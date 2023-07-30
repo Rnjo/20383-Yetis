@@ -10,7 +10,7 @@ public class Teleop extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         // Declare our motors
-        // Make sure your ID's match your configuration
+        // Make sure yxour ID's match your configuration
         DcMotor motorFrontLeft = hardwareMap.dcMotor.get("motorFrontLeft");
         DcMotor motorBackLeft = hardwareMap.dcMotor.get("motorBackLeft");
         DcMotor motorFrontRight = hardwareMap.dcMotor.get("motorFrontRight");
@@ -43,6 +43,16 @@ public class Teleop extends LinearOpMode {
             motorBackLeft.setPower(backLeftPower);
             motorFrontRight.setPower(frontRightPower);
             motorBackRight.setPower(backRightPower);
+
+
+            telemetry.addData("Flposition", motorFrontLeft.getCurrentPosition());
+            telemetry.addData("Flisbusy", !motorFrontLeft.isBusy());
+            telemetry.addData("FRposition", motorFrontRight.getCurrentPosition());
+            telemetry.addData("FRisbusy", !motorFrontRight.isBusy());
+            telemetry.addData("Blposition", motorBackLeft.getCurrentPosition());
+            telemetry.addData("Blisbusy", !motorBackLeft.isBusy());
+            telemetry.addData("Brposition", motorBackRight.getCurrentPosition());
+            telemetry.addData("Brisbusy", !motorBackRight.isBusy());
         }
     }
 }
