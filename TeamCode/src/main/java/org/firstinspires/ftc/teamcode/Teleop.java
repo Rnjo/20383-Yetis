@@ -11,15 +11,15 @@ public class Teleop extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         // Declare our motors
         // Make sure yxour ID's match your configuration
-        DcMotor motorFrontLeft = hardwareMap.dcMotor.get("motorFrontLeft");
-        DcMotor motorBackLeft = hardwareMap.dcMotor.get("motorBackLeft");
-        DcMotor motorFrontRight = hardwareMap.dcMotor.get("motorFrontRight");
-        DcMotor motorBackRight = hardwareMap.dcMotor.get("motorBackRight");
+        DcMotor leftFront = hardwareMap.dcMotor.get("leftFront");
+        DcMotor leftRear = hardwareMap.dcMotor.get("leftRear");
+        DcMotor rightFront = hardwareMap.dcMotor.get("rightFront");
+        DcMotor rightRear = hardwareMap.dcMotor.get("rightRear");
 
         // Reverse the right side motors
         // Reverse left motors if you are using NeveRests
-        motorFrontRight.setDirection(DcMotorSimple.Direction.REVERSE);
-        motorBackRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightRear.setDirection(DcMotorSimple.Direction.REVERSE);
 
         waitForStart();
 
@@ -39,20 +39,20 @@ public class Teleop extends LinearOpMode {
             double frontRightPower = (y - x - rx) / denominator;
             double backRightPower = (y + x - rx) / denominator;
 //test
-            motorFrontLeft.setPower(frontLeftPower);
-            motorBackLeft.setPower(backLeftPower);
-            motorFrontRight.setPower(frontRightPower);
-            motorBackRight.setPower(backRightPower);
+            leftFront.setPower(frontLeftPower);
+            leftRear.setPower(backLeftPower);
+            rightFront.setPower(frontRightPower);
+            rightRear.setPower(backRightPower);
 
 
-            telemetry.addData("Flposition", motorFrontLeft.getCurrentPosition());
-            telemetry.addData("Flisbusy", !motorFrontLeft.isBusy());
-            telemetry.addData("FRposition", motorFrontRight.getCurrentPosition());
-            telemetry.addData("FRisbusy", !motorFrontRight.isBusy());
-            telemetry.addData("Blposition", motorBackLeft.getCurrentPosition());
-            telemetry.addData("Blisbusy", !motorBackLeft.isBusy());
-            telemetry.addData("Brposition", motorBackRight.getCurrentPosition());
-            telemetry.addData("Brisbusy", !motorBackRight.isBusy());
+            telemetry.addData("Flposition", leftFront.getCurrentPosition());
+            telemetry.addData("Flisbusy", !leftFront.isBusy());
+            telemetry.addData("FRposition", rightFront.getCurrentPosition());
+            telemetry.addData("FRisbusy", !rightFront.isBusy());
+            telemetry.addData("Blposition", leftRear.getCurrentPosition());
+            telemetry.addData("Blisbusy", !leftRear.isBusy());
+            telemetry.addData("Brposition", rightRear.getCurrentPosition());
+            telemetry.addData("Brisbusy", !rightRear.isBusy());
         }
     }
 }
