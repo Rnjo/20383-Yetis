@@ -26,7 +26,7 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
+/*
 package org.firstinspires.ftc.robotcontroller.external.samples;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -63,7 +63,7 @@ import java.util.concurrent.TimeUnit;
  *
  * Use Android Studio to Copy this Class, and Paste it into the TeamCode/src/main/java/org/firstinspires/ftc/teamcode folder.
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list.
- */
+
 
 @TeleOp(name="Optimize AprilTag Exposure", group = "Concept")
 @Disabled
@@ -157,7 +157,7 @@ public class ConceptAprilTagOptimizeExposure extends LinearOpMode
 
     /**
      * Initialize the AprilTag processor.
-     */
+
     private void initAprilTag() {
         // Create the AprilTag processor by using a builder.
         aprilTag = new AprilTagProcessor.Builder().build();
@@ -173,7 +173,7 @@ public class ConceptAprilTagOptimizeExposure extends LinearOpMode
         Manually set the camera gain and exposure.
         Can only be called AFTER calling initAprilTag();
         Returns true if controls are set.
-     */
+
     private boolean    setManualExposure(int exposureMS, int gain) {
         // Ensure Vision Portal has been setup.
         if (visionPortal == null) {
@@ -216,7 +216,7 @@ public class ConceptAprilTagOptimizeExposure extends LinearOpMode
     /*
         Read this camera's minimum and maximum Exposure and Gain settings.
         Can only be called AFTER calling initAprilTag();
-     */
+
     private void getCameraSetting() {
         // Ensure Vision Portal has been setup.
         if (visionPortal == null) {
@@ -246,3 +246,4 @@ public class ConceptAprilTagOptimizeExposure extends LinearOpMode
         }
     }
 }
+*/

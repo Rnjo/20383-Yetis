@@ -30,7 +30,7 @@
  * TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
+/*
 package org.firstinspires.ftc.robotcontroller.external.samples;
 
 import android.util.Size;
@@ -57,7 +57,7 @@ import java.util.Locale;
  * Remove or comment out the @Disabled line to add this file to the Driver Station OpMode list.
  *
  * In OnBot Java, use "Add File" to add this file from the list of Samples.
- */
+
 
 @TeleOp(name = "Utility: Camera Frame Capture", group = "Utility")
 @Disabled
@@ -65,7 +65,7 @@ public class UtilityCameraFrameCapture extends LinearOpMode
 {
     /*
      * EDIT THESE PARAMETERS AS NEEDED
-     */
+
     final boolean USING_WEBCAM = false;
     final BuiltinCameraDirection INTERNAL_CAM_DIR = BuiltinCameraDirection.BACK;
     final int RESOLUTION_WIDTH = 640;
@@ -127,3 +127,4 @@ public class UtilityCameraFrameCapture extends LinearOpMode
         }
     }
 }
+*/

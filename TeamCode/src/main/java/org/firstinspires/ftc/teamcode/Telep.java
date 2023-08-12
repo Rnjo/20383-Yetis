@@ -24,7 +24,7 @@ public class Telep extends LinearOpMode {
         waitForStart();
 
         if (isStopRequested()) return;
-
+//leftfront rightFront rightRear bore encoders
         while (opModeIsActive()) {
             double y = -gamepad1.left_stick_y; // Remember, this is reversed!
             double x = gamepad1.left_stick_x * 1.2; // Counteract imperfect strafing
@@ -44,15 +44,10 @@ public class Telep extends LinearOpMode {
             rightFront.setPower(frontRightPower);
             rightRear.setPower(backRightPower);
 
-
-            telemetry.addData("Flposition", leftFront.getCurrentPosition());
-            telemetry.addData("Flisbusy", !leftFront.isBusy());
-            telemetry.addData("FRposition", rightFront.getCurrentPosition());
-            telemetry.addData("FRisbusy", !rightFront.isBusy());
-            telemetry.addData("Blposition", leftRear.getCurrentPosition());
-            telemetry.addData("Blisbusy", !leftRear.isBusy());
-            telemetry.addData("Brposition", rightRear.getCurrentPosition());
-            telemetry.addData("Brisbusy", !rightRear.isBusy());
+            telemetry.addData("FlPos", leftFront.getCurrentPosition());
+            telemetry.addData("Rpos", leftRear.getCurrentPosition());
+            telemetry.addData("frpos", rightFront.getCurrentPosition());
+            telemetry.update();
         }
     }
 }
