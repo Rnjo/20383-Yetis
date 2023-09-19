@@ -21,7 +21,10 @@ public class Telep extends LinearOpMode {
         DcMotor leftRear = hardwareMap.dcMotor.get("leftRear");
         DcMotor rightEncoder = hardwareMap.dcMotor.get("rightEncoder");
         DcMotor frontEncoder = hardwareMap.dcMotor.get("frontEncoder");
-        CRServo intake = hardwareMap.get(CRServo.class, "intake");
+        DcMotor lift1 =hardwareMap.dcMotor.get("lift1");
+        DcMotor lift2 =hardwareMap.dcMotor.get("lift2");
+        CRServo intake1 = hardwareMap.get(CRServo.class, "intake1");
+        CRServo intake2 = hardwareMap.get(CRServo.class, "intake2");
         Servo claw = hardwareMap.get(Servo.class, "claw");
 
 
@@ -29,7 +32,8 @@ public class Telep extends LinearOpMode {
         // Reverse left motors if you are using NeveRests
         rightEncoder.setDirection(DcMotorSimple.Direction.REVERSE);
         frontEncoder.setDirection(DcMotorSimple.Direction.REVERSE);
-
+        intake2.setDirection(CRServo.Direction.REVERSE);
+        lift2.setDirection(DcMotorSimple.Direction.REVERSE);
         waitForStart();
 
         if (isStopRequested()) return;
@@ -54,9 +58,11 @@ public class Telep extends LinearOpMode {
             frontEncoder.setPower(backRightPower);
 //intake code
             if (gamepad2.a) {
-                intake.setPower(1);
+                intake1.setPower(1);
+                intake2.setPower(1);
             } else {
-                intake.setPower(0);
+                intake1.setPower(0);
+                intake2.setPower(0);
             }
 //claw code
             if (gamepad2.b) {
@@ -64,11 +70,13 @@ public class Telep extends LinearOpMode {
             }else if (gamepad2.x){
                 claw.setPosition(0);
             }
+//lift code
+            lift1.setPower(gamepad2.left_stick_y);
+            lift2.setPower(gamepad2.left_stick_y);
 
-
-            telemetry.addData("FlPos", leftEncoder.getCurrentPosition());
-            telemetry.addData("Rpos", leftRear.getCurrentPosition());
-            telemetry.addData("frpos", rightEncoder.getCurrentPosition());
+            telemetry.addData("FrontleftPos", leftEncoder.getCurrentPosition());
+            telemetry.addData("Rearpos", leftRear.getCurrentPosition());
+            telemetry.addData("Frontrightpos", rightEncoder.getCurrentPosition());
             telemetry.update();
 
 
