@@ -34,7 +34,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.Range;
-
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
@@ -46,7 +45,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-/**
+/*
  * This OpMode illustrates using a camera to locate and drive towards a specific AprilTag.
  * The code assumes a Holonomic (Mecanum or X Drive) Robot.
  *
@@ -55,7 +54,7 @@ import java.util.concurrent.TimeUnit;
  * To reduce any motion blur (which will interrupt the detection process) the Camera exposure is reduced to a very low value (5mS)
  * You can determine the best Exposure and Gain values by using the ConceptAprilTagOptimizeExposure OpMode in this Samples folder.
  *
- * The code assumes a Robot Configuration with motors named: leftEncoder_drive and rightEncoder_drive, leftback_drive and rightback_drive.
+ * The code assumes a Robot Configuration with motors named: leftfront_drive and rightfront_drive, leftback_drive and rightback_drive.
  * The motor directions must be set so a positive power goes forward on all wheels.
  * This sample assumes that the current game AprilTag Library (usually for the current season) is being loaded by default,
  * so you should choose to approach a valid tag ID (usually starting at 0)
@@ -97,8 +96,8 @@ public class RobotAutoDriveToAprilTagOmni extends LinearOpMode
     final double MAX_AUTO_STRAFE= 0.5;   //  Clip the approach speed to this max value (adjust for your robot)
     final double MAX_AUTO_TURN  = 0.3;   //  Clip the turn speed to this max value (adjust for your robot)
 
-    private DcMotor leftEncoderDrive   = null;  //  Used to control the left front drive wheel
-    private DcMotor rightEncoderDrive  = null;  //  Used to control the right front drive wheel
+    private DcMotor leftFrontDrive   = null;  //  Used to control the left front drive wheel
+    private DcMotor rightFrontDrive  = null;  //  Used to control the right front drive wheel
     private DcMotor leftBackDrive    = null;  //  Used to control the left back drive wheel
     private DcMotor rightBackDrive   = null;  //  Used to control the right back drive wheel
 
@@ -121,17 +120,17 @@ public class RobotAutoDriveToAprilTagOmni extends LinearOpMode
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must match the names assigned during the robot configuration.
         // step (using the FTC Robot Controller app on the phone).
-        leftEncoderDrive  = hardwareMap.get(DcMotor.class, "leftEncoder_drive");
-        rightEncoderDrive = hardwareMap.get(DcMotor.class, "rightEncoder_drive");
+        leftFrontDrive  = hardwareMap.get(DcMotor.class, "leftfront_drive");
+        rightFrontDrive = hardwareMap.get(DcMotor.class, "rightfront_drive");
         leftBackDrive  = hardwareMap.get(DcMotor.class, "leftback_drive");
         rightBackDrive = hardwareMap.get(DcMotor.class, "rightback_drive");
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // When run, this OpMode should start both motors driving forward. So adjust these two lines based on your first test drive.
         // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
-        leftEncoderDrive.setDirection(DcMotor.Direction.REVERSE);
+        leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
         leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
-        rightEncoderDrive.setDirection(DcMotor.Direction.FORWARD);
+        rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
         rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
 
         if (USE_WEBCAM)
@@ -151,11 +150,13 @@ public class RobotAutoDriveToAprilTagOmni extends LinearOpMode
             // Step through the list of detected tags and look for a matching tag
             List<AprilTagDetection> currentDetections = aprilTag.getDetections();
             for (AprilTagDetection detection : currentDetections) {
-                if ((detection.metadata != null)
-                        && ((DESIRED_TAG_ID >= 0) || (detection.id == DESIRED_TAG_ID))  ){
+                if ((detection.metadata != null) &&
+                    ((DESIRED_TAG_ID < 0) || (detection.id == DESIRED_TAG_ID))  ){
                     targetFound = true;
                     desiredTag = detection;
                     break;  // don't look any further.
+                } else {
+                    telemetry.addData("Unknown Target", "Tag ID %d is not in TagLibrary\n", detection.id);
                 }
             }
 
@@ -167,7 +168,7 @@ public class RobotAutoDriveToAprilTagOmni extends LinearOpMode
                 telemetry.addData("Bearing","%3.0f degrees", desiredTag.ftcPose.bearing);
                 telemetry.addData("Yaw","%3.0f degrees", desiredTag.ftcPose.yaw);
             } else {
-                telemetry.addData(">","Drive using joystick to find target\n");
+                telemetry.addData(">","Drive using joysticks to find valid target\n");
             }
 
             // If Left Bumper is being pressed, AND we have found the desired target, Drive to target Automatically .
@@ -202,32 +203,35 @@ public class RobotAutoDriveToAprilTagOmni extends LinearOpMode
 
     /**
      * Move robot according to desired axes motions
+     * <p>
      * Positive X is forward
+     * <p>
      * Positive Y is strafe left
+     * <p>
      * Positive Yaw is counter-clockwise
      */
     public void moveRobot(double x, double y, double yaw) {
         // Calculate wheel powers.
-        double leftEncoderPower    =  x -y -yaw;
-        double rightEncoderPower   =  x +y +yaw;
+        double leftFrontPower    =  x -y -yaw;
+        double rightFrontPower   =  x +y +yaw;
         double leftBackPower     =  x +y -yaw;
         double rightBackPower    =  x -y +yaw;
 
         // Normalize wheel powers to be less than 1.0
-        double max = Math.max(Math.abs(leftEncoderPower), Math.abs(rightEncoderPower));
+        double max = Math.max(Math.abs(leftFrontPower), Math.abs(rightFrontPower));
         max = Math.max(max, Math.abs(leftBackPower));
         max = Math.max(max, Math.abs(rightBackPower));
 
         if (max > 1.0) {
-            leftEncoderPower /= max;
-            rightEncoderPower /= max;
+            leftFrontPower /= max;
+            rightFrontPower /= max;
             leftBackPower /= max;
             rightBackPower /= max;
         }
 
         // Send powers to the wheels.
-        leftEncoderDrive.setPower(leftEncoderPower);
-        rightEncoderDrive.setPower(rightEncoderPower);
+        leftFrontDrive.setPower(leftFrontPower);
+        rightFrontDrive.setPower(rightFrontPower);
         leftBackDrive.setPower(leftBackPower);
         rightBackDrive.setPower(rightBackPower);
     }
