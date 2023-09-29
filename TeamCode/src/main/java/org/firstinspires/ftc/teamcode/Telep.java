@@ -17,10 +17,14 @@ public class Telep extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         // Declare our motors
         // Make sure your ID's match your configuration
-        DcMotor leftEncoder = hardwareMap.dcMotor.get("leftEncoder");
-        DcMotor leftRear = hardwareMap.dcMotor.get("leftRear");
-        DcMotor rightEncoder = hardwareMap.dcMotor.get("rightEncoder");
-        DcMotor frontEncoder = hardwareMap.dcMotor.get("frontEncoder");
+        DcMotor leftFront = hardwareMap.dcMotor.get("leftFront");
+        DcMotor leftBack = hardwareMap.dcMotor.get("leftBack");
+        DcMotor rightFront = hardwareMap.dcMotor.get("rightFront");
+        DcMotor rightBack = hardwareMap.dcMotor.get("rightBack");
+        DcMotor par0 = hardwareMap.dcMotor.get("par0");
+        DcMotor par1 = hardwareMap.dcMotor.get("par1");
+        DcMotor perp = hardwareMap.dcMotor.get("perp");
+
       /*  DcMotor lift1 =hardwareMap.dcMotor.get("lift1");
         DcMotor lift2 =hardwareMap.dcMotor.get("lift2");
         CRServo intake1 = hardwareMap.get(CRServo.class, "intake1");
@@ -30,8 +34,8 @@ public class Telep extends LinearOpMode {
 */
         // Reverse the right side motors
         // Reverse left motors if you are using NeveRests
-        rightEncoder.setDirection(DcMotorSimple.Direction.REVERSE);
-        frontEncoder.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
        // intake2.setDirection(CRServo.Direction.REVERSE);
         //lift2.setDirection(DcMotorSimple.Direction.REVERSE);
         waitForStart();
@@ -52,10 +56,10 @@ public class Telep extends LinearOpMode {
             double frontRightPower = (y - x - rx) / denominator;
             double backRightPower = (y + x - rx) / denominator;
 //test
-            leftEncoder.setPower(frontLeftPower);
-            leftRear.setPower(backLeftPower);
-            rightEncoder.setPower(frontRightPower);
-            frontEncoder.setPower(backRightPower);
+            leftFront.setPower(frontLeftPower);
+            leftBack.setPower(backLeftPower);
+            rightFront.setPower(frontRightPower);
+            rightBack.setPower(backRightPower);
 
 //intake code
        /*     if (gamepad2.a) {
@@ -81,9 +85,9 @@ public class Telep extends LinearOpMode {
 
     telemetry.update();
 
-            telemetry.addData("FrontleftPos", leftEncoder.getCurrentPosition());
-            telemetry.addData("Rearpos", frontEncoder.getCurrentPosition());
-            telemetry.addData("Frontrightpos", rightEncoder.getCurrentPosition());
+            telemetry.addData("perp", perp.getCurrentPosition());
+            telemetry.addData("par0", par0.getCurrentPosition());
+            telemetry.addData("par1", par1.getCurrentPosition());
             telemetry.update();
 
 
