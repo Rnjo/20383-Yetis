@@ -12,7 +12,10 @@ import org.openftc.easyopencv.PipelineRecordingParameters;
 //abhir
 @TeleOp
 public class Telep extends LinearOpMode {
-
+    double arm_position;
+    double arm_accel;
+    double arm_max_position;
+    double arm_min_position;
     @Override
     public void runOpMode() throws InterruptedException {
         // Declare our motors
@@ -24,24 +27,21 @@ public class Telep extends LinearOpMode {
         DcMotor par0 = hardwareMap.dcMotor.get("par0");
         DcMotor par1 = hardwareMap.dcMotor.get("par1");
         DcMotor perp = hardwareMap.dcMotor.get("perp");
-
-      /*  DcMotor lift1 =hardwareMap.dcMotor.get("lift1");
-        DcMotor lift2 =hardwareMap.dcMotor.get("lift2");
+        DcMotor truss =hardwareMap.dcMotor.get("truss");
+              Servo trussServo = hardwareMap.get(Servo.class, "trussServo");
         CRServo intake1 = hardwareMap.get(CRServo.class, "intake1");
         CRServo intake2 = hardwareMap.get(CRServo.class, "intake2");
         Servo claw = hardwareMap.get(Servo.class, "claw");
 
-*/
+
         // Reverse the right side motors
         // Reverse left motors if you are using NeveRests
         rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
         rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
-       // intake2.setDirection(CRServo.Direction.REVERSE);
-        //lift2.setDirection(DcMotorSimple.Direction.REVERSE);
+        intake2.setDirection(CRServo.Direction.REVERSE);
         waitForStart();
 
         if (isStopRequested()) return;
-//leftEncoder rightEncoder frontEncoder bore encoders
         while (opModeIsActive()) {
             double y = -gamepad1.left_stick_y * 0.5; // Remember, this is reversed!
             double x = gamepad1.left_stick_x * 1.1; // Counteract imperfect strafing
@@ -55,14 +55,14 @@ public class Telep extends LinearOpMode {
             double backLeftPower = (y - x + rx) / denominator;
             double frontRightPower = (y - x - rx) / denominator;
             double backRightPower = (y + x - rx) / denominator;
-//test
+
             leftFront.setPower(frontLeftPower);
             leftBack.setPower(backLeftPower);
             rightFront.setPower(frontRightPower);
             rightBack.setPower(backRightPower);
 
 //intake code
-       /*     if (gamepad2.a) {
+          if (gamepad2.a) {
                 intake1.setPower(1);
                 intake2.setPower(1);
             } else {
@@ -76,12 +76,34 @@ public class Telep extends LinearOpMode {
                 claw.setPosition(0);
             }
 //lift code
-            lift1.setPower(gamepad2.left_stick_y);
-            lift2.setPower(gamepad2.left_stick_y);
+            truss.setPower(gamepad2.left_stick_y);
 
 
 
-    */
+
+//for arm code borrow it from DriverModeFinalFlipback
+
+
+
+              arm_position = trussServo.getPosition();
+        if (gamepad2.right_stick_y < 0) {
+            arm_accel = -gamepad2.right_stick_y * 0.06;
+        } else if (gamepad2.right_stick_y > 0) {
+            arm_accel = -gamepad2.right_stick_y * 0.03;
+        } else {
+            arm_accel = 0;
+        }
+        arm_position = arm_position + arm_accel;
+        if (arm_position > arm_max_position) {
+            arm_position = arm_max_position;
+        } else {
+            if (arm_position <= arm_min_position) {
+                arm_position = arm_min_position;
+            }
+        }
+        trussServo.setPosition(arm_position);
+    }
+
 
     telemetry.update();
 
@@ -93,4 +115,4 @@ public class Telep extends LinearOpMode {
 
         }
     }
-}
+
