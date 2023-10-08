@@ -31,8 +31,7 @@ public class Telep extends LinearOpMode {
         Servo arm = hardwareMap.get(Servo.class, "arm");
         CRServo intake1 = hardwareMap.get(CRServo.class, "intake1");
         CRServo intake2 = hardwareMap.get(CRServo.class, "intake2");
-        Servo gate1 = hardwareMap.get(Servo.class, "gate1");
-        Servo gate2 = hardwareMap.get(Servo.class, "gate2");
+        Servo gates = hardwareMap.get(Servo.class, "gates");
 
 
 
@@ -73,16 +72,12 @@ public class Telep extends LinearOpMode {
             }
 //gate code
             if (gamepad2.b) {
-                gate1.setPosition(1);
+                gates.setPosition(1);
             }else {
-                gate1.setPosition(0);
+                gates.setPosition(0);
             }
 
-            if (gamepad2.x) {
-                gate2.setPosition(1);
-            }else {
-                gate2.setPosition(0);
-            }
+
 
 //lift code
             lift.setPower(gamepad2.left_stick_y);
