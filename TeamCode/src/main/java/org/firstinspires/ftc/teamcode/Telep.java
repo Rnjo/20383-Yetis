@@ -27,11 +27,13 @@ public class Telep extends LinearOpMode {
         DcMotor par0 = hardwareMap.dcMotor.get("par0");
         DcMotor par1 = hardwareMap.dcMotor.get("par1");
         DcMotor perp = hardwareMap.dcMotor.get("perp");
-        DcMotor truss =hardwareMap.dcMotor.get("truss");
-              Servo trussServo = hardwareMap.get(Servo.class, "trussServo");
+        DcMotor lift =hardwareMap.dcMotor.get("lift");
+        Servo arm = hardwareMap.get(Servo.class, "arm");
         CRServo intake1 = hardwareMap.get(CRServo.class, "intake1");
         CRServo intake2 = hardwareMap.get(CRServo.class, "intake2");
-        Servo claw = hardwareMap.get(Servo.class, "claw");
+        Servo gate1 = hardwareMap.get(Servo.class, "gate1");
+        Servo gate2 = hardwareMap.get(Servo.class, "gate2");
+
 
 
         // Reverse the right side motors
@@ -69,14 +71,21 @@ public class Telep extends LinearOpMode {
                 intake1.setPower(0);
                 intake2.setPower(0);
             }
-//claw code
+//gate code
             if (gamepad2.b) {
-                claw.setPosition(1);
-            }else if (gamepad2.x){
-                claw.setPosition(0);
+                gate1.setPosition(1);
+            }else {
+                gate1.setPosition(0);
             }
+
+            if (gamepad2.x) {
+                gate2.setPosition(1);
+            }else {
+                gate2.setPosition(0);
+            }
+
 //lift code
-            truss.setPower(gamepad2.left_stick_y);
+            lift.setPower(gamepad2.left_stick_y);
 
 
 
@@ -85,7 +94,7 @@ public class Telep extends LinearOpMode {
 
 
 
-              arm_position = trussServo.getPosition();
+              arm_position = arm.getPosition();
         if (gamepad2.right_stick_y < 0) {
             arm_accel = -gamepad2.right_stick_y * 0.06;
         } else if (gamepad2.right_stick_y > 0) {
@@ -101,7 +110,7 @@ public class Telep extends LinearOpMode {
                 arm_position = arm_min_position;
             }
         }
-        trussServo.setPosition(arm_position);
+        arm.setPosition(arm_position);
     }
 
 
