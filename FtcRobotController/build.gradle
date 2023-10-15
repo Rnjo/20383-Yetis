@@ -23,4 +23,8 @@ android {
     namespace = 'com.qualcomm.ftcrobotcontroller'
 }
 
+dependencies {
+    implementation 'org.jetbrains:annotations:15.0'
+}
+
 apply from: '../build.dependencies.gradle'
