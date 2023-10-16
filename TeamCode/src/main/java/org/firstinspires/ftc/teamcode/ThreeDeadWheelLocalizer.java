@@ -38,8 +38,7 @@ public final class ThreeDeadWheelLocalizer implements Localizer {
         lastPar1Pos = par1.getPositionAndVelocity().position;
         lastPerpPos = perp.getPositionAndVelocity().position;
 
-        this.inPerTick = inPerTick;
-
+        this.inPerTick = 0.00055149;
         FlightRecorder.write("THREE_DEAD_WHEEL_PARAMS", PARAMS);
     }
 
