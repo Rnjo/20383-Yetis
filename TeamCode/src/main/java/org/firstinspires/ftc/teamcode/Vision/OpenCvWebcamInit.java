@@ -40,6 +40,7 @@ import org.openftc.easyopencv.OpenCvWebcam;
 public class OpenCvWebcamInit extends LinearOpMode
 {
     OpenCvWebcam webcam;
+    int checker = 0;
 
     @Override
     public void runOpMode()
@@ -99,6 +100,7 @@ public class OpenCvWebcamInit extends LinearOpMode
                  * away from the user.
                  */
                 webcam.startStreaming(1280, 720, OpenCvCameraRotation.UPRIGHT);
+
             }
 
             @Override
@@ -204,6 +206,18 @@ public class OpenCvWebcamInit extends LinearOpMode
         double  leftavgfin;
         double middleavgfin;
         double rightavgfin;
+/*
+        boolean coneInLeft1 = leftavgfin>rightavgfin;
+        boolean coneInLeft2 = leftavgfin>middleavgfin;
+
+        boolean coneInMiddle1 = middleavgfin>leftavgfin;
+        boolean coneInMiddle2 = middleavgfin>rightavgfin;
+
+        boolean coneInRight1 = rightavgfin>leftavgfin;
+        boolean coneInRight2 = rightavgfin>middleavgfin;
+
+*/
+
         Mat outPut=new Mat();
         Scalar rectColor = new Scalar(255.0,0.0,0.0);
         @Override
@@ -250,18 +264,36 @@ public class OpenCvWebcamInit extends LinearOpMode
             leftavgfin = leftavg.val[0];
             middleavgfin = middleavg.val[0];
             rightavgfin = rightavg.val[0];
-
-            if (leftavgfin > rightavgfin + middleavgfin) {
+/*
+            if (coneInLeft1&&coneInLeft2) {
 telemetry.addLine("left"); //replace with rr values for left board placement
 
-            } else if (middleavgfin > rightavgfin + leftavgfin){
+            } else if (coneInMiddle1&&coneInMiddle2){
 telemetry.addLine("middle"); //replace with rr values for middle board placement
 
-        }else {
+        }else  {
 
             telemetry.addLine("right"); //replace with rr values for right board placement
 
             }
+
+*/
+
+            if (leftavgfin>middleavgfin||leftavgfin>rightavgfin) {
+                telemetry.addLine("left"); //replace with rr values for left board placement
+                checker+=1;
+
+            } else if (middleavgfin>rightavgfin||middleavgfin>leftavgfin){
+                telemetry.addLine("middle"); //replace with rr values for middle board placement
+                checker+=2;
+            }else  if(rightavgfin>leftavgfin||rightavgfin>middleavgfin){
+
+                telemetry.addLine("right"); //replace with rr values for right board placement
+                checker+=3;
+            }
+
+
+
             return (outPut);
         }
 

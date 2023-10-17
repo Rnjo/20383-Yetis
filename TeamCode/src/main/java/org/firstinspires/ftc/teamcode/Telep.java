@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -8,16 +9,27 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 //abhir
+@Config
 @TeleOp
 public class Telep extends LinearOpMode {
     double arm_position;
     double arm_accel;
     double arm_max_position;
     double arm_min_position;
+   /* private PIDController controller;
+
+    public static double p = 0, i = 0, d = 0;
+    public static double f = 0;
+
+    public static int target = 0;
+
+    private final double ticks_in_degree = 700 / 180.0;
+*/
     @Override
     public void runOpMode() throws InterruptedException {
         // Declare our motors
         // Make sure your ID's match your configuration
+       // controller = new PIDController(p, i, d);
         DcMotor leftFront = hardwareMap.dcMotor.get("leftFront");
         DcMotor leftBack = hardwareMap.dcMotor.get("leftBack");
         DcMotor rightFront = hardwareMap.dcMotor.get("rightFront");
@@ -25,12 +37,11 @@ public class Telep extends LinearOpMode {
         DcMotor par0 = hardwareMap.dcMotor.get("par0");
         DcMotor par1 = hardwareMap.dcMotor.get("par1");
         DcMotor perp = hardwareMap.dcMotor.get("perp");
-        DcMotor lift =hardwareMap.dcMotor.get("lift");
+        DcMotor lift = hardwareMap.dcMotor.get("lift");
         Servo arm = hardwareMap.get(Servo.class, "arm");
         CRServo intake1 = hardwareMap.get(CRServo.class, "intake1");
         CRServo intake2 = hardwareMap.get(CRServo.class, "intake2");
         Servo gates = hardwareMap.get(Servo.class, "gates");
-
 
 
         // Reverse the right side motors
@@ -60,8 +71,16 @@ public class Telep extends LinearOpMode {
             rightFront.setPower(frontRightPower);
             rightBack.setPower(backRightPower);
 
+          /*  controller.setPID(p, i, d);
+            int liftPos = lift.getCurrentPosition();
+            double pid = controller.calculate(liftPos, target);
+            double ff = Math.cos(Math.toRadians(target / ticks_in_degree)) * f;
+
+            double power = pid + ff;
+            lift.setPower(power);
+*/
 //intake code
-          if (gamepad2.a) {
+            if (gamepad2.a) {
                 intake1.setPower(1);
                 intake2.setPower(1);
             } else {
@@ -71,16 +90,13 @@ public class Telep extends LinearOpMode {
 //gate code
             if (gamepad2.b) {
                 gates.setPosition(1);
-            }else {
+            } else {
                 gates.setPosition(0);
             }
 
 
-
 //lift code
             lift.setPower(gamepad2.left_stick_y);
-
-
 
 
 //for arm code borrow it from DriverModeFinalFlipback
@@ -104,17 +120,19 @@ public class Telep extends LinearOpMode {
             }
         }
         arm.setPosition(arm_position);
-    }
 
 
-    telemetry.update();
+
+            telemetry.update();
 
             telemetry.addData("perp", perp.getCurrentPosition());
             telemetry.addData("par0", par0.getCurrentPosition());
             telemetry.addData("par1", par1.getCurrentPosition());
+         //   telemetry.addData("pos", liftPos);
+           // telemetry.addData("targetpos", target);
             telemetry.update();
 
 
         }
     }
-
+}
