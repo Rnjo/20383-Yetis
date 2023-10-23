@@ -23,7 +23,7 @@ public class Telep extends LinearOpMode {
 
     public static int target = 0;
 
-    private final double ticks_in_degree = 700 / 180.0;
+    private final double ticks_in_degree = 28/360;
 */
     @Override
     public void runOpMode() throws InterruptedException {
@@ -38,6 +38,7 @@ public class Telep extends LinearOpMode {
         DcMotor par1 = hardwareMap.dcMotor.get("par1");
         DcMotor perp = hardwareMap.dcMotor.get("perp");
         DcMotor lift = hardwareMap.dcMotor.get("lift");
+
         Servo arm = hardwareMap.get(Servo.class, "arm");
         CRServo intake1 = hardwareMap.get(CRServo.class, "intake1");
         CRServo intake2 = hardwareMap.get(CRServo.class, "intake2");
@@ -49,6 +50,10 @@ public class Telep extends LinearOpMode {
         rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
         rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
         intake2.setDirection(CRServo.Direction.REVERSE);
+        lift.setDirection(DcMotorSimple.Direction.FORWARD);
+
+        perp.setDirection(DcMotorSimple.Direction.REVERSE);
+
         waitForStart();
 
         if (isStopRequested()) return;
@@ -96,7 +101,8 @@ public class Telep extends LinearOpMode {
 
 
 //lift code
-            lift.setPower(gamepad2.left_stick_y);
+            lift.setPower(gamepad2.left_stick_y*-0.7);
+            perp.setPower(gamepad2.left_stick_y*-0.7);
 
 
 //for arm code borrow it from DriverModeFinalFlipback

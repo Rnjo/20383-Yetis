@@ -96,8 +96,8 @@ public class OpenCvWebcamInit extends LinearOpMode
                  * Also, we specify the rotation that the webcam is used in. This is so that the image
                  * from the camera sensor can be rotated such that it is always displayed with the image upright.
                  * For a front facing camera, rotation is defined assuming the user is looking at the screen.
-                 * For a rear facing camera or a webcam, rotation is defined assuming the camera is facing
-                 * away from the user.
+                 * away from the user.                 * For a rear facing camera or a webcam, rotation is defined assuming the camera is facing
+
                  */
                 webcam.startStreaming(1280, 720, OpenCvCameraRotation.UPRIGHT);
 
@@ -201,10 +201,10 @@ public class OpenCvWebcamInit extends LinearOpMode
          */
         Mat YCbCr=new Mat();
         Mat leftCrop;
-        Mat middleCrop;
+      //  Mat middleCrop;
         Mat rightCrop;
         double  leftavgfin;
-        double middleavgfin;
+       // double middleavgfin;
         double rightavgfin;
 /*
         boolean coneInLeft1 = leftavgfin>rightavgfin;
@@ -235,9 +235,8 @@ public class OpenCvWebcamInit extends LinearOpMode
              */
             Imgproc.cvtColor(input, YCbCr, Imgproc.COLOR_RGB2YCrCb);
             telemetry.addLine("pipeline running xd");
-            Rect leftRect = new Rect(1, 1, 426, 719);
-            Rect middleRect = new Rect(427, 1, 426, 719);
-            Rect rightRect = new Rect(853, 1, 426, 719);
+            Rect leftRect = new Rect(0, 0, 426, 719);
+            Rect rightRect = new Rect(856, 0, 424, 719);
 
             /**
              * NOTE: to see how to get data from your pipeline to your OpMode as well as how
@@ -246,23 +245,18 @@ public class OpenCvWebcamInit extends LinearOpMode
              */
 
             input.copyTo(outPut);
-            Imgproc.rectangle(outPut, leftRect, rectColor, 2);
-            Imgproc.rectangle(outPut, middleRect, rectColor, 2);
-            Imgproc.rectangle(outPut, rightRect, rectColor, 2);
+            Imgproc.rectangle(outPut, leftRect, rectColor, 1);
+            Imgproc.rectangle(outPut, rightRect, rectColor, 1);
 
             leftCrop = YCbCr.submat(leftRect);
-            middleCrop = YCbCr.submat(middleRect);
             rightCrop = YCbCr.submat(rightRect);
 
             Core.extractChannel(leftCrop, leftCrop, 2);
-            Core.extractChannel(middleCrop, middleCrop, 2);
             Core.extractChannel(rightCrop, rightCrop, 2);
             Scalar leftavg = Core.mean(leftCrop);
-            Scalar middleavg = Core.mean(middleCrop);
             Scalar rightavg = Core.mean(rightCrop);
 
             leftavgfin = leftavg.val[0];
-            middleavgfin = middleavg.val[0];
             rightavgfin = rightavg.val[0];
 /*
             if (coneInLeft1&&coneInLeft2) {
@@ -279,17 +273,17 @@ telemetry.addLine("middle"); //replace with rr values for middle board placement
 
 */
 
-            if (leftavgfin>middleavgfin||leftavgfin>rightavgfin) {
+            if (leftavgfin>rightavgfin) {
                 telemetry.addLine("left"); //replace with rr values for left board placement
-                checker+=1;
+              //  checker+=1;
 
-            } else if (middleavgfin>rightavgfin||middleavgfin>leftavgfin){
-                telemetry.addLine("middle"); //replace with rr values for middle board placement
-                checker+=2;
-            }else  if(rightavgfin>leftavgfin||rightavgfin>middleavgfin){
+            } else if (rightavgfin>leftavgfin){
+                telemetry.addLine("right"); //replace with rr values for middle board placement
+               // checker+=2;
+            }else  if(rightavgfin==leftavgfin){
 
-                telemetry.addLine("right"); //replace with rr values for right board placement
-                checker+=3;
+                telemetry.addLine("middle"); //replace with rr values for right board placement
+              //  checker+=3;
             }
 
 
