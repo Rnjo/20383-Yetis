@@ -88,11 +88,14 @@ private void position_zero() {
         if (gamepad1.a) {
             arm1.setPosition(0);
             arm2.setPosition(0);
-
+            sleep(2000);
             lift.setTargetPosition(0);
             lift2.setTargetPosition(0);
 lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             lift2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+            gates.setPosition(0);
 
         }
     }
@@ -276,7 +279,7 @@ lift2.setDirection(DcMotorSimple.Direction.REVERSE);
         drive_power = 0.7;
         drive_slow_power = 0.2;
         Initialize_DriveTrain();
-        Initialize_Lift();
+       // Initialize_Lift();
         lift_telemetry();
         telemetry.update();
         // Wait for Start button
@@ -288,10 +291,8 @@ lift2.setDirection(DcMotorSimple.Direction.REVERSE);
                 Arm_Control();
                 Claw_Control();
                 lift_telemetry();
-                Return_home();
-                Return_home2();
+               // Return_home();
                 Deliver_cone();
-                Deliver_cone2();
                 telemetry.update();
             }
         }
@@ -314,102 +315,25 @@ lift2.setDirection(DcMotorSimple.Direction.REVERSE);
     /**
      * Describe this function...
      */
-    private void Return_home2() {
-        if (gamepad2.right_bumper) {
-            if (lift_pos >= 60) {
-                lift_reset_done = false;
-                lift_max_power_mult_down = 1;
-            }
-            if (arm_position < 0.5) {
-                claw.setPosition(claw_open_position);
-            } else {
-                claw.setPosition(claw_open_position * 0.8);
-            }
-            Timer(0.5);
-            arm.setPosition(0.1);
-            lift.setTargetPosition(0);
-            lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            lift.setPower(lift_max_power * 1);
-            Timer(1);
-            lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            arm.setPosition(0);
-            claw.setPosition(claw_open_position);
-        }
-    }
+
 
     /**
      * Describe this function...
      */
-    private void Return_home() {
-        if (gamepad2.x) {
-            if (lift_pos >= 60) {
-                lift_reset_done = false;
-                lift_max_power_mult_down = 1;
-            }
-            if (arm_position < 0.5) {
-                claw.setPosition(claw_open_position);
-            } else {
-                claw.setPosition(claw_open_position * 0.8);
-            }
-            Timer(0.5);
-            arm.setPosition(0.1);
-            lift.setTargetPosition(0);
-            lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            lift.setPower(lift_max_power * 1);
-            Timer(1);
-            lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            arm.setPosition(0);
-            claw.setPosition(claw_open_position);
-        }
-    }
+
+
+
 
     /**
      * Describe this function...
      */
-    private void Initialize_Lift() {
-        double i;
-
-        lift.setDirection(DcMotorSimple.Direction.FORWARD);
-        lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        claw.setDirection(Servo.Direction.FORWARD);
-        Timer(1);
-        arm.setDirection(Servo.Direction.REVERSE);
-        Timer(1);
-        if (!reset.isPressed()) {
-            while (!reset.isPressed()) {
-                lift.setPower(-1);
-                lift_telemetry();
-                telemetry.update();
-            }
-            lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            lift.setPower(0);
-            Timer(1);
-        }
-        lift_reset_done = true;
-        claw.setPosition(claw_open_position);
-        arm_position = arm.getPosition();
-        double i_inc = 0.01;
-        if (arm_position > arm_min_position) {
-            i_inc = -i_inc;
-        }
-        for (i = arm_position; i_inc >= 0 ? i <= arm_min_position : i >= arm_min_position; i += i_inc) {
-            arm_position = i;
-            arm.setPosition(arm_position);
-            lift_telemetry();
-            telemetry.update();
-        }
-        claw.setPosition(claw_open_position);
-        lift_telemetry();
-        telemetry.update();
+    private void stop_and_reset() {
+        leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
-    /**
-     * Describe this function...
-     */
     private void drive(double fr_distance, double fl_distance, double bl_distance, double br_distance) {
         stop_and_reset();
         rightFront.setTargetPosition((int) ((fr_distance / circumference) * ticks_rev__fd_and_bk_ * gear_ratio));
@@ -437,7 +361,7 @@ lift2.setDirection(DcMotorSimple.Direction.REVERSE);
      */
     private void Arm_Control() {
         // ---------------------- Arm Code ----------------------
-        arm_position = arm.getPosition();
+        arm_position = arm1.getPosition();
         if (gamepad2.right_stick_y < 0) {
             arm_accel = -gamepad2.right_stick_y * 0.06;
         } else if (gamepad2.right_stick_y > 0) {
@@ -453,7 +377,7 @@ lift2.setDirection(DcMotorSimple.Direction.REVERSE);
                 arm_position = arm_min_position;
             }
         }
-        arm.setPosition(arm_position);
+        arm1.setPosition(arm_position);
     }
 
     /**
