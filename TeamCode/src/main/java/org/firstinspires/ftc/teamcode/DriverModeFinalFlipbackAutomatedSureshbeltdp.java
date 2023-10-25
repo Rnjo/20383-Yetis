@@ -17,10 +17,10 @@ import org.firstinspires.ftc.robotcore.external.JavaUtil;
 public class DriverModeFinalFlipbackAutomatedSureshbeltdp extends LinearOpMode {
 
     private Servo claw;
-    private DcMotor backleft;
-    private DcMotor backright;
-    private DcMotor frontleft;
-    private DcMotor frontright;
+    private DcMotor leftBack;
+    private DcMotor rightBack;
+    private DcMotor leftFront;
+    private DcMotor rightFront;
     private DcMotor swivel;
     private DcMotor lift;
     private Servo arm;
@@ -91,10 +91,10 @@ public class DriverModeFinalFlipbackAutomatedSureshbeltdp extends LinearOpMode {
      * Describe this function...
      */
     private void stop_and_reset() {
-        backleft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        backright.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        frontleft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        frontright.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
     /**
@@ -119,18 +119,18 @@ public class DriverModeFinalFlipbackAutomatedSureshbeltdp extends LinearOpMode {
      * Describe this function...
      */
     private void Initialize_DriveTrain() {
-        frontleft.setDirection(DcMotorSimple.Direction.REVERSE);
-        frontleft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        frontleft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        frontright.setDirection(DcMotorSimple.Direction.REVERSE);
-        frontright.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        frontright.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        backleft.setDirection(DcMotorSimple.Direction.REVERSE);
-        backleft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        backleft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        backright.setDirection(DcMotorSimple.Direction.REVERSE);
-        backright.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        backright.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     /**
@@ -224,36 +224,36 @@ public class DriverModeFinalFlipbackAutomatedSureshbeltdp extends LinearOpMode {
         rx = -(gamepad1.right_stick_x * -0.6);
         if (gamepad1.right_stick_x != 0 || gamepad1.left_stick_y != 0 || gamepad1.left_stick_x != 0) {
             denominator = JavaUtil.maxOfList(JavaUtil.createListWith(JavaUtil.sumOfList(JavaUtil.createListWith(Math.abs(y), Math.abs(x), Math.abs(rx))), 1));
-            frontleft.setPower(drive_power * (((y - x) + rx) / denominator));
-            backleft.setPower(drive_power * ((y + x + rx) / denominator));
-            frontright.setPower(drive_power * (((y + x) - rx) / denominator));
-            backright.setPower(drive_power * (((y - x) - rx) / denominator));
+            leftFront.setPower(drive_power * (((y - x) + rx) / denominator));
+            leftBack.setPower(drive_power * ((y + x + rx) / denominator));
+            rightFront.setPower(drive_power * (((y + x) - rx) / denominator));
+            rightBack.setPower(drive_power * (((y - x) - rx) / denominator));
         } else if (gamepad1.right_stick_x == 0 && gamepad1.left_stick_y == 0 && gamepad1.left_stick_x == 0) {
             if (gamepad1.dpad_up || gamepad2.dpad_up) {
-                backleft.setPower(drive_slow_power);
-                backright.setPower(drive_slow_power);
-                frontleft.setPower(drive_slow_power);
-                frontright.setPower(drive_slow_power);
+                leftBack.setPower(drive_slow_power);
+                rightBack.setPower(drive_slow_power);
+                leftFront.setPower(drive_slow_power);
+                rightFront.setPower(drive_slow_power);
             } else if (gamepad1.dpad_down || gamepad2.dpad_down) {
-                backleft.setPower(-drive_slow_power);
-                backright.setPower(-drive_slow_power);
-                frontleft.setPower(-drive_slow_power);
-                frontright.setPower(-drive_slow_power);
+                leftBack.setPower(-drive_slow_power);
+                rightBack.setPower(-drive_slow_power);
+                leftFront.setPower(-drive_slow_power);
+                rightFront.setPower(-drive_slow_power);
             } else if (gamepad1.dpad_left || gamepad2.dpad_left) {
-                backleft.setPower(drive_slow_power);
-                backright.setPower(-drive_slow_power);
-                frontleft.setPower(-drive_slow_power);
-                frontright.setPower(drive_slow_power);
+                leftBack.setPower(drive_slow_power);
+                rightBack.setPower(-drive_slow_power);
+                leftFront.setPower(-drive_slow_power);
+                rightFront.setPower(drive_slow_power);
             } else if (gamepad1.dpad_right || gamepad2.dpad_right) {
-                backleft.setPower(-drive_slow_power);
-                backright.setPower(drive_slow_power);
-                frontleft.setPower(drive_slow_power);
-                frontright.setPower(-drive_slow_power);
+                leftBack.setPower(-drive_slow_power);
+                rightBack.setPower(drive_slow_power);
+                leftFront.setPower(drive_slow_power);
+                rightFront.setPower(-drive_slow_power);
             } else {
-                backleft.setPower(0);
-                backright.setPower(0);
-                frontleft.setPower(0);
-                frontright.setPower(0);
+                leftBack.setPower(0);
+                rightBack.setPower(0);
+                leftFront.setPower(0);
+                rightFront.setPower(0);
             }
         }
         // Denominator is the largest motor power
@@ -274,10 +274,10 @@ public class DriverModeFinalFlipbackAutomatedSureshbeltdp extends LinearOpMode {
         int lift_high_junction_max;
 
         claw = hardwareMap.get(Servo.class, "claw");
-        backleft = hardwareMap.get(DcMotor.class, "backleft");
-        backright = hardwareMap.get(DcMotor.class, "backright");
-        frontleft = hardwareMap.get(DcMotor.class, "frontleft");
-        frontright = hardwareMap.get(DcMotor.class, "frontright");
+        leftBack = hardwareMap.get(DcMotor.class, "leftBack");
+        rightBack = hardwareMap.get(DcMotor.class, "rightBack");
+        leftFront = hardwareMap.get(DcMotor.class, "leftFront");
+        rightFront = hardwareMap.get(DcMotor.class, "rightFront");
         swivel = hardwareMap.get(DcMotor.class, "swivel");
         lift = hardwareMap.get(DcMotor.class, "lift");
         arm = hardwareMap.get(Servo.class, "arm");
@@ -335,14 +335,14 @@ public class DriverModeFinalFlipbackAutomatedSureshbeltdp extends LinearOpMode {
      * Describe this function...
      */
     private void drive_telemetry() {
-        telemetry.addData("leftback pow", backleft.getPower());
-        telemetry.addData("leftback vel", ((DcMotorEx) backleft).getVelocity());
-        telemetry.addData("frontleft pow", frontleft.getPower());
-        telemetry.addData("frontleft vel", ((DcMotorEx) frontleft).getVelocity());
-        telemetry.addData("rightback pow", backright.getPower());
-        telemetry.addData("rightback vel", ((DcMotorEx) backright).getVelocity());
-        telemetry.addData("frontright pow", frontright.getPower());
-        telemetry.addData("frontright vel", ((DcMotorEx) frontright).getVelocity());
+        telemetry.addData("leftback pow", leftBack.getPower());
+        telemetry.addData("leftback vel", ((DcMotorEx) leftBack).getVelocity());
+        telemetry.addData("leftFront pow", leftFront.getPower());
+        telemetry.addData("leftFront vel", ((DcMotorEx) leftFront).getVelocity());
+        telemetry.addData("rightback pow", rightBack.getPower());
+        telemetry.addData("rightback vel", ((DcMotorEx) rightBack).getVelocity());
+        telemetry.addData("rightFront pow", rightFront.getPower());
+        telemetry.addData("rightFront vel", ((DcMotorEx) rightFront).getVelocity());
     }
 
     /**
@@ -446,22 +446,22 @@ public class DriverModeFinalFlipbackAutomatedSureshbeltdp extends LinearOpMode {
      */
     private void drive(double fr_distance, double fl_distance, double bl_distance, double br_distance) {
         stop_and_reset();
-        frontright.setTargetPosition((int) ((fr_distance / circumference) * ticks_rev__fd_and_bk_ * gear_ratio));
-        frontleft.setTargetPosition((int) ((fl_distance / circumference) * ticks_rev__fd_and_bk_ * gear_ratio));
-        backleft.setTargetPosition((int) ((bl_distance / circumference) * ticks_rev__fd_and_bk_ * gear_ratio));
-        backright.setTargetPosition((int) ((br_distance / circumference) * ticks_rev__fd_and_bk_ * gear_ratio));
-        ((DcMotorEx) frontleft).setTargetPositionTolerance(5);
-        ((DcMotorEx) frontright).setTargetPositionTolerance(5);
-        ((DcMotorEx) backleft).setTargetPositionTolerance(5);
-        ((DcMotorEx) backright).setTargetPositionTolerance(5);
-        backleft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        backright.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        frontleft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        frontright.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        ((DcMotorEx) frontright).setVelocity(Drivetrain_velocity);
-        ((DcMotorEx) frontleft).setVelocity(Drivetrain_velocity);
-        ((DcMotorEx) backright).setVelocity(Drivetrain_velocity);
-        ((DcMotorEx) backleft).setVelocity(Drivetrain_velocity);
+        rightFront.setTargetPosition((int) ((fr_distance / circumference) * ticks_rev__fd_and_bk_ * gear_ratio));
+        leftFront.setTargetPosition((int) ((fl_distance / circumference) * ticks_rev__fd_and_bk_ * gear_ratio));
+        leftBack.setTargetPosition((int) ((bl_distance / circumference) * ticks_rev__fd_and_bk_ * gear_ratio));
+        rightBack.setTargetPosition((int) ((br_distance / circumference) * ticks_rev__fd_and_bk_ * gear_ratio));
+        ((DcMotorEx) leftFront).setTargetPositionTolerance(5);
+        ((DcMotorEx) rightFront).setTargetPositionTolerance(5);
+        ((DcMotorEx) leftBack).setTargetPositionTolerance(5);
+        ((DcMotorEx) rightBack).setTargetPositionTolerance(5);
+        leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        ((DcMotorEx) rightFront).setVelocity(Drivetrain_velocity);
+        ((DcMotorEx) leftFront).setVelocity(Drivetrain_velocity);
+        ((DcMotorEx) rightBack).setVelocity(Drivetrain_velocity);
+        ((DcMotorEx) leftBack).setVelocity(Drivetrain_velocity);
         Timer(0.5);
         stop_and_reset();
     }
