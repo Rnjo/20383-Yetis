@@ -245,8 +245,8 @@ public class OpenCvWebcamInit extends LinearOpMode
              */
 
             input.copyTo(outPut);
-            Imgproc.rectangle(outPut, leftRect, rectColor, 1);
-            Imgproc.rectangle(outPut, rightRect, rectColor, 1);
+            Imgproc.rectangle(outPut, leftRect, rectColor, 3);
+            Imgproc.rectangle(outPut, rightRect, rectColor, 3);
 
             leftCrop = YCbCr.submat(leftRect);
             rightCrop = YCbCr.submat(rightRect);
@@ -256,8 +256,8 @@ public class OpenCvWebcamInit extends LinearOpMode
             Scalar leftavg = Core.mean(leftCrop);
             Scalar rightavg = Core.mean(rightCrop);
 
-            leftavgfin = leftavg.val[0];
-            rightavgfin = rightavg.val[0];
+            leftavgfin = leftavg.val[1];
+            rightavgfin = rightavg.val[1];
 /*
             if (coneInLeft1&&coneInLeft2) {
 telemetry.addLine("left"); //replace with rr values for left board placement

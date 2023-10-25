@@ -2,29 +2,29 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.JavaUtil;
 
-@TeleOp(name = "DriverModeFinalFlipbackAutomatedSureshbeltdp (Blocks to Java)")
-public class DriverModeFinalFlipbackAutomatedSureshbeltdp extends LinearOpMode {
+@TeleOp(name = "Bina_v1 ")
+public class Bina_v1 extends LinearOpMode {
 
     private Servo gates;
     private DcMotor leftBack;
     private DcMotor rightBack;
     private DcMotor leftFront;
     private DcMotor rightFront;
-    private DcMotor swivel;
     private DcMotor lift;     private DcMotor lift2;
 
     private Servo arm1;    private Servo arm2;
+    private Servo intake1; private Servo intake2;
+    private DcMotor par0; private DcMotor par1; private DcMotor perp;
 
-    private TouchSensor reset;
 
     double drive_slow_power;
     double arm_position;
@@ -56,13 +56,11 @@ public class DriverModeFinalFlipbackAutomatedSureshbeltdp extends LinearOpMode {
      * Describe this function...
      */
     private void Claw_Control() {
-        // ---------------------- Claw Code ----------------------
+        // ---------------------- Gate Code ----------------------
 
-        if (gamepad2.a) {
+        if (gamepad2.b) {
             gates.setPosition(1);
-
-
-        } else if (gamepad2.b) {
+        } else {
             gates.setPosition(0);
         }
         lift_telemetry();
@@ -84,18 +82,24 @@ public class DriverModeFinalFlipbackAutomatedSureshbeltdp extends LinearOpMode {
     /**
      * Describe this function...
      */
-private void position_zero() {
-        if (gamepad1.a) {
+    private void position_zero() {
+        if (gamepad1.x|| gamepad2.x) {
             arm1.setPosition(0);
             arm2.setPosition(0);
-            sleep(2000);
+            sleep(500);
             lift.setTargetPosition(0);
             lift2.setTargetPosition(0);
-lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            lift2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                lift.setPower(lift_max_power * 1);
+            lift2.setPower(lift_max_power * 1);
+
+            lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             lift2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            lift2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-            gates.setPosition(0);
+
 
         }
     }
@@ -127,7 +131,6 @@ lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
      * Describe this function...
      */
     private void lift_telemetry() {
-        telemetry.addData("lift reset", reset.isPressed());
         telemetry.addData("lift brake", lift.getZeroPowerBehavior());
         telemetry.addData("lift reset done", lift_reset_done);
         telemetry.addData("lift target power", lift_target_power);
@@ -138,9 +141,8 @@ lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         telemetry.addData("lift vel", ((DcMotorEx) lift).getVelocity());
         telemetry.addData("gamepadX", gamepad2.right_stick_x);
         telemetry.addData("gamepadY", gamepad2.left_stick_y);
-        telemetry.addData("arm pos", arm1.getPosition());
-        telemetry.addData("arm pos", arm2.getPosition());
-
+        telemetry.addData("arm1 pos", arm1.getPosition());
+        telemetry.addData("arm2 pos", arm2.getPosition());
         telemetry.addData("arm accel", arm_accel);
         telemetry.addData("gates pos", gates.getPosition());
     }
@@ -153,13 +155,9 @@ lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     /**
      * Describe this function...
      */
-    private void Deliver_cone() {
+   /* private void Deliver_cone() {
         if (gamepad2.y) {
-            if (lift_pos >= 60) {
-                lift_reset_done = false;
-                lift_max_power_mult_down = 1;
-            }
-            gates.setPosition(0);
+
             Timer(0.6);
             arm1.setPosition(1);
             arm2.setPosition(1);
@@ -170,12 +168,12 @@ lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             lift2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-            lift.setPower(lift_max_power * 1);
+            lift.setPower(lift_max_power);
             Timer(2);
             lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
     }
-
+*/
     /**
      * Describe this function...
      */
@@ -244,15 +242,18 @@ lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightBack = hardwareMap.get(DcMotor.class, "rightBack");
         leftFront = hardwareMap.get(DcMotor.class, "leftFront");
         rightFront = hardwareMap.get(DcMotor.class, "rightFront");
-        swivel = hardwareMap.get(DcMotor.class, "swivel");
         lift = hardwareMap.get(DcMotor.class, "lift");
         lift2 = hardwareMap.get(DcMotor.class, "lift2");
         arm1 = hardwareMap.get(Servo.class, "arm1");
         arm2 = hardwareMap.get(Servo.class, "arm2");
-
-        reset = hardwareMap.get(TouchSensor.class, "reset");
-arm2.setDirection(Servo.Direction.REVERSE);
-lift2.setDirection(DcMotorSimple.Direction.REVERSE);
+        DcMotor par0 = hardwareMap.dcMotor.get("par0");
+        DcMotor par1 = hardwareMap.dcMotor.get("par1");
+        DcMotor perp = hardwareMap.dcMotor.get("perp");
+        CRServo intake1 = hardwareMap.get(CRServo.class, "intake1");
+        CRServo intake2 = hardwareMap.get(CRServo.class, "intake2");
+        arm2.setDirection(Servo.Direction.REVERSE);
+        lift2.setDirection(DcMotorSimple.Direction.REVERSE);
+        intake2.setDirection(CRServo.Direction.REVERSE);
         drive_max_velocity = 1250;
         slow_velocity = 500;
         lift_reset_done = false;
@@ -272,14 +273,11 @@ lift2.setDirection(DcMotorSimple.Direction.REVERSE);
         claw_closed_position = 0;
         lift_high_junction_max = 1;
         Drivetrain_velocity = 1400;
-        circumference = 9.3886;
-        ticks_rev__fd_and_bk_ = 560;
-        gear_ratio = 0.56;
         lift_max_velocity = 2100;
         drive_power = 0.7;
         drive_slow_power = 0.2;
         Initialize_DriveTrain();
-       // Initialize_Lift();
+        // Initialize_Lift();
         lift_telemetry();
         telemetry.update();
         // Wait for Start button
@@ -291,8 +289,9 @@ lift2.setDirection(DcMotorSimple.Direction.REVERSE);
                 Arm_Control();
                 Claw_Control();
                 lift_telemetry();
-               // Return_home();
-                Deliver_cone();
+                // Return_home();
+                //Deliver_cone();
+                position_zero();
                 telemetry.update();
             }
         }
@@ -310,6 +309,9 @@ lift2.setDirection(DcMotorSimple.Direction.REVERSE);
         telemetry.addData("rightback vel", ((DcMotorEx) rightBack).getVelocity());
         telemetry.addData("rightFront pow", rightFront.getPower());
         telemetry.addData("rightFront vel", ((DcMotorEx) rightFront).getVelocity());
+        telemetry.addData("par0 pos", par0.getCurrentPosition());
+        telemetry.addData("par1 pos", par1.getCurrentPosition());
+        telemetry.addData("perp pos", perp.getCurrentPosition());
     }
 
     /**
@@ -334,27 +336,6 @@ lift2.setDirection(DcMotorSimple.Direction.REVERSE);
         rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
-    private void drive(double fr_distance, double fl_distance, double bl_distance, double br_distance) {
-        stop_and_reset();
-        rightFront.setTargetPosition((int) ((fr_distance / circumference) * ticks_rev__fd_and_bk_ * gear_ratio));
-        leftFront.setTargetPosition((int) ((fl_distance / circumference) * ticks_rev__fd_and_bk_ * gear_ratio));
-        leftBack.setTargetPosition((int) ((bl_distance / circumference) * ticks_rev__fd_and_bk_ * gear_ratio));
-        rightBack.setTargetPosition((int) ((br_distance / circumference) * ticks_rev__fd_and_bk_ * gear_ratio));
-        ((DcMotorEx) leftFront).setTargetPositionTolerance(5);
-        ((DcMotorEx) rightFront).setTargetPositionTolerance(5);
-        ((DcMotorEx) leftBack).setTargetPositionTolerance(5);
-        ((DcMotorEx) rightBack).setTargetPositionTolerance(5);
-        leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        ((DcMotorEx) rightFront).setVelocity(Drivetrain_velocity);
-        ((DcMotorEx) leftFront).setVelocity(Drivetrain_velocity);
-        ((DcMotorEx) rightBack).setVelocity(Drivetrain_velocity);
-        ((DcMotorEx) leftBack).setVelocity(Drivetrain_velocity);
-        Timer(0.5);
-        stop_and_reset();
-    }
 
     /**
      * Describe this function...
@@ -378,6 +359,7 @@ lift2.setDirection(DcMotorSimple.Direction.REVERSE);
             }
         }
         arm1.setPosition(arm_position);
+        arm2.setPosition(arm_position);
     }
 
     /**
@@ -390,19 +372,8 @@ lift2.setDirection(DcMotorSimple.Direction.REVERSE);
         lift_pos = lift.getCurrentPosition();
         lift_max_power_mult_up = 1;
         lift_max_power_mult_down = 1;
-        if (reset.isPressed()) {
-            if (!lift_reset_done) {
-                lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-                lift_pos = lift.getCurrentPosition();
-                lift_reset_done = true;
-            }
-            lift_max_power_mult_down = 0;
-        }
-        if (lift_pos >= 60) {
-            lift_reset_done = false;
-        }
+
+
         lift_pos = lift.getCurrentPosition();
         lift_power = lift.getPower();
         if (gamepad2.left_stick_y < 0 && lift_pos <= lift_max_position) {
@@ -410,13 +381,12 @@ lift2.setDirection(DcMotorSimple.Direction.REVERSE);
         } else if (gamepad2.left_stick_y > 0) {
             lift_target_power = -(lift_max_power_mult_down * lift_max_power * gamepad2.left_stick_y);
         } else {
-            if (lift.getCurrentPosition() > 200) {
-                lift_target_power = 0.001;
-            } else {
+
                 lift_target_power = 0;
-            }
+
         }
         lift_power = lift_target_power;
         lift.setPower(lift_power);
+        lift2.setPower(lift_power);
     }
 }
