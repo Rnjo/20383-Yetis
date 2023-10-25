@@ -16,20 +16,20 @@ public class Telep extends LinearOpMode {
     double arm_accel;
     double arm_max_position;
     double arm_min_position;
-   /* private PIDController controller;
+    /* private PIDController controller;
 
-    public static double p = 0, i = 0, d = 0;
-    public static double f = 0;
+     public static double p = 0, i = 0, d = 0;
+     public static double f = 0;
 
-    public static int target = 0;
+     public static int target = 0;
 
-    private final double ticks_in_degree = 28/360;
-*/
+     private final double ticks_in_degree = 28/360;
+ */
     @Override
     public void runOpMode() throws InterruptedException {
         // Declare our motors
         // Make sure your ID's match your configuration
-       // controller = new PIDController(p, i, d);
+        // controller = new PIDController(p, i, d);
         DcMotor leftFront = hardwareMap.dcMotor.get("leftFront");
         DcMotor leftBack = hardwareMap.dcMotor.get("leftBack");
         DcMotor rightFront = hardwareMap.dcMotor.get("rightFront");
@@ -109,23 +109,23 @@ public class Telep extends LinearOpMode {
 
 
 
-              arm_position = arm.getPosition();
-        if (gamepad2.right_stick_y < 0) {
-            arm_accel = -gamepad2.right_stick_y * 0.06;
-        } else if (gamepad2.right_stick_y > 0) {
-            arm_accel = -gamepad2.right_stick_y * 0.03;
-        } else {
-            arm_accel = 0;
-        }
-        arm_position = arm_position + arm_accel;
-        if (arm_position > arm_max_position) {
-            arm_position = arm_max_position;
-        } else {
-            if (arm_position <= arm_min_position) {
-                arm_position = arm_min_position;
+            arm_position = arm.getPosition();
+            if (gamepad2.right_stick_y < 0) {
+                arm_accel = -gamepad2.right_stick_y * 0.06;
+            } else if (gamepad2.right_stick_y > 0) {
+                arm_accel = -gamepad2.right_stick_y * 0.03;
+            } else {
+                arm_accel = 0;
             }
-        }
-        arm.setPosition(arm_position);
+            arm_position = arm_position + arm_accel;
+            if (arm_position > arm_max_position) {
+                arm_position = arm_max_position;
+            } else {
+                if (arm_position <= arm_min_position) {
+                    arm_position = arm_min_position;
+                }
+            }
+            arm.setPosition(arm_position);
 
 
 
@@ -134,8 +134,8 @@ public class Telep extends LinearOpMode {
             telemetry.addData("perp", perp.getCurrentPosition());
             telemetry.addData("par0", par0.getCurrentPosition());
             telemetry.addData("par1", par1.getCurrentPosition());
-         //   telemetry.addData("pos", liftPos);
-           // telemetry.addData("targetpos", target);
+            //   telemetry.addData("pos", liftPos);
+            // telemetry.addData("targetpos", target);
             telemetry.update();
 
 

@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -12,21 +11,21 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.JavaUtil;
 
-@Disabled
 @TeleOp(name = "DriverModeFinalFlipbackAutomatedSureshbeltdp (Blocks to Java)")
 public class DriverModeFinalFlipbackAutomatedSureshbeltdp extends LinearOpMode {
 
-    private Servo claw;
+    private Servo gates;
     private DcMotor leftBack;
     private DcMotor rightBack;
     private DcMotor leftFront;
     private DcMotor rightFront;
     private DcMotor swivel;
-    private DcMotor lift;
-    private Servo arm;
+    private DcMotor lift;     private DcMotor lift2;
+
+    private Servo arm1;    private Servo arm2;
+
     private TouchSensor reset;
 
-    int claw_counter;
     double drive_slow_power;
     double arm_position;
     int drive_max_velocity;
@@ -58,18 +57,13 @@ public class DriverModeFinalFlipbackAutomatedSureshbeltdp extends LinearOpMode {
      */
     private void Claw_Control() {
         // ---------------------- Claw Code ----------------------
-        if (gamepad2.back) {
-            claw_counter += 1;
-        }
+
         if (gamepad2.a) {
-            claw.setPosition(claw_open_position);
-            if (arm_position < 0.5) {
-                claw.setPosition(claw_open_position);
-            } else {
-                claw.setPosition(claw_open_position * 0.8);
-            }
+            gates.setPosition(1);
+
+
         } else if (gamepad2.b) {
-            claw.setPosition(claw_closed_position);
+            gates.setPosition(0);
         }
         lift_telemetry();
         telemetry.update();
@@ -90,28 +84,16 @@ public class DriverModeFinalFlipbackAutomatedSureshbeltdp extends LinearOpMode {
     /**
      * Describe this function...
      */
-    private void stop_and_reset() {
-        leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-    }
-
-    /**
-     * Describe this function...
-     */
-    private void position_zero() {
+private void position_zero() {
         if (gamepad1.a) {
-            swivel.setTargetPosition(0);
-            swivel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            ((DcMotorEx) swivel).setVelocity(1200);
-            while (swivel.isBusy()) {
-            }
-            swivel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            lift.setTargetPosition(lift_min_position);
-            lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            lift.setPower(1);
-            lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            arm1.setPosition(0);
+            arm2.setPosition(0);
+
+            lift.setTargetPosition(0);
+            lift2.setTargetPosition(0);
+lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            lift2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
         }
     }
 
@@ -136,19 +118,7 @@ public class DriverModeFinalFlipbackAutomatedSureshbeltdp extends LinearOpMode {
     /**
      * Describe this function...
      */
-    private void highest_level() {
-        if (gamepad2.right_bumper) {
-            lift.setTargetPosition(lift_max_position);
-            lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            ((DcMotorEx) lift).setVelocity(lift_max_velocity);
-            lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            arm.setPosition(arm_max_position);
-            swivel.setTargetPosition(1);
-            swivel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            ((DcMotorEx) swivel).setVelocity(lift_max_velocity);
-            swivel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        }
-    }
+
 
     /**
      * Describe this function...
@@ -165,30 +135,17 @@ public class DriverModeFinalFlipbackAutomatedSureshbeltdp extends LinearOpMode {
         telemetry.addData("lift vel", ((DcMotorEx) lift).getVelocity());
         telemetry.addData("gamepadX", gamepad2.right_stick_x);
         telemetry.addData("gamepadY", gamepad2.left_stick_y);
-        telemetry.addData("arm pos", arm.getPosition());
+        telemetry.addData("arm pos", arm1.getPosition());
+        telemetry.addData("arm pos", arm2.getPosition());
+
         telemetry.addData("arm accel", arm_accel);
-        telemetry.addData("claw pos", claw.getPosition());
+        telemetry.addData("gates pos", gates.getPosition());
     }
 
     /**
      * Describe this function...
      */
-    private void Deliver_cone2() {
-        if (gamepad2.left_bumper) {
-            if (lift_pos >= 60) {
-                lift_reset_done = false;
-                lift_max_power_mult_down = 1;
-            }
-            claw.setPosition(claw_closed_position);
-            Timer(0.6);
-            arm.setPosition(0.8);
-            lift.setTargetPosition(1150);
-            lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            lift.setPower(lift_max_power * 1);
-            Timer(2);
-            lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        }
-    }
+
 
     /**
      * Describe this function...
@@ -199,11 +156,17 @@ public class DriverModeFinalFlipbackAutomatedSureshbeltdp extends LinearOpMode {
                 lift_reset_done = false;
                 lift_max_power_mult_down = 1;
             }
-            claw.setPosition(claw_closed_position);
+            gates.setPosition(0);
             Timer(0.6);
-            arm.setPosition(0.6);
+            arm1.setPosition(1);
+            arm2.setPosition(1);
+
             lift.setTargetPosition(1200);
+            lift2.setTargetPosition(1200);
+
             lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            lift2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
             lift.setPower(lift_max_power * 1);
             Timer(2);
             lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -273,17 +236,20 @@ public class DriverModeFinalFlipbackAutomatedSureshbeltdp extends LinearOpMode {
         double lift_power_incr;
         int lift_high_junction_max;
 
-        claw = hardwareMap.get(Servo.class, "claw");
+        gates = hardwareMap.get(Servo.class, "gates");
         leftBack = hardwareMap.get(DcMotor.class, "leftBack");
         rightBack = hardwareMap.get(DcMotor.class, "rightBack");
         leftFront = hardwareMap.get(DcMotor.class, "leftFront");
         rightFront = hardwareMap.get(DcMotor.class, "rightFront");
         swivel = hardwareMap.get(DcMotor.class, "swivel");
         lift = hardwareMap.get(DcMotor.class, "lift");
-        arm = hardwareMap.get(Servo.class, "arm");
-        reset = hardwareMap.get(TouchSensor.class, "reset");
+        lift2 = hardwareMap.get(DcMotor.class, "lift2");
+        arm1 = hardwareMap.get(Servo.class, "arm1");
+        arm2 = hardwareMap.get(Servo.class, "arm2");
 
-        claw_counter = 0;
+        reset = hardwareMap.get(TouchSensor.class, "reset");
+arm2.setDirection(Servo.Direction.REVERSE);
+lift2.setDirection(DcMotorSimple.Direction.REVERSE);
         drive_max_velocity = 1250;
         slow_velocity = 500;
         lift_reset_done = false;
@@ -530,6 +496,3 @@ public class DriverModeFinalFlipbackAutomatedSureshbeltdp extends LinearOpMode {
         lift.setPower(lift_power);
     }
 }
-
-
-
