@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -11,7 +12,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.JavaUtil;
 
-@TeleOp(name = "Bina_v1 ")
+@Config
+
+@TeleOp
 public class Bina_v1 extends LinearOpMode {
 
     private Servo gates;
@@ -19,11 +22,15 @@ public class Bina_v1 extends LinearOpMode {
     private DcMotor rightBack;
     private DcMotor leftFront;
     private DcMotor rightFront;
-    private DcMotor lift;     private DcMotor lift2;
+    private DcMotor lift;
 
-    private Servo arm1;    private Servo arm2;
-    private Servo intake1; private Servo intake2;
-    private DcMotor par0; private DcMotor par1; private DcMotor perp;
+    private Servo arm1;
+    private Servo arm2;
+    private CRServo intake1;
+    private CRServo intake2;
+    private DcMotor par0;
+    private DcMotor par1;
+    private DcMotor perp;
 
 
     double drive_slow_power;
@@ -63,6 +70,15 @@ public class Bina_v1 extends LinearOpMode {
         } else {
             gates.setPosition(0);
         }
+     /*   if (gamepad2.a) {
+            intake1.setPower(1);
+            intake2.setPower(1);
+        } else {
+            intake1.setPower(0.5);
+            intake2.setPower(0.5);
+        }
+
+      */
         lift_telemetry();
         telemetry.update();
     }
@@ -79,25 +95,23 @@ public class Bina_v1 extends LinearOpMode {
         }
     }
 
-    /**
-     * Describe this function...
-     */
+
     private void position_zero() {
-        if (gamepad1.x|| gamepad2.x) {
+        if ( gamepad2.x) {
             arm1.setPosition(0);
             arm2.setPosition(0);
             sleep(500);
             lift.setTargetPosition(0);
-            lift2.setTargetPosition(0);
+            perp.setTargetPosition(0);
             lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            lift2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                lift.setPower(lift_max_power * 1);
-            lift2.setPower(lift_max_power * 1);
+            perp.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                lift.setPower(lift_max_power);
+            perp.setPower(lift_max_power);
 
             lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            lift2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            perp.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            lift2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            perp.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 
 
@@ -145,16 +159,15 @@ public class Bina_v1 extends LinearOpMode {
         telemetry.addData("arm2 pos", arm2.getPosition());
         telemetry.addData("arm accel", arm_accel);
         telemetry.addData("gates pos", gates.getPosition());
+
+        telemetry.update();
+
     }
 
-    /**
-     * Describe this function...
-     */
 
 
-    /**
-     * Describe this function...
-     */
+
+
    /* private void Deliver_cone() {
         if (gamepad2.y) {
 
@@ -243,16 +256,16 @@ public class Bina_v1 extends LinearOpMode {
         leftFront = hardwareMap.get(DcMotor.class, "leftFront");
         rightFront = hardwareMap.get(DcMotor.class, "rightFront");
         lift = hardwareMap.get(DcMotor.class, "lift");
-        lift2 = hardwareMap.get(DcMotor.class, "lift2");
+        perp = hardwareMap.get(DcMotor.class, "perp");
         arm1 = hardwareMap.get(Servo.class, "arm1");
         arm2 = hardwareMap.get(Servo.class, "arm2");
-        DcMotor par0 = hardwareMap.dcMotor.get("par0");
-        DcMotor par1 = hardwareMap.dcMotor.get("par1");
-        DcMotor perp = hardwareMap.dcMotor.get("perp");
-        CRServo intake1 = hardwareMap.get(CRServo.class, "intake1");
-        CRServo intake2 = hardwareMap.get(CRServo.class, "intake2");
+        par0 = hardwareMap.dcMotor.get("par0");
+         par1 = hardwareMap.dcMotor.get("par1");
+         perp = hardwareMap.dcMotor.get("perp");
+         intake1 = hardwareMap.get(CRServo.class, "intake1");
+         intake2 = hardwareMap.get(CRServo.class, "intake2");
         arm2.setDirection(Servo.Direction.REVERSE);
-        lift2.setDirection(DcMotorSimple.Direction.REVERSE);
+        lift.setDirection(DcMotorSimple.Direction.REVERSE);
         intake2.setDirection(CRServo.Direction.REVERSE);
         drive_max_velocity = 1250;
         slow_velocity = 500;
@@ -367,9 +380,9 @@ public class Bina_v1 extends LinearOpMode {
      */
     private void Lift_Control() {
         double lift_power;
+        lift_pos = lift.getCurrentPosition();
 
         // ---------------------- Lift Code ----------------------
-        lift_pos = lift.getCurrentPosition();
         lift_max_power_mult_up = 1;
         lift_max_power_mult_down = 1;
 
@@ -378,7 +391,7 @@ public class Bina_v1 extends LinearOpMode {
         lift_power = lift.getPower();
         if (gamepad2.left_stick_y < 0 && lift_pos <= lift_max_position) {
             lift_target_power = -(lift_max_power_mult_up * lift_max_power * gamepad2.left_stick_y);
-        } else if (gamepad2.left_stick_y > 0) {
+        } else if (gamepad2.left_stick_y > 0&&lift_pos>lift_min_position) {
             lift_target_power = -(lift_max_power_mult_down * lift_max_power * gamepad2.left_stick_y);
         } else {
 
@@ -387,6 +400,6 @@ public class Bina_v1 extends LinearOpMode {
         }
         lift_power = lift_target_power;
         lift.setPower(lift_power);
-        lift2.setPower(lift_power);
+        perp.setPower(lift_power);
     }
 }

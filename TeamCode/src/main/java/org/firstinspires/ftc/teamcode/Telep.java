@@ -16,7 +16,7 @@ public class Telep extends LinearOpMode {
     double arm_accel;
     double arm_max_position;
     double arm_min_position;
-   /* private PIDController controller;
+    /* private PIDController controller;
 
     public static double p = 0, i = 0, d = 0;
     public static double f = 0;
@@ -24,7 +24,7 @@ public class Telep extends LinearOpMode {
     public static int target = 0;
 
     private final double ticks_in_degree = 28/360;
-*/
+    */
     @Override
     public void runOpMode() throws InterruptedException {
         // Declare our motors
@@ -38,7 +38,6 @@ public class Telep extends LinearOpMode {
         DcMotor par1 = hardwareMap.dcMotor.get("par1");
         DcMotor perp = hardwareMap.dcMotor.get("perp");
         DcMotor lift = hardwareMap.dcMotor.get("lift");
-
         Servo arm = hardwareMap.get(Servo.class, "arm");
         CRServo intake1 = hardwareMap.get(CRServo.class, "intake1");
         CRServo intake2 = hardwareMap.get(CRServo.class, "intake2");
