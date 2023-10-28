@@ -117,11 +117,11 @@ public class PowerplayDeterminationExample extends LinearOpMode
         /*
          * The core values which define the location and size of the sample regions
          */
-        static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(0,240);
-        static final Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(425,240);
-        static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(850,240);
+        static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(0,0);
+        static final Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(425,0);
+        static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(850,0);
         static final int REGION_WIDTH = 424;
-        static final int REGION_HEIGHT = 240;
+        static final int REGION_HEIGHT = 720;
 
         /*
          * Points which actually define the sample region rectangles, derived from above values

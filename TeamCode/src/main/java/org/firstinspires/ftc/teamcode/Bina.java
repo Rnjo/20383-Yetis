@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.JavaUtil;
 
-@Config
+
 
 @TeleOp
 public class Bina extends LinearOpMode {
