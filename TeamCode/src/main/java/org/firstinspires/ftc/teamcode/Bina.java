@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.JavaUtil;
@@ -15,7 +16,7 @@ import org.firstinspires.ftc.robotcore.external.JavaUtil;
 @Config
 
 @TeleOp
-public class Bina_v1 extends LinearOpMode {
+public class Bina extends LinearOpMode {
 
     private Servo gates;
     private DcMotor leftBack;
@@ -23,6 +24,7 @@ public class Bina_v1 extends LinearOpMode {
     private DcMotor leftFront;
     private DcMotor rightFront;
     private DcMotor lift;
+    private TouchSensor reset;
 
     private Servo arm1;
     private Servo arm2;
@@ -264,6 +266,7 @@ public class Bina_v1 extends LinearOpMode {
          perp = hardwareMap.dcMotor.get("perp");
          intake1 = hardwareMap.get(CRServo.class, "intake1");
          intake2 = hardwareMap.get(CRServo.class, "intake2");
+        reset = hardwareMap.get(TouchSensor.class, "reset");
         arm2.setDirection(Servo.Direction.REVERSE);
         lift.setDirection(DcMotorSimple.Direction.REVERSE);
         intake2.setDirection(CRServo.Direction.REVERSE);
@@ -385,13 +388,19 @@ public class Bina_v1 extends LinearOpMode {
         // ---------------------- Lift Code ----------------------
         lift_max_power_mult_up = 1;
         lift_max_power_mult_down = 1;
+        if (reset.isPressed()) {
 
-
+            lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            lift_pos = lift.getCurrentPosition();
+            lift_reset_done = true;
+        }
         lift_pos = lift.getCurrentPosition();
         lift_power = lift.getPower();
         if (gamepad2.left_stick_y < 0 && lift_pos <= lift_max_position) {
             lift_target_power = -(lift_max_power_mult_up * lift_max_power * gamepad2.left_stick_y);
-        } else if (gamepad2.left_stick_y > 0&&lift_pos>lift_min_position) {
+        } else if (gamepad2.left_stick_y > 0) {
             lift_target_power = -(lift_max_power_mult_down * lift_max_power * gamepad2.left_stick_y);
         } else {
 
