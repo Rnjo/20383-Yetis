@@ -35,7 +35,7 @@ import org.openftc.easyopencv.OpenCvWebcam;
  * command is issued. The pipeline is re-used from SkystoneDeterminationExample
  */
 @Autonomous
-public class AutonomousInitDetectionExample extends LinearOpMode
+public class BlueAllianceLeft extends LinearOpMode
 {
     OpenCvWebcam webcam;
     PowerplayDeterminationExample.SkystoneDeterminationPipeline pipeline;

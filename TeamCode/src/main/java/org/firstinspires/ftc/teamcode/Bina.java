@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -70,17 +69,19 @@ public class Bina extends LinearOpMode {
         if (gamepad2.b) {
             gates.setPosition(1);
         } else {
-            gates.setPosition(0);
+            gates.setPosition(0.5);
         }
-     /*   if (gamepad2.a) {
+        if (gamepad2.a) {
             intake1.setPower(1);
             intake2.setPower(1);
+            gates.setPosition(1);
         } else {
-            intake1.setPower(0.5);
-            intake2.setPower(0.5);
+            intake1.setPower(0);
+            intake2.setPower(0);
+            gates.setPosition(0.5);
         }
 
-      */
+
         lift_telemetry();
         telemetry.update();
     }
