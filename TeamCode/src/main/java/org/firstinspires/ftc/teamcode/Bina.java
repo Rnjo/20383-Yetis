@@ -148,8 +148,7 @@ public class Bina extends LinearOpMode {
      * Describe this function...
      */
     private void lift_telemetry() {
-        telemetry.addData("lift brake", lift.getZeroPowerBehavior());
-        telemetry.addData("lift reset done", lift_reset_done);
+
         telemetry.addData("lift target power", lift_target_power);
         telemetry.addData("lift pow", lift.getPower());
         telemetry.addData("lift speed mult up", lift_max_power_mult_up);
@@ -162,7 +161,8 @@ public class Bina extends LinearOpMode {
         telemetry.addData("arm2 pos", arm2.getPosition());
         telemetry.addData("arm accel", arm_accel);
         telemetry.addData("gates pos", gates.getPosition());
-
+        telemetry.addData("intake 1 pow", intake1.getPower());
+        telemetry.addData("intake 2 pow", intake2.getPower());
         telemetry.update();
 
     }
