@@ -55,7 +55,7 @@ public class Bina extends LinearOpMode {
     double circumference;
     int lift_brake_threshold_up;
     double arm_max_position;
-    int arm_min_position;
+    double arm_min_position;
     double arm_turn_Ok_position;
     int Drivetrain_velocity;
     double drive_power;
@@ -101,8 +101,8 @@ public class Bina extends LinearOpMode {
 
     private void position_zero() {
         if ( gamepad2.x) {
-            arm1.setPosition(0);
-            arm2.setPosition(0);
+            arm1.setPosition(0.5);
+            arm2.setPosition(0.5);
             sleep(500);
             lift.setTargetPosition(0);
             perp.setTargetPosition(0);
@@ -153,7 +153,8 @@ public class Bina extends LinearOpMode {
         telemetry.addData("lift pow", lift.getPower());
         telemetry.addData("lift speed mult up", lift_max_power_mult_up);
         telemetry.addData("lift speed mult down", lift_max_power_mult_down);
-        telemetry.addData("lift pos", lift_pos);
+        telemetry.addData("lift pos", lift.getCurrentPosition());
+        telemetry.addData("perp pos", perp.getCurrentPosition());
         telemetry.addData("lift vel", ((DcMotorEx) lift).getVelocity());
         telemetry.addData("gamepadX", gamepad2.right_stick_x);
         telemetry.addData("gamepadY", gamepad2.left_stick_y);
@@ -396,6 +397,10 @@ public class Bina extends LinearOpMode {
             lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             lift_pos = lift.getCurrentPosition();
             lift_reset_done = true;
+            perp.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            perp.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            perp.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
         }
         lift_pos = lift.getCurrentPosition();
         lift_power = lift.getPower();
