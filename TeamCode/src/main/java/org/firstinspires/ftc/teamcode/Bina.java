@@ -71,13 +71,15 @@ public class Bina extends LinearOpMode {
         } else {
             gates.setPosition(0.5);
         }
-        if (gamepad2.a) {
+        if (gamepad1.a) {
             intake1.setPower(1);
             intake2.setPower(1);
             gates.setPosition(1);
-        } else {
+        } else if(gamepad1.x){
             intake1.setPower(0);
             intake2.setPower(0);
+            gates.setPosition(0.5);
+        }else{
             gates.setPosition(0.5);
         }
 
@@ -126,17 +128,17 @@ public class Bina extends LinearOpMode {
      */
     private void Initialize_DriveTrain() {
         leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
-        leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+       leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
-        rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+       rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        leftBack.setDirection(DcMotorSimple.Direction.FORWARD);
-        leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+     leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
+       leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
+       rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
         rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+      rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     /**
@@ -195,33 +197,33 @@ public class Bina extends LinearOpMode {
      * Describe this function...
      */
     private void Drive_Control() {
-        float y;
+        double y;
         float x;
-        double rx;
+        float rx;
         double denominator;
 
-        y = -gamepad1.right_stick_x;
+        rx = gamepad1.left_stick_y;
         x = -gamepad1.left_stick_x;
-        rx = gamepad1.left_stick_y ;
+        y = (gamepad1.right_stick_x * -1);
         if (gamepad1.right_stick_x != 0 || gamepad1.left_stick_y != 0 || gamepad1.left_stick_x != 0) {
             denominator = JavaUtil.maxOfList(JavaUtil.createListWith(JavaUtil.sumOfList(JavaUtil.createListWith(Math.abs(y), Math.abs(x), Math.abs(rx))), 1));
-            leftFront.setPower(drive_power * (((y - x) + rx) / denominator));
+           leftFront.setPower(drive_power * (((y - x) + rx) / denominator));
             leftBack.setPower(drive_power * ((y + x + rx) / denominator));
-            rightFront.setPower(drive_power * (((y + x) - rx) / denominator));
-            rightBack.setPower(drive_power * (((y - x) - rx) / denominator));
+           rightFront.setPower(drive_power * (((y + x) - rx) / denominator));
+          rightBack.setPower(drive_power * (((y - x) - rx) / denominator));
         } else if (gamepad1.right_stick_x == 0 && gamepad1.left_stick_y == 0 && gamepad1.left_stick_x == 0) {
-            if (gamepad1.dpad_up || gamepad2.dpad_up) {
+            if (gamepad1.dpad_down || gamepad2.dpad_down) {
+               leftBack.setPower(drive_slow_power);
+                rightBack.setPower(-drive_slow_power);
+                leftFront.setPower(drive_slow_power);
+                rightFront.setPower(-drive_slow_power);
+        } else if (gamepad1.dpad_up || gamepad2.dpad_up) {
                 leftBack.setPower(-drive_slow_power);
                 rightBack.setPower(drive_slow_power);
                 leftFront.setPower(-drive_slow_power);
                 rightFront.setPower(drive_slow_power);
-            } else if (gamepad1.dpad_down || gamepad2.dpad_down) {
-                leftBack.setPower(-drive_slow_power);
-                rightBack.setPower(-drive_slow_power);
-                leftFront.setPower(-drive_slow_power);
-                rightFront.setPower(-drive_slow_power);
             } else if (gamepad1.dpad_left || gamepad2.dpad_left) {
-                leftBack.setPower(drive_slow_power);
+    leftBack.setPower(drive_slow_power);
                 rightBack.setPower(-drive_slow_power);
                 leftFront.setPower(-drive_slow_power);
                 rightFront.setPower(drive_slow_power);
@@ -296,7 +298,7 @@ public class Bina extends LinearOpMode {
         drive_slow_power = 0.2;
         Initialize_DriveTrain();
         // Initialize_Lift();
-        lift_telemetry();
+     //   lift_telemetry();
         telemetry.update();
         // Wait for Start button
         waitForStart();
@@ -306,7 +308,7 @@ public class Bina extends LinearOpMode {
                 Lift_Control();
                 Arm_Control();
                 Claw_Control();
-                lift_telemetry();
+                drive_telemetry();
                 // Return_home();
                 //Deliver_cone();
                 position_zero();
