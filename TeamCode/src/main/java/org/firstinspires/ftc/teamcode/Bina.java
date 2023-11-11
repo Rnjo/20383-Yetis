@@ -35,6 +35,7 @@ public class Bina extends LinearOpMode {
 
 
     double drive_slow_power;
+    int drive_slow_velocity;
     double arm_position;
     int drive_max_velocity;
     int lift_pos;
@@ -204,39 +205,40 @@ public class Bina extends LinearOpMode {
 
         rx = gamepad1.left_stick_y;
         x = -gamepad1.left_stick_x;
-        y = (gamepad1.right_stick_x * -1);
+        y = (gamepad1.right_stick_x * -0.6);
         if (gamepad1.right_stick_x != 0 || gamepad1.left_stick_y != 0 || gamepad1.left_stick_x != 0) {
             denominator = JavaUtil.maxOfList(JavaUtil.createListWith(JavaUtil.sumOfList(JavaUtil.createListWith(Math.abs(y), Math.abs(x), Math.abs(rx))), 1));
-           leftFront.setPower(drive_power * (((y - x) + rx) / denominator));
-            leftBack.setPower(drive_power * ((y + x + rx) / denominator));
-           rightFront.setPower(drive_power * (((y + x) - rx) / denominator));
-          rightBack.setPower(drive_power * (((y - x) - rx) / denominator));
+            ((DcMotorEx) leftFront).setVelocity(drive_max_velocity * (((y - x) + rx) / denominator));
+            ((DcMotorEx) leftBack).setVelocity(drive_max_velocity * ((y + x + rx) / denominator));
+            ((DcMotorEx) rightFront).setVelocity(drive_max_velocity * (((y + x) - rx) / denominator));
+            ((DcMotorEx) rightBack).setVelocity(drive_max_velocity * (((y - x) - rx) / denominator));
         } else if (gamepad1.right_stick_x == 0 && gamepad1.left_stick_y == 0 && gamepad1.left_stick_x == 0) {
             if (gamepad1.dpad_down || gamepad2.dpad_down) {
-               leftBack.setPower(drive_slow_power);
-                rightBack.setPower(-drive_slow_power);
-                leftFront.setPower(drive_slow_power);
-                rightFront.setPower(-drive_slow_power);
+                ((DcMotorEx) leftBack).setVelocity(drive_slow_velocity);
+                ((DcMotorEx) rightBack).setVelocity(-drive_slow_velocity);
+                ((DcMotorEx) leftFront).setVelocity(drive_slow_velocity);
+                ((DcMotorEx) rightFront).setVelocity(-drive_slow_velocity);
+
         } else if (gamepad1.dpad_up || gamepad2.dpad_up) {
-                leftBack.setPower(-drive_slow_power);
-                rightBack.setPower(drive_slow_power);
-                leftFront.setPower(-drive_slow_power);
-                rightFront.setPower(drive_slow_power);
+                ((DcMotorEx) leftBack).setVelocity(-drive_slow_velocity);
+                ((DcMotorEx) rightBack).setVelocity(drive_slow_velocity);
+                ((DcMotorEx) leftFront).setVelocity(-drive_slow_velocity);
+                ((DcMotorEx) rightFront).setVelocity(drive_slow_velocity);
             } else if (gamepad1.dpad_left || gamepad2.dpad_left) {
-    leftBack.setPower(drive_slow_power);
-                rightBack.setPower(-drive_slow_power);
-                leftFront.setPower(-drive_slow_power);
-                rightFront.setPower(drive_slow_power);
+                ((DcMotorEx) leftBack).setVelocity(drive_slow_velocity);
+                ((DcMotorEx) rightBack).setVelocity(-drive_slow_velocity);
+                ((DcMotorEx) leftFront).setVelocity(-drive_slow_velocity);
+                ((DcMotorEx) rightFront).setVelocity(drive_slow_velocity);
             } else if (gamepad1.dpad_right || gamepad2.dpad_right) {
-                leftBack.setPower(-drive_slow_power);
-                rightBack.setPower(drive_slow_power);
-                leftFront.setPower(drive_slow_power);
-                rightFront.setPower(-drive_slow_power);
+                ((DcMotorEx) leftBack).setVelocity(-drive_slow_velocity);
+                ((DcMotorEx) rightBack).setVelocity(drive_slow_velocity);
+                ((DcMotorEx) leftFront).setVelocity(drive_slow_velocity);
+                ((DcMotorEx) rightFront).setVelocity(-drive_slow_velocity);
             } else {
-                leftBack.setPower(0);
-                rightBack.setPower(0);
-                leftFront.setPower(0);
-                rightFront.setPower(0);
+                ((DcMotorEx) leftBack).setVelocity(0);
+                ((DcMotorEx) rightBack).setVelocity(0);
+                ((DcMotorEx) leftFront).setVelocity(0);
+                ((DcMotorEx) rightFront).setVelocity(0);
             }
         }
         // Denominator is the largest motor power
@@ -282,6 +284,7 @@ public class Bina extends LinearOpMode {
         lift_max_position = 1200;
         lift_max_power_mult_up = 1;
         lift_max_power_mult_down = 1;
+        drive_slow_velocity=280;
         lift_power_incr = 0.1;
         lift_max_velocity = 0;
         arm_max_position = 0.8;
