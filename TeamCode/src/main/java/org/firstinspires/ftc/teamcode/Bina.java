@@ -17,7 +17,7 @@ import org.firstinspires.ftc.robotcore.external.JavaUtil;
 @TeleOp
 public class Bina extends LinearOpMode {
 
-    private Servo gates;
+    private CRServo gates;
     private DcMotor leftBack;
     private DcMotor rightBack;
     private DcMotor leftFront;
@@ -67,23 +67,22 @@ public class Bina extends LinearOpMode {
         // ---------------------- Gate Code ----------------------
 
         if (gamepad2.b) {
-            gates.setPosition(1);
-        } else {
-            gates.setPosition(0.5);
-        }
-        if (gamepad1.a) {
+            gates.setPower(-1);
+        } else if (gamepad1.b) {
+            intake1.setPower(-1);
+            intake2.setPower(-1);
+        } else if (gamepad1.right_bumper) {
             intake1.setPower(1);
             intake2.setPower(1);
-            gates.setPosition(1);
-        } else if(gamepad1.x){
+        } else if (gamepad2.a) {
+            gates.setPower(1);
+        } else if (gamepad1.left_bumper) {
             intake1.setPower(0);
             intake2.setPower(0);
-            gates.setPosition(0.5);
-        }else{
-            gates.setPosition(0.5);
         }
-
-
+        else {
+            gates.setPower(0);
+        }
         lift_telemetry();
         telemetry.update();
     }
@@ -163,7 +162,7 @@ public class Bina extends LinearOpMode {
         telemetry.addData("arm1 pos", arm1.getPosition());
         telemetry.addData("arm2 pos", arm2.getPosition());
         telemetry.addData("arm accel", arm_accel);
-        telemetry.addData("gates pos", gates.getPosition());
+        telemetry.addData("gates pos", gates.getPower());
         telemetry.addData("intake 1 pow", intake1.getPower());
         telemetry.addData("intake 2 pow", intake2.getPower());
         telemetry.update();
@@ -256,7 +255,7 @@ public class Bina extends LinearOpMode {
         double lift_power_incr;
         int lift_high_junction_max;
 
-        gates = hardwareMap.get(Servo.class, "gates");
+        gates = hardwareMap.get(CRServo.class, "gates");
         leftBack = hardwareMap.get(DcMotor.class, "leftBack");
         rightBack = hardwareMap.get(DcMotor.class, "rightBack");
         leftFront = hardwareMap.get(DcMotor.class, "leftFront");
