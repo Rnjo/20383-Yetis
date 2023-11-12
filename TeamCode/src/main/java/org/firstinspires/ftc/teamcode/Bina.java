@@ -81,9 +81,9 @@ public class Bina extends LinearOpMode {
         } else if (gamepad1.left_bumper) {
             intake1.setPower(0);
             intake2.setPower(0);
-        }
-
-
+        } else if (gamepad2.b){
+gates.setPower(0);
+    }
         telemetry.update();
     }
 
@@ -274,19 +274,19 @@ public class Bina extends LinearOpMode {
         arm2.setDirection(Servo.Direction.REVERSE);
         lift.setDirection(DcMotorSimple.Direction.REVERSE);
         intake2.setDirection(CRServo.Direction.REVERSE);
-        drive_max_velocity = 1250;
+        drive_max_velocity = 2000;
         slow_velocity = 500;
         lift_reset_done = false;
         lift_max_power = 1;
         lift_min_position = 0;
         lift_max_position = 1200;
         lift_max_power_mult_up = 1;
-        lift_max_power_mult_down = 1;
+        lift_max_power_mult_down = 0.7;
         drive_slow_velocity=280;
         lift_power_incr = 0.1;
         lift_max_velocity = 0;
         arm_max_position = 0.8;
-        arm_min_position = 0.179;
+        arm_min_position = 0.178;
         arm_position = 0.5;
         arm_accel = 0;
         arm_turn_Ok_position = 0.41;

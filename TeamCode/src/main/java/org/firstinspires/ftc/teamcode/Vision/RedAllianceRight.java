@@ -22,6 +22,7 @@
 package org.firstinspires.ftc.teamcode.Vision;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.openftc.easyopencv.OpenCvCamera;
@@ -35,6 +36,7 @@ import org.openftc.easyopencv.OpenCvWebcam;
  * command is issued. The pipeline is re-used from SkystoneDeterminationExample
  */
 @Autonomous
+@Disabled
 public class RedAllianceRight extends LinearOpMode
 {
     OpenCvWebcam webcam;
