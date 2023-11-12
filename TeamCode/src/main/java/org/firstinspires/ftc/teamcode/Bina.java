@@ -67,7 +67,7 @@ public class Bina extends LinearOpMode {
     private void Claw_Control() {
         // ---------------------- Gate Code ----------------------
 
-        if (gamepad2.b) {
+        if (gamepad2.left_bumper) {
             gates.setPower(-1);
         } else if (gamepad1.b) {
             intake1.setPower(-1);
@@ -76,16 +76,14 @@ public class Bina extends LinearOpMode {
             intake1.setPower(1);
             intake2.setPower(1);
             gates.setPower(1);
-        } else if (gamepad2.a) {
+        } else if (gamepad2.right_bumper) {
             gates.setPower(1);
         } else if (gamepad1.left_bumper) {
             intake1.setPower(0);
             intake2.setPower(0);
         }
-        else {
-            gates.setPower(0);
-        }
-        lift_telemetry();
+
+
         telemetry.update();
     }
 
@@ -104,8 +102,8 @@ public class Bina extends LinearOpMode {
 
     private void position_zero() {
         if ( gamepad2.x) {
-            arm1.setPosition(0.5);
-            arm2.setPosition(0.5);
+            arm1.setPosition(arm_min_position);
+            arm2.setPosition(arm_min_position);
             sleep(500);
             lift.setTargetPosition(0);
             perp.setTargetPosition(0);
@@ -288,7 +286,7 @@ public class Bina extends LinearOpMode {
         lift_power_incr = 0.1;
         lift_max_velocity = 0;
         arm_max_position = 0.8;
-        arm_min_position = 0;
+        arm_min_position = 0.179;
         arm_position = 0.5;
         arm_accel = 0;
         arm_turn_Ok_position = 0.41;
@@ -305,6 +303,9 @@ public class Bina extends LinearOpMode {
         telemetry.update();
         // Wait for Start button
         waitForStart();
+        arm1.setPosition(arm_min_position);
+        arm2.setPosition(arm_min_position);
+
         if (opModeIsActive()) {
             while (opModeIsActive()) {
                 Drive_Control();
