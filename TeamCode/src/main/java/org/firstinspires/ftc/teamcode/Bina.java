@@ -286,7 +286,7 @@ gates.setPower(0);
         lift_power_incr = 0.1;
         lift_max_velocity = 0;
         arm_max_position = 0.8;
-        arm_min_position = 0.178;
+        arm_min_position = 0.17;
         arm_position = 0.5;
         arm_accel = 0;
         arm_turn_Ok_position = 0.41;
@@ -315,7 +315,7 @@ gates.setPower(0);
                 drive_telemetry();
                 // Return_home();
                 //Deliver_cone();
-                position_zero();
+               // position_zero();
                 telemetry.update();
             }
         }
@@ -336,7 +336,10 @@ gates.setPower(0);
         telemetry.addData("par0 pos", par0.getCurrentPosition());
         telemetry.addData("par1 pos", par1.getCurrentPosition());
         telemetry.addData("perp pos", perp.getCurrentPosition());
-    }
+        telemetry.addData("left Back pos", leftBack.getCurrentPosition());
+        telemetry.addData("Left Front pos", leftFront.getCurrentPosition());
+        telemetry.addData("Right Back pos", rightBack.getCurrentPosition());
+        telemetry.addData("Right Front pos", rightFront.getCurrentPosition());}
 
     /**
      * Describe this function...
