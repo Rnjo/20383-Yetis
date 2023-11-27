@@ -68,7 +68,7 @@ public class Bina extends LinearOpMode {
         // ---------------------- Gate Code ----------------------
 
         if (gamepad2.left_bumper) {
-            gates.setPower(-1);
+            gates.setPower(-0.4);
         } else if (gamepad1.b) {
             intake1.setPower(-1);
             intake2.setPower(-1);

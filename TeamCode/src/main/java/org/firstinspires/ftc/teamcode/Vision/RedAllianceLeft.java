@@ -40,8 +40,8 @@ import org.openftc.easyopencv.OpenCvWebcam;
 public class RedAllianceLeft extends LinearOpMode
 {
     OpenCvWebcam webcam;
-    PowerplayDeterminationExample.SkystoneDeterminationPipeline pipeline;
-    PowerplayDeterminationExample.SkystoneDeterminationPipeline.SkystonePosition snapshotAnalysis = PowerplayDeterminationExample.SkystoneDeterminationPipeline.SkystonePosition.LEFT; // default
+    PowerplayRedDeterminationExample.SkystoneDeterminationRedPipeline pipeline;
+    PowerplayRedDeterminationExample.SkystoneDeterminationRedPipeline.SkystonePosition snapshotAnalysis = PowerplayRedDeterminationExample.SkystoneDeterminationRedPipeline.SkystonePosition.LEFT; // default
 
     @Override
     public void runOpMode()
@@ -55,7 +55,7 @@ public class RedAllianceLeft extends LinearOpMode
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
-        pipeline = new PowerplayDeterminationExample.SkystoneDeterminationPipeline();
+        pipeline = new PowerplayRedDeterminationExample.SkystoneDeterminationRedPipeline();
         webcam.setPipeline(pipeline);
 
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()

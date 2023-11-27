@@ -22,8 +22,8 @@
 package org.firstinspires.ftc.teamcode.Vision;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -36,12 +36,12 @@ import org.openftc.easyopencv.OpenCvWebcam;
  * command is issued. The pipeline is re-used from SkystoneDeterminationExample
  */
 @Autonomous
-@Disabled
+
 public class BlueAllianceLeft extends LinearOpMode
 {
     OpenCvWebcam webcam;
-    PowerplayDeterminationExample.SkystoneDeterminationPipeline pipeline;
-    PowerplayDeterminationExample.SkystoneDeterminationPipeline.SkystonePosition snapshotAnalysis = PowerplayDeterminationExample.SkystoneDeterminationPipeline.SkystonePosition.LEFT; // default
+    PowerplayblueDeterminationExample.SkystoneDeterminationPipeline pipeline;
+    PowerplayblueDeterminationExample.SkystoneDeterminationPipeline.SkystonePosition snapshotAnalysis = PowerplayblueDeterminationExample.SkystoneDeterminationPipeline.SkystonePosition.LEFT; // default
 
     @Override
     public void runOpMode()
@@ -55,7 +55,7 @@ public class BlueAllianceLeft extends LinearOpMode
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
-        pipeline = new PowerplayDeterminationExample.SkystoneDeterminationPipeline();
+        pipeline = new PowerplayblueDeterminationExample.SkystoneDeterminationPipeline();
         webcam.setPipeline(pipeline);
 
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
