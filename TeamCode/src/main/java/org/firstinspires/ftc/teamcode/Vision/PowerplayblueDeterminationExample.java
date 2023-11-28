@@ -43,6 +43,7 @@ import org.openftc.easyopencv.OpenCvWebcam;
  * the sample regions over the first 3 stones.
  */
 @TeleOp
+
 public class PowerplayblueDeterminationExample extends LinearOpMode
 {
     OpenCvWebcam webcam;

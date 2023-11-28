@@ -68,7 +68,7 @@ public class Bina extends LinearOpMode {
         // ---------------------- Gate Code ----------------------
 
         if (gamepad2.left_bumper) {
-            gates.setPower(-0.4);
+            gates.setPower(-0.1);
         } else if (gamepad1.b) {
             intake1.setPower(-1);
             intake2.setPower(-1);
@@ -105,8 +105,8 @@ gates.setPower(0);
             arm1.setPosition(arm_min_position);
             arm2.setPosition(arm_min_position);
             sleep(500);
-            lift.setTargetPosition(0);
-            perp.setTargetPosition(0);
+            lift.setTargetPosition(lift_min_position);
+            perp.setTargetPosition(lift_min_position);
             lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             perp.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 lift.setPower(lift_max_power);
@@ -165,6 +165,9 @@ gates.setPower(0);
         telemetry.addData("gates pos", gates.getPower());
         telemetry.addData("intake 1 pow", intake1.getPower());
         telemetry.addData("intake 2 pow", intake2.getPower());
+        telemetry.addData("par 0 pos", par0.getCurrentPosition());
+        telemetry.addData("par 1 pos", par1.getCurrentPosition());
+
         telemetry.update();
 
     }
@@ -279,14 +282,14 @@ gates.setPower(0);
         lift_reset_done = false;
         lift_max_power = 1;
         lift_min_position = 0;
-        lift_max_position = 1200;
+        lift_max_position = 3158;
         lift_max_power_mult_up = 1;
         lift_max_power_mult_down = 0.7;
         drive_slow_velocity=280;
         lift_power_incr = 0.1;
         lift_max_velocity = 0;
         arm_max_position = 0.8;
-        arm_min_position = 0.17;
+        arm_min_position = 0.153;
         arm_position = 0.5;
         arm_accel = 0;
         arm_turn_Ok_position = 0.41;
@@ -300,22 +303,24 @@ gates.setPower(0);
         Initialize_DriveTrain();
         // Initialize_Lift();
      //   lift_telemetry();
-        telemetry.update();
         // Wait for Start button
+telemetry.update();
         waitForStart();
         arm1.setPosition(arm_min_position);
         arm2.setPosition(arm_min_position);
-
+/*telemetry.setAutoClear(true);
+telemetry.update();
+        telemetry.setAutoClear(false);
+  */      telemetry.clearAll();
+telemetry.update();
         if (opModeIsActive()) {
             while (opModeIsActive()) {
                 Drive_Control();
                 Lift_Control();
                 Arm_Control();
                 Claw_Control();
-                drive_telemetry();
-                // Return_home();
-                //Deliver_cone();
-               // position_zero();
+                lift_telemetry();
+                position_zero();
                 telemetry.update();
             }
         }
@@ -415,7 +420,7 @@ gates.setPower(0);
         lift_power = lift.getPower();
         if (gamepad2.left_stick_y < 0 && lift_pos <= lift_max_position) {
             lift_target_power = -(lift_max_power_mult_up * lift_max_power * gamepad2.left_stick_y);
-        } else if (gamepad2.left_stick_y > 0) {
+        } else if (gamepad2.left_stick_y > 0/*&&lift_pos>=lift_min_position*/) {
             lift_target_power = -(lift_max_power_mult_down * lift_max_power * gamepad2.left_stick_y);
         } else {
 
