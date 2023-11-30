@@ -69,11 +69,20 @@ public class BlueAllianceLeft extends LinearOpMode
             @Override
             public void onError(int errorCode) {}
         });
+/*
+        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 90));
 
+        Trajectory myTrajectory = drive.actionBuilder(Pose2d())
+                .forward(5)
+                .build();
+*/
         /*
          * The INIT-loop:
          * This REPLACES waitForStart!
          */
+
+
+
         while (!isStarted() && !isStopRequested())
         {
             telemetry.addData("Realtime analysis", pipeline.getAnalysis());
@@ -101,6 +110,8 @@ public class BlueAllianceLeft extends LinearOpMode
             case LEFT:
             {
                telemetry.addLine("left"); /* Your autonomous code */
+               // drive.FollowTrajectoryAction(myTrajectory);
+
                 break;
             }
 
