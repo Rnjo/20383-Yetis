@@ -125,17 +125,6 @@ gates.setPower(0);
         if ( gamepad2.y) {
             arm1.setPosition(arm_max_position);
             arm2.setPosition(arm_max_position);
-            sleep(500);
-            lift.setTargetPosition(lift_max_position);
-            perp.setTargetPosition(lift_max_position);
-            lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            perp.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            lift.setPower(lift_max_power);
-            perp.setPower(lift_max_power);
-            lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            perp.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-
 
         }
     }
@@ -321,8 +310,6 @@ gates.setPower(0);
         telemetry.update();
         // Wait for Start button
         waitForStart();
-        arm1.setPosition(arm_min_position);
-        arm2.setPosition(arm_min_position);
         telemetry.update();
 
         if (opModeIsActive()) {
