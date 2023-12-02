@@ -3,6 +3,9 @@ repositories {
     google() // Needed for androidx
 
 maven {url = 'https://maven.brott.dev/'}
+    flatDir {
+        dirs rootProject.file('libs')
+    }
 }
 
 dependencies {

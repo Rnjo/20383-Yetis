@@ -21,14 +21,10 @@
 
 package org.firstinspires.ftc.teamcode.Vision;
 
-import com.acmerobotics.roadrunner.Action;
-import com.acmerobotics.roadrunner.Pose2d;
-import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.MecanumDrive;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
@@ -73,13 +69,6 @@ public class BlueAllianceLeft extends LinearOpMode
             @Override
             public void onError(int errorCode) {}
         });
-        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(0,0,Math.toRadians(90)));
-Pose2d myPose = new Pose2d(0,0, Math.toRadians(90));
-Vector2d myVector = new Vector2d(24, 72);
-        Action myTrajectory = drive.actionBuilder(myPose)
-                .setTangent(0)
-                .splineToConstantHeading((myVector), Math.PI/2)
-                .build();
 
         /*
          * The INIT-loop:
@@ -115,7 +104,7 @@ Vector2d myVector = new Vector2d(24, 72);
             case LEFT:
             {
                telemetry.addLine("left"); /* Your autonomous code */
-              //  drive.FollowTrajectoryAction(myTrajectory);
+                //drive.FollowTrajectoryAction(myTrajectory);
 
                 break;
             }
