@@ -18,6 +18,8 @@ import org.firstinspires.ftc.robotcore.external.JavaUtil;
 public class Bina extends LinearOpMode {
 
     private CRServo gates;
+
+    private Servo launcher;
     private DcMotor leftBack;
     private DcMotor rightBack;
     private DcMotor leftFront;
@@ -40,6 +42,7 @@ public class Bina extends LinearOpMode {
     int drive_max_velocity;
     int lift_pos;
     int lift_max_position;
+    double launcher_pos;
     boolean lift_reset_done;
     double lift_max_power_mult_down;
     int claw_closed_position;
@@ -65,8 +68,8 @@ public class Bina extends LinearOpMode {
      * Describe this function...
      */
     private void Claw_Control() {
-        // ---------------------- Gate Code ----------------------
-
+        // ---------------------- Gate/intake/Launcher Code ----------------------
+        launcher_pos = launcher.getPosition();
         if (gamepad2.left_bumper) {
             gates.setPower(-0.1);
         } else if (gamepad1.b) {
@@ -81,11 +84,19 @@ public class Bina extends LinearOpMode {
         } else if (gamepad1.left_bumper) {
             intake1.setPower(0);
             intake2.setPower(0);
-        } else if (gamepad2.b){
-gates.setPower(0);
-    }
+        } else if (gamepad2.b) {
+            gates.setPower(0);
+        }
+        // drone launch
+        if (gamepad2.a) {
+            launcher.setPosition(1);
+        } else {
+
+         launcher.setPosition(0);
+        }
         telemetry.update();
     }
+
 
     /**
      * Describe this function...
@@ -172,6 +183,7 @@ gates.setPower(0);
         telemetry.addData("gates pos", gates.getPower());
         telemetry.addData("intake 1 pow", intake1.getPower());
         telemetry.addData("intake 2 pow", intake2.getPower());
+        telemetry.addData("launcher pos", launcher.getPosition());
         telemetry.update();
 
     }
@@ -272,6 +284,7 @@ gates.setPower(0);
         perp = hardwareMap.get(DcMotor.class, "perp");
         arm1 = hardwareMap.get(Servo.class, "arm1");
         arm2 = hardwareMap.get(Servo.class, "arm2");
+        launcher = hardwareMap.get(Servo.class, "launcher");
         par0 = hardwareMap.dcMotor.get("par0");
          par1 = hardwareMap.dcMotor.get("par1");
          perp = hardwareMap.dcMotor.get("perp");
@@ -285,6 +298,7 @@ gates.setPower(0);
         slow_velocity = 500;
         lift_reset_done = false;
         lift_max_power = 1;
+        launcher_pos=1;
         lift_min_position = 0;
         lift_max_position = 3280;
         lift_max_power_mult_up = 1;
