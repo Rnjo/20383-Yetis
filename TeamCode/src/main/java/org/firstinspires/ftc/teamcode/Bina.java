@@ -44,6 +44,7 @@ public class Bina extends LinearOpMode {
     int lift_max_position;
     double launcher_pos;
     boolean lift_reset_done;
+    boolean is_reset_pressed;
     double lift_max_power_mult_down;
     int claw_closed_position;
     double gear_ratio;
@@ -71,7 +72,9 @@ public class Bina extends LinearOpMode {
         // ---------------------- Gate/intake/Launcher Code ----------------------
         launcher_pos = launcher.getPosition();
         if (gamepad2.left_bumper) {
-            gates.setPower(-0.1);
+            gates.setPower(-1);
+        }else if (gamepad2.left_trigger!=0) {
+            gates.setPower(-0.5);
         } else if (gamepad1.b) {
             intake1.setPower(-1);
             intake2.setPower(-1);
@@ -297,6 +300,7 @@ public class Bina extends LinearOpMode {
         drive_max_velocity = 2000;
         slow_velocity = 500;
         lift_reset_done = false;
+        is_reset_pressed= reset.isPressed();
         lift_max_power = 1;
         launcher_pos=1;
         lift_min_position = 0;
@@ -332,7 +336,7 @@ public class Bina extends LinearOpMode {
                 Lift_Control();
                 Arm_Control();
                 Claw_Control();
-                drive_telemetry();
+                lift_telemetry();
                 // Return_home();
                 //Deliver_cone();
                 position_zero();
@@ -361,6 +365,7 @@ public class Bina extends LinearOpMode {
         telemetry.addData("Left Front pos", leftFront.getCurrentPosition());
         telemetry.addData("Right Back pos", rightBack.getCurrentPosition());
         telemetry.addData("Right Front pos", rightFront.getCurrentPosition());}
+
 
     /**
      * Describe this function...
@@ -436,7 +441,7 @@ public class Bina extends LinearOpMode {
         lift_power = lift.getPower();
         if (gamepad2.left_stick_y < 0 && lift_pos <= lift_max_position) {
             lift_target_power = -(lift_max_power_mult_up * lift_max_power * gamepad2.left_stick_y);
-        } else if (gamepad2.left_stick_y > 0 && lift_pos >= lift_min_position) {
+        } else if ((gamepad2.left_stick_y > 0 && !reset.isPressed())) {
             lift_target_power = -(lift_max_power_mult_down * lift_max_power * gamepad2.left_stick_y);
         } else {
                 lift_target_power = 0;
