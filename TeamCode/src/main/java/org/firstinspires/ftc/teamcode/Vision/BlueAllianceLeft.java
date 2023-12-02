@@ -21,10 +21,15 @@
 
 package org.firstinspires.ftc.teamcode.Vision;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.trajectory.Trajectory;
+import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.Bina;
+import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
@@ -37,15 +42,16 @@ import org.openftc.easyopencv.OpenCvWebcam;
  */
 @Autonomous
 
-public class BlueAllianceLeft extends LinearOpMode
-{
+
+public class BlueAllianceLeft extends Bina {
+
     OpenCvWebcam webcam;
     PowerplayblueDeterminationExample.SkystoneDeterminationPipeline pipeline;
     PowerplayblueDeterminationExample.SkystoneDeterminationPipeline.SkystonePosition snapshotAnalysis = PowerplayblueDeterminationExample.SkystoneDeterminationPipeline.SkystonePosition.LEFT; // default
 
     @Override
-    public void runOpMode()
-    {
+    public void runOpMode() {
+        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         /*
          * NOTE: Many comments have been omitted from this sample for the
          * sake of conciseness. If you're just starting out with EasyOpenCv,
@@ -58,16 +64,15 @@ public class BlueAllianceLeft extends LinearOpMode
         pipeline = new PowerplayblueDeterminationExample.SkystoneDeterminationPipeline();
         webcam.setPipeline(pipeline);
 
-        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
-        {
+        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
-            public void onOpened()
-            {
-                webcam.startStreaming(1280   ,720, OpenCvCameraRotation.UPRIGHT);
+            public void onOpened() {
+                webcam.startStreaming(1280, 720, OpenCvCameraRotation.UPRIGHT);
             }
 
             @Override
-            public void onError(int errorCode) {}
+            public void onError(int errorCode) {
+            }
         });
 
         /*
@@ -76,9 +81,7 @@ public class BlueAllianceLeft extends LinearOpMode
          */
 
 
-
-        while (!isStarted() && !isStopRequested())
-        {
+        while (!isStarted() && !isStopRequested()) {
             telemetry.addData("Realtime analysis", pipeline.getAnalysis());
             telemetry.update();
 
@@ -99,30 +102,105 @@ public class BlueAllianceLeft extends LinearOpMode
         telemetry.addData("Snapshot post-START analysis", snapshotAnalysis);
         telemetry.update();
 
-        switch (snapshotAnalysis)
-        {
-            case LEFT:
-            {
-               telemetry.addLine("left"); /* Your autonomous code */
+        switch (snapshotAnalysis) {
+            case LEFT: {
+                telemetry.addLine("left"); /* Your autonomous code */
                 //drive.FollowTrajectoryAction(myTrajectory);
 
                 break;
             }
 
-            case RIGHT:
-            {
+            case RIGHT: {
                 telemetry.addLine("right");    /* Your autonomous code */
                 break;
             }
 
-            case CENTER:
-            {
+            case CENTER: {
                 telemetry.addLine("middle");  /* Your autonomous code*/
                 break;
             }
-        }
 
-        /* You wouldn't have this in your autonomous, this is just to prevent the sample from ending */
+        }
+        Trajectory myTrajectory = drive.trajectoryBuilder(new Pose2d(-72, 12, 0))
+                .forward(40)
+                .build();
+        Trajectory LeftTurn = drive.trajectoryBuilder(new Pose2d(-32, 12, 0))
+                .lineToSplineHeading(new Pose2d(-32, 12, Math.toRadians(90)))
+                .forward(3)
+                .build();
+        Trajectory LeftTurnBack = drive.trajectoryBuilder(new Pose2d(-32, 12, 90))
+                .back(3)
+                .lineToSplineHeading(new Pose2d(-32, 12, Math.toRadians(0)))
+                .build();
+        Trajectory RightTurn = drive.trajectoryBuilder(new Pose2d(-32, 12, 0))
+                .lineToSplineHeading(new Pose2d(-32, 12, Math.toRadians(-90)))
+                .forward(3)
+                .build();
+        Trajectory Left = drive.trajectoryBuilder(new Pose2d(-36, 36, 270))
+                .strafeRight(6)
+                .build();
+        Trajectory Right = drive.trajectoryBuilder(new Pose2d(-36, 36, 270))
+                .strafeLeft(6)
+                .build();
+        Trajectory RightTurnBack = drive.trajectoryBuilder(new Pose2d(-32, 12, -90))
+                .back(3)
+                .lineToSplineHeading(new Pose2d(-32, 12, Math.toRadians(0)))
+                .build();
+        Trajectory turnyThingy = drive.trajectoryBuilder(new Pose2d(-32, 12, 0))
+                .lineToSplineHeading(new Pose2d(-36, 36, Math.toRadians(-90)))
+                .build();
+        Trajectory imFinnaMoveBack = drive.trajectoryBuilder(new Pose2d(-36, 36, 0))
+                .back(12)
+                .build();
+        waitForStart();
+        if (isStopRequested()) return;
+
+        drive.followTrajectory(myTrajectory);
+        switch (snapshotAnalysis) {
+            case LEFT: {
+                drive.followTrajectory(LeftTurn);
+                gates.setPower(-1);
+                intake1.setPower(-1);
+                intake2.setPower(-1);
+                sleep(1000);
+                drive.followTrajectory(LeftTurnBack);
+            }
+            case RIGHT: {
+                drive.followTrajectory(RightTurn);
+                gates.setPower(-1);
+                intake1.setPower(-1);
+                intake2.setPower(-1);
+                sleep(1000);
+                drive.followTrajectory(RightTurnBack);
+            }
+            case CENTER: {
+            }
+            drive.followTrajectory(turnyThingy);
+            switch (snapshotAnalysis) {
+                case LEFT: {
+                    drive.followTrajectory(Left);
+                }
+
+                case RIGHT: {
+                    drive.followTrajectory(Right);
+                }
+
+                case CENTER: {
+
+                }
+
+            }
+            arm1.setPosition(1);
+            arm2.setPosition(1);
+            sleep(1000);
+            gates.setPower(-1);
+            sleep(1000);
+            gates.setPower(0);
+            arm1.setPosition(0);
+            arm2.setPosition(0);
+            drive.followTrajectory(imFinnaMoveBack);
+
 
         }
     }
+}

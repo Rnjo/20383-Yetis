@@ -17,7 +17,7 @@ import org.firstinspires.ftc.robotcore.external.JavaUtil;
 @TeleOp
 public class Bina extends LinearOpMode {
 
-    private CRServo gates;
+    public CRServo gates;
 
     private Servo launcher;
     private DcMotor leftBack;
@@ -27,10 +27,10 @@ public class Bina extends LinearOpMode {
     private DcMotor lift;
     private TouchSensor reset;
 
-    private Servo arm1;
-    private Servo arm2;
-    private CRServo intake1;
-    private CRServo intake2;
+    public Servo arm1;
+    public Servo arm2;
+    public CRServo intake1;
+    public CRServo intake2;
     private DcMotor par0;
     private DcMotor par1;
     private DcMotor perp;
