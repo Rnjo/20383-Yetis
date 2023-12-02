@@ -174,6 +174,9 @@ public class BlueAllianceLeft extends Bina {
                 drive.followTrajectory(RightTurnBack);
             }
             case CENTER: {
+                gates.setPower(-1);
+                intake1.setPower(-1);
+                intake2.setPower(-1);
             }
             drive.followTrajectory(turnyThingy);
             switch (snapshotAnalysis) {
