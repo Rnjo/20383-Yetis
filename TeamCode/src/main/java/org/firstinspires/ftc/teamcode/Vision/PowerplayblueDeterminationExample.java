@@ -52,7 +52,7 @@ public class PowerplayblueDeterminationExample extends LinearOpMode
     @Override
     public void runOpMode()
     {
-        /**
+        /*
          * NOTE: Many comments have been omitted from this sample for the
          * sake of conciseness. If you're just starting out with EasyOpenCv,
          * you should take a look at {@link InternalCamera1Example} or its

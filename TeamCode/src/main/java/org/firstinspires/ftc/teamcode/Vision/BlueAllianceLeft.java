@@ -21,8 +21,9 @@
 
 package org.firstinspires.ftc.teamcode.Vision;
 
+import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
-import com.acmerobotics.roadrunner.Trajectory;
+import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
@@ -49,7 +50,7 @@ public class BlueAllianceLeft extends LinearOpMode
     @Override
     public void runOpMode()
     {
-        /**
+        /*
          * NOTE: Many comments have been omitted from this sample for the
          * sake of conciseness. If you're just starting out with EasyOpenCv,
          * you should take a look at {@link InternalCamera1Example} or its
@@ -72,12 +73,13 @@ public class BlueAllianceLeft extends LinearOpMode
             @Override
             public void onError(int errorCode) {}
         });
-
-       // MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 90));
-
-        //Trajectory myTrajectory = drive.actionBuilder()
-              //  .forward(5)
-               // .build();
+        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(0,0,Math.toRadians(90)));
+Pose2d myPose = new Pose2d(0,0, Math.toRadians(90));
+Vector2d myVector = new Vector2d(24, 72);
+        Action myTrajectory = drive.actionBuilder(myPose)
+                .setTangent(0)
+                .splineToConstantHeading((myVector), Math.PI/2)
+                .build();
 
         /*
          * The INIT-loop:
@@ -113,7 +115,7 @@ public class BlueAllianceLeft extends LinearOpMode
             case LEFT:
             {
                telemetry.addLine("left"); /* Your autonomous code */
-               // drive.FollowTrajectoryAction(myTrajectory);
+              //  drive.FollowTrajectoryAction(myTrajectory);
 
                 break;
             }
