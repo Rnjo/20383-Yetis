@@ -20,8 +20,8 @@ public class Bina extends LinearOpMode {
     public CRServo gates;
 
     private Servo launcher;
-    private DcMotor leftBack;
-    private DcMotor rightBack;
+    private DcMotor leftRear;
+    private DcMotor rightRear;
     private DcMotor leftFront;
     private DcMotor rightFront;
     private DcMotor lift;
@@ -31,9 +31,9 @@ public class Bina extends LinearOpMode {
     public Servo arm2;
     public CRServo intake1;
     public CRServo intake2;
-    private DcMotor par0;
-    private DcMotor par1;
-    private DcMotor perp;
+    private DcMotor leftEncoder;
+    private DcMotor rightEncoder;
+    private DcMotor middleEncoder;
 
 
     double drive_slow_power;
@@ -121,15 +121,15 @@ public class Bina extends LinearOpMode {
             arm2.setPosition(arm_min_position);
             sleep(500);
             lift.setTargetPosition(lift_min_position);
-            perp.setTargetPosition(lift_min_position);
+            middleEncoder.setTargetPosition(lift_min_position);
             lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            perp.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            middleEncoder.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 lift.setPower(lift_max_power);
-            perp.setPower(lift_max_power);
+            middleEncoder.setPower(lift_max_power);
             lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            perp.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            middleEncoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            perp.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            middleEncoder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 
 
@@ -153,12 +153,12 @@ public class Bina extends LinearOpMode {
         rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
        rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-     leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
-       leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-       rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
-        rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-      rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+     leftRear.setDirection(DcMotorSimple.Direction.REVERSE);
+       leftRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftRear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+       rightRear.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+      rightRear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     /**
@@ -176,7 +176,7 @@ public class Bina extends LinearOpMode {
         telemetry.addData("lift speed mult up", lift_max_power_mult_up);
         telemetry.addData("lift speed mult down", lift_max_power_mult_down);
         telemetry.addData("lift pos", lift.getCurrentPosition());
-        telemetry.addData("perp pos", perp.getCurrentPosition());
+        telemetry.addData("middleEncoder pos", middleEncoder.getCurrentPosition());
         telemetry.addData("lift vel", ((DcMotorEx) lift).getVelocity());
         telemetry.addData("gamepadX", gamepad2.right_stick_x);
         telemetry.addData("gamepadY", gamepad2.left_stick_y);
@@ -229,34 +229,34 @@ public class Bina extends LinearOpMode {
         if (gamepad1.right_stick_x != 0 || gamepad1.left_stick_y != 0 || gamepad1.left_stick_x != 0) {
             denominator = JavaUtil.maxOfList(JavaUtil.createListWith(JavaUtil.sumOfList(JavaUtil.createListWith(Math.abs(y), Math.abs(x), Math.abs(rx))), 1));
             ((DcMotorEx) leftFront).setVelocity(drive_max_velocity * (((y - x) + rx) / denominator));
-            ((DcMotorEx) leftBack).setVelocity(drive_max_velocity * ((y + x + rx) / denominator));
+            ((DcMotorEx) leftRear).setVelocity(drive_max_velocity * ((y + x + rx) / denominator));
             ((DcMotorEx) rightFront).setVelocity(drive_max_velocity * (((y + x) - rx) / denominator));
-            ((DcMotorEx) rightBack).setVelocity(drive_max_velocity * (((y - x) - rx) / denominator));
+            ((DcMotorEx) rightRear).setVelocity(drive_max_velocity * (((y - x) - rx) / denominator));
         } else if (gamepad1.right_stick_x == 0 && gamepad1.left_stick_y == 0 && gamepad1.left_stick_x == 0) {
             if (gamepad1.dpad_down || gamepad2.dpad_down) {
-                ((DcMotorEx) leftBack).setVelocity(drive_slow_velocity);
-                ((DcMotorEx) rightBack).setVelocity(-drive_slow_velocity);
+                ((DcMotorEx) leftRear).setVelocity(drive_slow_velocity);
+                ((DcMotorEx) rightRear).setVelocity(-drive_slow_velocity);
                 ((DcMotorEx) leftFront).setVelocity(drive_slow_velocity);
                 ((DcMotorEx) rightFront).setVelocity(-drive_slow_velocity);
 
         } else if (gamepad1.dpad_up || gamepad2.dpad_up) {
-                ((DcMotorEx) leftBack).setVelocity(-drive_slow_velocity);
-                ((DcMotorEx) rightBack).setVelocity(drive_slow_velocity);
+                ((DcMotorEx) leftRear).setVelocity(-drive_slow_velocity);
+                ((DcMotorEx) rightRear).setVelocity(drive_slow_velocity);
                 ((DcMotorEx) leftFront).setVelocity(-drive_slow_velocity);
                 ((DcMotorEx) rightFront).setVelocity(drive_slow_velocity);
             } else if (gamepad1.dpad_left || gamepad2.dpad_left) {
-                ((DcMotorEx) leftBack).setVelocity(drive_slow_velocity);
-                ((DcMotorEx) rightBack).setVelocity(-drive_slow_velocity);
+                ((DcMotorEx) leftRear).setVelocity(drive_slow_velocity);
+                ((DcMotorEx) rightRear).setVelocity(-drive_slow_velocity);
                 ((DcMotorEx) leftFront).setVelocity(-drive_slow_velocity);
                 ((DcMotorEx) rightFront).setVelocity(drive_slow_velocity);
             } else if (gamepad1.dpad_right || gamepad2.dpad_right) {
-                ((DcMotorEx) leftBack).setVelocity(-drive_slow_velocity);
-                ((DcMotorEx) rightBack).setVelocity(drive_slow_velocity);
+                ((DcMotorEx) leftRear).setVelocity(-drive_slow_velocity);
+                ((DcMotorEx) rightRear).setVelocity(drive_slow_velocity);
                 ((DcMotorEx) leftFront).setVelocity(drive_slow_velocity);
                 ((DcMotorEx) rightFront).setVelocity(-drive_slow_velocity);
             } else {
-                ((DcMotorEx) leftBack).setVelocity(0);
-                ((DcMotorEx) rightBack).setVelocity(0);
+                ((DcMotorEx) leftRear).setVelocity(0);
+                ((DcMotorEx) rightRear).setVelocity(0);
                 ((DcMotorEx) leftFront).setVelocity(0);
                 ((DcMotorEx) rightFront).setVelocity(0);
             }
@@ -279,18 +279,18 @@ public class Bina extends LinearOpMode {
         int lift_high_junction_max;
 
         gates = hardwareMap.get(CRServo.class, "gates");
-        leftBack = hardwareMap.get(DcMotor.class, "leftBack");
-        rightBack = hardwareMap.get(DcMotor.class, "rightBack");
+        leftRear = hardwareMap.get(DcMotor.class, "leftRear");
+        rightRear = hardwareMap.get(DcMotor.class, "rightRear");
         leftFront = hardwareMap.get(DcMotor.class, "leftFront");
         rightFront = hardwareMap.get(DcMotor.class, "rightFront");
         lift = hardwareMap.get(DcMotor.class, "lift");
-        perp = hardwareMap.get(DcMotor.class, "perp");
+        middleEncoder = hardwareMap.get(DcMotor.class, "middleEncoder");
         arm1 = hardwareMap.get(Servo.class, "arm1");
         arm2 = hardwareMap.get(Servo.class, "arm2");
         launcher = hardwareMap.get(Servo.class, "launcher");
-        par0 = hardwareMap.dcMotor.get("par0");
-         par1 = hardwareMap.dcMotor.get("par1");
-         perp = hardwareMap.dcMotor.get("perp");
+        leftEncoder = hardwareMap.dcMotor.get("leftEncoder");
+         rightEncoder = hardwareMap.dcMotor.get("rightEncoder");
+         middleEncoder = hardwareMap.dcMotor.get("middleEncoder");
          intake1 = hardwareMap.get(CRServo.class, "intake1");
          intake2 = hardwareMap.get(CRServo.class, "intake2");
         reset = hardwareMap.get(TouchSensor.class, "reset");
@@ -350,20 +350,20 @@ public class Bina extends LinearOpMode {
      * Describe this function...
      */
     private void drive_telemetry() {
-        telemetry.addData("leftback pow", leftBack.getPower());
-        telemetry.addData("leftback vel", ((DcMotorEx) leftBack).getVelocity());
+        telemetry.addData("leftRear pow", leftRear.getPower());
+        telemetry.addData("leftRear vel", ((DcMotorEx) leftRear).getVelocity());
         telemetry.addData("leftFront pow", leftFront.getPower());
         telemetry.addData("leftFront vel", ((DcMotorEx) leftFront).getVelocity());
-        telemetry.addData("rightback pow", rightBack.getPower());
-        telemetry.addData("rightback vel", ((DcMotorEx) rightBack).getVelocity());
+        telemetry.addData("rightRear pow", rightRear.getPower());
+        telemetry.addData("rightRear vel", ((DcMotorEx) rightRear).getVelocity());
         telemetry.addData("rightFront pow", rightFront.getPower());
         telemetry.addData("rightFront vel", ((DcMotorEx) rightFront).getVelocity());
-        telemetry.addData("par0 pos", par0.getCurrentPosition());
-        telemetry.addData("par1 pos", par1.getCurrentPosition());
-        telemetry.addData("perp pos", perp.getCurrentPosition());
-        telemetry.addData("left Back pos", leftBack.getCurrentPosition());
+        telemetry.addData("leftEncoder pos", leftEncoder.getCurrentPosition());
+        telemetry.addData("rightEncoder pos", rightEncoder.getCurrentPosition());
+        telemetry.addData("middleEncoder pos", middleEncoder.getCurrentPosition());
+        telemetry.addData("left Back pos", leftRear.getCurrentPosition());
         telemetry.addData("Left Front pos", leftFront.getCurrentPosition());
-        telemetry.addData("Right Back pos", rightBack.getCurrentPosition());
+        telemetry.addData("Right Back pos", rightRear.getCurrentPosition());
         telemetry.addData("Right Front pos", rightFront.getCurrentPosition());}
 
 
@@ -383,8 +383,8 @@ public class Bina extends LinearOpMode {
      * Describe this function...
      */
     private void stop_and_reset() {
-        leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
@@ -432,9 +432,9 @@ public class Bina extends LinearOpMode {
             lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             lift_pos = lift.getCurrentPosition();
             lift_reset_done = true;
-            perp.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            perp.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            perp.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            middleEncoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            middleEncoder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            middleEncoder.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         }
         lift_pos = lift.getCurrentPosition();
@@ -449,7 +449,7 @@ public class Bina extends LinearOpMode {
         }
         lift_power = lift_target_power;
         lift.setPower(lift_power);
-        perp.setPower(lift_power);
+        middleEncoder.setPower(lift_power);
 
 
     }

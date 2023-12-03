@@ -56,7 +56,7 @@ import org.firstinspires.ftc.teamcode.drive.StandardTrackingWheelLocalizer;
  * actual bot, the LATERAL_DISTANCE should be increased.
  *
  * If your drawn bot oscillates around a point in dashboard, don't worry. This is because the
- * position of the perpendicular wheel isn't perfectly set and causes a discrepancy in the
+ * position of the middleEncoderendicular wheel isn't perfectly set and causes a discrepancy in the
  * effective center of rotation. You can ignore this effect. The center of rotation will be offset
  * slightly but your heading will still be fine. This does not affect your overall tracking
  * precision. The heading should still line up.
