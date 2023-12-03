@@ -336,7 +336,7 @@ public class Bina extends LinearOpMode {
                 Lift_Control();
                 Arm_Control();
                 Claw_Control();
-                lift_telemetry();
+                drive_telemetry();
                 // Return_home();
                 //Deliver_cone();
                 position_zero();

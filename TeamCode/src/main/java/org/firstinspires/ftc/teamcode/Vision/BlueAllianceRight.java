@@ -23,9 +23,7 @@ package org.firstinspires.ftc.teamcode.Vision;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
-import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.Bina;
@@ -51,7 +49,6 @@ public class BlueAllianceRight extends Bina {
 
     @Override
     public void runOpMode() {
-        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         /*
          * NOTE: Many comments have been omitted from this sample for the
          * sake of conciseness. If you're just starting out with EasyOpenCv,
@@ -81,13 +78,7 @@ public class BlueAllianceRight extends Bina {
          */
 
 
-        while (!isStarted() && !isStopRequested()) {
-            telemetry.addData("Realtime analysis", pipeline.getAnalysis());
-            telemetry.update();
-
-            // Don't burn CPU cycles busy-looping in this sample
-            sleep(50);
-        }
+        waitForStart();
 
         /*
          * The START command just came in: snapshot the current analysis now
@@ -102,25 +93,11 @@ public class BlueAllianceRight extends Bina {
         telemetry.addData("Snapshot post-START analysis", snapshotAnalysis);
         telemetry.update();
 
-        switch (snapshotAnalysis) {
-            case LEFT: {
-                telemetry.addLine("left"); /* Your autonomous code */
-                //drive.FollowTrajectoryAction(myTrajectory);
+        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
-                break;
-            }
 
-            case RIGHT: {
-                telemetry.addLine("right");    /* Your autonomous code */
-                break;
-            }
+        drive.setPoseEstimate(new Pose2d(-72, -36, 0));
 
-            case CENTER: {
-                telemetry.addLine("middle");  /* Your autonomous code*/
-                break;
-            }
-
-        }
         Trajectory myTrajectory = drive.trajectoryBuilder(new Pose2d(-72, -36, 0))
                 .forward(40)
                 .build();
@@ -152,8 +129,7 @@ public class BlueAllianceRight extends Bina {
         Trajectory imFinnaMoveBack = drive.trajectoryBuilder(new Pose2d(-36, 36, 0))
                 .back(-36)
                 .build();
-        waitForStart();
-        if (isStopRequested()) return;
+
 
         drive.followTrajectory(myTrajectory);
         switch (snapshotAnalysis) {
