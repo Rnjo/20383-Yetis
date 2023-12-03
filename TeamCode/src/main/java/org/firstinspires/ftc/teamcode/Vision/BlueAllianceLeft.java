@@ -23,9 +23,7 @@ package org.firstinspires.ftc.teamcode.Vision;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
-import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.Bina;
@@ -81,13 +79,7 @@ public class BlueAllianceLeft extends Bina {
          */
 
 
-        while (!isStarted() && !isStopRequested()) {
-            telemetry.addData("Realtime analysis", pipeline.getAnalysis());
-            telemetry.update();
-
-            // Don't burn CPU cycles busy-looping in this sample
-            sleep(50);
-        }
+       waitForStart();
 
         /*
          * The START command just came in: snapshot the current analysis now
@@ -102,30 +94,12 @@ public class BlueAllianceLeft extends Bina {
         telemetry.addData("Snapshot post-START analysis", snapshotAnalysis);
         telemetry.update();
 
-        switch (snapshotAnalysis) {
-            case LEFT: {
-                telemetry.addLine("left"); /* Your autonomous code */
-                //drive.FollowTrajectoryAction(myTrajectory);
 
-                break;
-            }
-
-            case RIGHT: {
-                telemetry.addLine("right");    /* Your autonomous code */
-                break;
-            }
-
-            case CENTER: {
-                telemetry.addLine("middle");  /* Your autonomous code*/
-                break;
-            }
-
-        }
         Trajectory myTrajectory = drive.trajectoryBuilder(new Pose2d(-72, 12, 0))
                 .forward(40)
                 .build();
         Trajectory LeftTurn = drive.trajectoryBuilder(new Pose2d(-32, 12, 0))
-                .lineToSplineHeading(new Pose2d(-32, 12, Math.toRadians(90)))
+                 .lineToSplineHeading(new Pose2d(-32, 12, Math.toRadians(90)))
                 .forward(3)
                 .build();
         Trajectory LeftTurnBack = drive.trajectoryBuilder(new Pose2d(-32, 12, 90))
@@ -152,8 +126,8 @@ public class BlueAllianceLeft extends Bina {
         Trajectory imFinnaMoveBack = drive.trajectoryBuilder(new Pose2d(-36, 36, 0))
                 .back(12)
                 .build();
-        waitForStart();
-        if (isStopRequested()) return;
+
+
 
         drive.followTrajectory(myTrajectory);
         switch (snapshotAnalysis) {
@@ -164,6 +138,8 @@ public class BlueAllianceLeft extends Bina {
                 intake2.setPower(-1);
                 sleep(1000);
                 drive.followTrajectory(LeftTurnBack);
+                drive.followTrajectory(Left);
+
             }
             case RIGHT: {
                 drive.followTrajectory(RightTurn);
@@ -172,24 +148,12 @@ public class BlueAllianceLeft extends Bina {
                 intake2.setPower(-1);
                 sleep(1000);
                 drive.followTrajectory(RightTurnBack);
+                drive.followTrajectory(Right);
+
             }
             case CENTER: {
             }
             drive.followTrajectory(turnyThingy);
-            switch (snapshotAnalysis) {
-                case LEFT: {
-                    drive.followTrajectory(Left);
-                }
-
-                case RIGHT: {
-                    drive.followTrajectory(Right);
-                }
-
-                case CENTER: {
-
-                }
-
-            }
             arm1.setPosition(1);
             arm2.setPosition(1);
             sleep(1000);
@@ -203,4 +167,5 @@ public class BlueAllianceLeft extends Bina {
 
         }
     }
-}
+    }
+
