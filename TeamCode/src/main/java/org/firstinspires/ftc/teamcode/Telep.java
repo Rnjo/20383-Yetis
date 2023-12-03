@@ -32,12 +32,12 @@ public class Telep extends LinearOpMode {
         // Make sure your ID's match your configuration
        // controller = new PIDController(p, i, d);
         DcMotor leftFront = hardwareMap.dcMotor.get("leftFront");
-        DcMotor leftBack = hardwareMap.dcMotor.get("leftBack");
+        DcMotor leftRear = hardwareMap.dcMotor.get("leftRear");
         DcMotor rightFront = hardwareMap.dcMotor.get("rightFront");
-        DcMotor rightBack = hardwareMap.dcMotor.get("rightBack");
-        DcMotor par0 = hardwareMap.dcMotor.get("par0");
-        DcMotor par1 = hardwareMap.dcMotor.get("par1");
-        DcMotor perp = hardwareMap.dcMotor.get("perp");
+        DcMotor rightRear = hardwareMap.dcMotor.get("rightRear");
+        DcMotor leftEncoder = hardwareMap.dcMotor.get("leftEncoder");
+        DcMotor rightEncoder = hardwareMap.dcMotor.get("rightEncoder");
+        DcMotor middleEncoder = hardwareMap.dcMotor.get("middleEncoder");
         DcMotor lift = hardwareMap.dcMotor.get("lift");
         Servo arm = hardwareMap.get(Servo.class, "arm");
         CRServo intake1 = hardwareMap.get(CRServo.class, "intake1");
@@ -48,11 +48,11 @@ public class Telep extends LinearOpMode {
         // Reverse the right side motors
         // Reverse left motors if you are using NeveRests
         rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
-        rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightRear.setDirection(DcMotorSimple.Direction.REVERSE);
         intake2.setDirection(CRServo.Direction.REVERSE);
         lift.setDirection(DcMotorSimple.Direction.FORWARD);
 
-        perp.setDirection(DcMotorSimple.Direction.REVERSE);
+        middleEncoder.setDirection(DcMotorSimple.Direction.REVERSE);
 
         waitForStart();
 
@@ -72,9 +72,9 @@ public class Telep extends LinearOpMode {
             double backRightPower = (y + x - rx) / denominator;
 
             leftFront.setPower(frontLeftPower);
-            leftBack.setPower(backLeftPower);
+            leftRear.setPower(backLeftPower);
             rightFront.setPower(frontRightPower);
-            rightBack.setPower(backRightPower);
+            rightRear.setPower(backRightPower);
 
           /*  controller.setPID(p, i, d);
             int liftPos = lift.getCurrentPosition();
@@ -102,7 +102,7 @@ public class Telep extends LinearOpMode {
 
 //lift code
             lift.setPower(gamepad2.left_stick_y*-0.7);
-            perp.setPower(gamepad2.left_stick_y*-0.7);
+            middleEncoder.setPower(gamepad2.left_stick_y*-0.7);
 
 
 //for arm code borrow it from DriverModeFinalFlipback
@@ -131,13 +131,13 @@ public class Telep extends LinearOpMode {
 
             telemetry.update();
 
-            telemetry.addData("perp", perp.getCurrentPosition());
-            telemetry.addData("par0", par0.getCurrentPosition());
-            telemetry.addData("par1", par1.getCurrentPosition());
+            telemetry.addData("middleEncoder", middleEncoder.getCurrentPosition());
+            telemetry.addData("leftEncoder", leftEncoder.getCurrentPosition());
+            telemetry.addData("rightEncoder", rightEncoder.getCurrentPosition());
             telemetry.addData("leftFront", leftFront.getCurrentPosition());
             telemetry.addData("rigtfront", rightFront.getCurrentPosition());
-            telemetry.addData("backleft", leftBack.getCurrentPosition());
-            telemetry.addData("br", rightBack.getCurrentPosition());
+            telemetry.addData("backleft", leftRear.getCurrentPosition());
+            telemetry.addData("br", rightRear.getCurrentPosition());
 
             //   telemetry.addData("pos", liftPos);
            // telemetry.addData("targetpos", target);

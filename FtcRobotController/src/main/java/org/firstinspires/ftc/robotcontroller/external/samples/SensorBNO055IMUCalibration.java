@@ -74,7 +74,7 @@ import java.util.Locale;
  *             degrees, hold for a few seconds, then continue rotating another 45 degrees and
  *             hold, etc. 6 or more movements of this type may be required. You can move through
  *             any axis you desire, but make sure that the device is lying at least once
- *             perpendicular to the x, y, and z axis.</ol>
+ *             middleEncoderendicular to the x, y, and z axis.</ol>
  *     3. MAG: Move slowly in a figure 8 pattern in the air, until the calibration values reaches 3.</ol>
  *     4. SYS: This will usually reach 3 when the other items have also reached 3. If not, continue
  *             slowly moving the device though various axes until it does."</ol>
