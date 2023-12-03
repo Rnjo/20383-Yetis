@@ -101,83 +101,98 @@ public class BlueAllianceRight extends Bina {
         Trajectory myTrajectory = drive.trajectoryBuilder(new Pose2d(-72, -36, 0))
                 .forward(40)
                 .build();
-        Trajectory LeftTurn = drive.trajectoryBuilder(new Pose2d(-32, -36, 0))
+        Trajectory LeftTurn = drive.trajectoryBuilder(myTrajectory.end())
                 .lineToSplineHeading(new Pose2d(-32, -36, Math.toRadians(90)))
                 .forward(3)
                 .build();
-        Trajectory LeftTurnBack = drive.trajectoryBuilder(new Pose2d(-32, -36, 90))
+        Trajectory LeftTurnBack = drive.trajectoryBuilder(LeftTurn.end())
                 .back(3)
                 .lineToSplineHeading(new Pose2d(-32, -36, Math.toRadians(0)))
                 .build();
-        Trajectory RightTurn = drive.trajectoryBuilder(new Pose2d(-32, -36, 0))
+        Trajectory RightTurn = drive.trajectoryBuilder(myTrajectory.end())
                 .lineToSplineHeading(new Pose2d(-32, -36, Math.toRadians(-90)))
                 .forward(3)
                 .build();
-        Trajectory Left = drive.trajectoryBuilder(new Pose2d(-36, 36, 270))
-                .strafeRight(6)
-                .build();
-        Trajectory Right = drive.trajectoryBuilder(new Pose2d(-36, 36, 270))
-                .strafeLeft(6)
-                .build();
-        Trajectory RightTurnBack = drive.trajectoryBuilder(new Pose2d(-32, -36, -90))
+        Trajectory RightTurnBack = drive.trajectoryBuilder(RightTurn.end())
                 .back(3)
                 .lineToSplineHeading(new Pose2d(-32, -36, Math.toRadians(0)))
                 .build();
-        Trajectory turnyThingy = drive.trajectoryBuilder(new Pose2d(-32, -36, 0))
+        Trajectory moveTowardsBackboardWhileTurning = drive.trajectoryBuilder(myTrajectory.end())
                 .lineToSplineHeading(new Pose2d(-36, 36, Math.toRadians(-90)))
                 .build();
-        Trajectory imFinnaMoveBack = drive.trajectoryBuilder(new Pose2d(-36, 36, 0))
+        Trajectory Left = drive.trajectoryBuilder(moveTowardsBackboardWhileTurning.end())
+                .strafeRight(6)
+                .build();
+        Trajectory Right = drive.trajectoryBuilder(moveTowardsBackboardWhileTurning.end())
+                .strafeLeft(6)
+                .build();
+        Trajectory Parking = drive.trajectoryBuilder(moveTowardsBackboardWhileTurning.end())
                 .back(-36)
                 .build();
 
 
-        drive.followTrajectory(myTrajectory);
         switch (snapshotAnalysis) {
             case LEFT: {
+                drive.followTrajectory(myTrajectory);
                 drive.followTrajectory(LeftTurn);
                 gates.setPower(-1);
-                intake1.setPower(-1);
-                intake2.setPower(-1);
+                intake1.setPower(-0.4);
+                intake2.setPower(-0.4);
                 sleep(1000);
                 drive.followTrajectory(LeftTurnBack);
+                drive.followTrajectory(Left);
+                drive.followTrajectory(moveTowardsBackboardWhileTurning);
+                arm1.setPosition(1);
+                arm2.setPosition(1);
+                sleep(1000);
+                gates.setPower(-1);
+                sleep(1000);
+                gates.setPower(0);
+                arm1.setPosition(0);
+                arm2.setPosition(0);
+                drive.followTrajectory(Parking);
+
+
             }
             case RIGHT: {
+                drive.followTrajectory(myTrajectory);
                 drive.followTrajectory(RightTurn);
                 gates.setPower(-1);
-                intake1.setPower(-1);
-                intake2.setPower(-1);
+                intake1.setPower(-0.4);
+                intake2.setPower(-0.4);
                 sleep(1000);
                 drive.followTrajectory(RightTurnBack);
+                drive.followTrajectory(Right);
+                drive.followTrajectory(moveTowardsBackboardWhileTurning);
+                arm1.setPosition(1);
+                arm2.setPosition(1);
+                sleep(1000);
+                gates.setPower(-1);
+                sleep(1000);
+                gates.setPower(0);
+                arm1.setPosition(0);
+                arm2.setPosition(0);
+                drive.followTrajectory(Parking);
+
+
             }
             case CENTER: {
+                drive.followTrajectory(myTrajectory);
                 gates.setPower(-1);
                 intake1.setPower(-1);
                 intake2.setPower(-1);
-            }
-            drive.followTrajectory(turnyThingy);
-            switch (snapshotAnalysis) {
-                case LEFT: {
-                    drive.followTrajectory(Left);
-                }
-
-                case RIGHT: {
-                    drive.followTrajectory(Right);
-                }
-
-                case CENTER: {
-
-                }
+                drive.followTrajectory(moveTowardsBackboardWhileTurning);
+                arm1.setPosition(1);
+                arm2.setPosition(1);
+                sleep(1000);
+                gates.setPower(-1);
+                sleep(1000);
+                gates.setPower(0);
+                arm1.setPosition(0);
+                arm2.setPosition(0);
+                drive.followTrajectory(Parking);
 
             }
-            arm1.setPosition(1);
-            arm2.setPosition(1);
-            sleep(1000);
-            gates.setPower(-1);
-            sleep(1000);
-            gates.setPower(0);
-            arm1.setPosition(0);
-            arm2.setPosition(0);
-            drive.followTrajectory(imFinnaMoveBack);
 
 
         }
