@@ -121,19 +121,22 @@ public class Bina extends LinearOpMode {
             arm2.setPosition(arm_min_position);
             sleep(500);
             lift.setTargetPosition(lift_min_position);
-            middleEncoder.setTargetPosition(lift_min_position);
+            //middleEncoder.setTargetPosition(lift_min_position);
             lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            middleEncoder.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                lift.setPower(lift_max_power);
-            middleEncoder.setPower(lift_max_power);
-            lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            middleEncoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            //middleEncoder.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            lift.setPower(lift_max_power);
+            //middleEncoder.setPower(lift_max_power);
+            while(lift.isBusy()){
+    telemetry.update();
+
+}
             lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            middleEncoder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+       //        middleEncoder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 
 
         }
+
     }
     private void position_max() {
         if ( gamepad2.y) {
@@ -187,6 +190,8 @@ public class Bina extends LinearOpMode {
         telemetry.addData("intake 1 pow", intake1.getPower());
         telemetry.addData("intake 2 pow", intake2.getPower());
         telemetry.addData("launcher pos", launcher.getPosition());
+        telemetry.addData("lift targ pos tolerance",((DcMotorEx) lift).getTargetPositionTolerance());
+        telemetry.addData("lift targ pos ", lift.getTargetPosition());
         telemetry.update();
 
     }
@@ -297,6 +302,11 @@ public class Bina extends LinearOpMode {
         arm2.setDirection(Servo.Direction.REVERSE);
         lift.setDirection(DcMotorSimple.Direction.REVERSE);
         intake2.setDirection(CRServo.Direction.REVERSE);
+        lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        ((DcMotorEx) lift).setTargetPositionTolerance(5);
+        middleEncoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        middleEncoder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         drive_max_velocity = 2000;
         slow_velocity = 500;
         lift_reset_done = false;
@@ -304,7 +314,7 @@ public class Bina extends LinearOpMode {
         lift_max_power = 1;
         launcher_pos=1;
         lift_min_position = 0;
-        lift_max_position = 3280;
+        lift_max_position = 3200;
         lift_max_power_mult_up = 1;
         lift_max_power_mult_down = 0.7;
         drive_slow_velocity=280;
@@ -336,11 +346,11 @@ public class Bina extends LinearOpMode {
                 Lift_Control();
                 Arm_Control();
                 Claw_Control();
-                drive_telemetry();
+                lift_telemetry();
                 // Return_home();
                 //Deliver_cone();
                 position_zero();
-                position_max();
+                  position_max();
                 telemetry.update();
             }
         }
@@ -440,16 +450,16 @@ public class Bina extends LinearOpMode {
         lift_pos = lift.getCurrentPosition();
         lift_power = lift.getPower();
         if (gamepad2.left_stick_y < 0 && lift_pos <= lift_max_position) {
-            lift_target_power = -(lift_max_power_mult_up * lift_max_power * gamepad2.left_stick_y);
-        } else if ((gamepad2.left_stick_y > 0 && !reset.isPressed())) {
-            lift_target_power = -(lift_max_power_mult_down * lift_max_power * gamepad2.left_stick_y);
+            lift_target_power = -(lift_max_velocity*lift_max_power_mult_up * lift_max_power * gamepad2.left_stick_y);
+        } else if ((gamepad2.left_stick_y > 0 /*&& !reset.isPressed()*/)) {
+            lift_target_power = -(lift_max_velocity*lift_max_power_mult_down * lift_max_power * gamepad2.left_stick_y);
         } else {
                 lift_target_power = 0;
 
         }
         lift_power = lift_target_power;
-        lift.setPower(lift_power);
-        middleEncoder.setPower(lift_power);
+        ((DcMotorEx) lift).setVelocity(lift_power);
+        ((DcMotorEx) middleEncoder).setVelocity(lift_power);
 
 
     }
