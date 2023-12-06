@@ -87,6 +87,7 @@ public class Bina extends LinearOpMode {
         } else if (gamepad1.left_bumper) {
             intake1.setPower(0);
             intake2.setPower(0);
+            gates.setPower(0);
         } else if (gamepad2.b) {
             gates.setPower(0);
         }
@@ -116,7 +117,7 @@ public class Bina extends LinearOpMode {
 
     private void position_zero() {
         if ( gamepad2.x) {
-
+gates.setPower(0);
             arm1.setPosition(arm_min_position);
             arm2.setPosition(arm_min_position);
             sleep(500);
@@ -142,6 +143,7 @@ public class Bina extends LinearOpMode {
         if ( gamepad2.y) {
             arm1.setPosition(arm_max_position);
             arm2.setPosition(arm_max_position);
+
 
         }
     }
@@ -321,7 +323,7 @@ public class Bina extends LinearOpMode {
         lift_power_incr = 0.1;
         lift_max_velocity = 0;
         arm_max_position = 0.8;
-        arm_min_position = 0.153;
+        arm_min_position = 0.0;
         arm_position = 0.5;
         arm_accel = 0;
         arm_turn_Ok_position = 0.41;
