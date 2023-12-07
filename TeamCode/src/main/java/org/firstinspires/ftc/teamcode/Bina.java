@@ -33,7 +33,7 @@ public class Bina extends LinearOpMode {
     public CRServo intake2;
     private DcMotor leftEncoder;
     private DcMotor rightEncoder;
-    private DcMotor middleEncoder;
+    private DcMotor frontEncoder;
 
 
     double drive_slow_power;
@@ -122,17 +122,17 @@ gates.setPower(0);
             arm2.setPosition(arm_min_position);
             sleep(500);
             lift.setTargetPosition(lift_min_position);
-            //middleEncoder.setTargetPosition(lift_min_position);
+            //frontEncoder.setTargetPosition(lift_min_position);
             lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            //middleEncoder.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            //frontEncoder.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             lift.setPower(lift_max_power);
-            //middleEncoder.setPower(lift_max_power);
+            //frontEncoder.setPower(lift_max_power);
             while(lift.isBusy()){
     telemetry.update();
 
 }
             lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-       //        middleEncoder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+       //        frontEncoder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 
 
@@ -181,7 +181,7 @@ gates.setPower(0);
         telemetry.addData("lift speed mult up", lift_max_power_mult_up);
         telemetry.addData("lift speed mult down", lift_max_power_mult_down);
         telemetry.addData("lift pos", lift.getCurrentPosition());
-        telemetry.addData("middleEncoder pos", middleEncoder.getCurrentPosition());
+        telemetry.addData("frontEncoder pos", frontEncoder.getCurrentPosition());
         telemetry.addData("lift vel", ((DcMotorEx) lift).getVelocity());
         telemetry.addData("gamepadX", gamepad2.right_stick_x);
         telemetry.addData("gamepadY", gamepad2.left_stick_y);
@@ -291,13 +291,13 @@ gates.setPower(0);
         leftFront = hardwareMap.get(DcMotor.class, "leftFront");
         rightFront = hardwareMap.get(DcMotor.class, "rightFront");
         lift = hardwareMap.get(DcMotor.class, "lift");
-        middleEncoder = hardwareMap.get(DcMotor.class, "middleEncoder");
+        frontEncoder = hardwareMap.get(DcMotor.class, "frontEncoder");
         arm1 = hardwareMap.get(Servo.class, "arm1");
         arm2 = hardwareMap.get(Servo.class, "arm2");
         launcher = hardwareMap.get(Servo.class, "launcher");
         leftEncoder = hardwareMap.dcMotor.get("leftEncoder");
          rightEncoder = hardwareMap.dcMotor.get("rightEncoder");
-         middleEncoder = hardwareMap.dcMotor.get("middleEncoder");
+         frontEncoder = hardwareMap.dcMotor.get("frontEncoder");
          intake1 = hardwareMap.get(CRServo.class, "intake1");
          intake2 = hardwareMap.get(CRServo.class, "intake2");
         reset = hardwareMap.get(TouchSensor.class, "reset");
@@ -306,9 +306,9 @@ gates.setPower(0);
         intake2.setDirection(CRServo.Direction.REVERSE);
         lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         ((DcMotorEx) lift).setTargetPositionTolerance(5);
-        middleEncoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontEncoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        middleEncoder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        frontEncoder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         drive_max_velocity = 2000;
         slow_velocity = 500;
         lift_reset_done = false;
@@ -372,7 +372,7 @@ gates.setPower(0);
         telemetry.addData("rightFront vel", ((DcMotorEx) rightFront).getVelocity());
         telemetry.addData("leftEncoder pos", leftEncoder.getCurrentPosition());
         telemetry.addData("rightEncoder pos", rightEncoder.getCurrentPosition());
-        telemetry.addData("middleEncoder pos", middleEncoder.getCurrentPosition());
+        telemetry.addData("frontEncoder pos", frontEncoder.getCurrentPosition());
         telemetry.addData("left Back pos", leftRear.getCurrentPosition());
         telemetry.addData("Left Front pos", leftFront.getCurrentPosition());
         telemetry.addData("Right Back pos", rightRear.getCurrentPosition());
@@ -444,9 +444,9 @@ gates.setPower(0);
             lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             lift_pos = lift.getCurrentPosition();
             lift_reset_done = true;
-            middleEncoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            middleEncoder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            middleEncoder.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            frontEncoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            frontEncoder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            frontEncoder.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         }
         lift_pos = lift.getCurrentPosition();
@@ -461,7 +461,7 @@ gates.setPower(0);
         }
         lift_power = lift_target_power;
         ((DcMotorEx) lift).setVelocity(lift_power);
-        ((DcMotorEx) middleEncoder).setVelocity(lift_power);
+        ((DcMotorEx) frontEncoder).setVelocity(lift_power);
 
 
     }

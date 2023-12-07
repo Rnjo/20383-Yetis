@@ -37,7 +37,7 @@ public class Telep extends LinearOpMode {
         DcMotor rightRear = hardwareMap.dcMotor.get("rightRear");
         DcMotor leftEncoder = hardwareMap.dcMotor.get("leftEncoder");
         DcMotor rightEncoder = hardwareMap.dcMotor.get("rightEncoder");
-        DcMotor middleEncoder = hardwareMap.dcMotor.get("middleEncoder");
+        DcMotor frontEncoder = hardwareMap.dcMotor.get("frontEncoder");
         DcMotor lift = hardwareMap.dcMotor.get("lift");
         Servo arm = hardwareMap.get(Servo.class, "arm");
         CRServo intake1 = hardwareMap.get(CRServo.class, "intake1");
@@ -52,7 +52,7 @@ public class Telep extends LinearOpMode {
         intake2.setDirection(CRServo.Direction.REVERSE);
         lift.setDirection(DcMotorSimple.Direction.FORWARD);
 
-        middleEncoder.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontEncoder.setDirection(DcMotorSimple.Direction.REVERSE);
 
         waitForStart();
 
@@ -102,7 +102,7 @@ public class Telep extends LinearOpMode {
 
 //lift code
             lift.setPower(gamepad2.left_stick_y*-0.7);
-            middleEncoder.setPower(gamepad2.left_stick_y*-0.7);
+            frontEncoder.setPower(gamepad2.left_stick_y*-0.7);
 
 
 //for arm code borrow it from DriverModeFinalFlipback
@@ -131,7 +131,7 @@ public class Telep extends LinearOpMode {
 
             telemetry.update();
 
-            telemetry.addData("middleEncoder", middleEncoder.getCurrentPosition());
+            telemetry.addData("frontEncoder", frontEncoder.getCurrentPosition());
             telemetry.addData("leftEncoder", leftEncoder.getCurrentPosition());
             telemetry.addData("rightEncoder", rightEncoder.getCurrentPosition());
             telemetry.addData("leftFront", leftFront.getCurrentPosition());
