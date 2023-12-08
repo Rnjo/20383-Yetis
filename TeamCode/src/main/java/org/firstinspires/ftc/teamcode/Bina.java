@@ -323,7 +323,7 @@ gates.setPower(0);
         lift_power_incr = 0.1;
         lift_max_velocity = 0;
         arm_max_position = 0.8;
-        arm_min_position = 0.0;
+        arm_min_position = 0.25;
         arm_position = 0.5;
         arm_accel = 0;
         arm_turn_Ok_position = 0.41;
@@ -453,12 +453,13 @@ gates.setPower(0);
         lift_power = lift.getPower();
         if (gamepad2.left_stick_y < 0 && lift_pos <= lift_max_position) {
             lift_target_power = -(lift_max_velocity*lift_max_power_mult_up * lift_max_power * gamepad2.left_stick_y);
-        } else if ((gamepad2.left_stick_y > 0 /*&& !reset.isPressed()*/)) {
+        } else if ((gamepad2.left_stick_y > 0 /*!reset.isPressed()*/)) {
             lift_target_power = -(lift_max_velocity*lift_max_power_mult_down * lift_max_power * gamepad2.left_stick_y);
         } else {
                 lift_target_power = 0;
 
         }
+
         lift_power = lift_target_power;
         ((DcMotorEx) lift).setVelocity(lift_power);
         ((DcMotorEx) frontEncoder).setVelocity(lift_power);
