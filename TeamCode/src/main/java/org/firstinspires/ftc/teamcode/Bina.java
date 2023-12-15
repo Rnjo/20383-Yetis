@@ -96,7 +96,7 @@ public class Bina extends LinearOpMode {
             launcher.setPosition(1);
         } else {
 
-         launcher.setPosition(0);
+            launcher.setPosition(0);
         }
         telemetry.update();
     }
@@ -117,7 +117,7 @@ public class Bina extends LinearOpMode {
 
     private void position_zero() {
         if ( gamepad2.x) {
-gates.setPower(0);
+            gates.setPower(0);
             arm1.setPosition(arm_min_position);
             arm2.setPosition(arm_min_position);
             sleep(500);
@@ -128,11 +128,11 @@ gates.setPower(0);
             lift.setPower(lift_max_power);
             //frontEncoder.setPower(lift_max_power);
             while(lift.isBusy()){
-    telemetry.update();
+                telemetry.update();
 
-}
+            }
             lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-       //        frontEncoder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            //        frontEncoder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 
 
@@ -153,17 +153,17 @@ gates.setPower(0);
      */
     private void Initialize_DriveTrain() {
         leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
-       leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
-       rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-     leftRear.setDirection(DcMotorSimple.Direction.REVERSE);
-       leftRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftRear.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftRear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-       rightRear.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightRear.setDirection(DcMotorSimple.Direction.REVERSE);
         rightRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-      rightRear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightRear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     /**
@@ -246,7 +246,7 @@ gates.setPower(0);
                 ((DcMotorEx) leftFront).setVelocity(drive_slow_velocity);
                 ((DcMotorEx) rightFront).setVelocity(-drive_slow_velocity);
 
-        } else if (gamepad1.dpad_up || gamepad2.dpad_up) {
+            } else if (gamepad1.dpad_up || gamepad2.dpad_up) {
                 ((DcMotorEx) leftRear).setVelocity(-drive_slow_velocity);
                 ((DcMotorEx) rightRear).setVelocity(drive_slow_velocity);
                 ((DcMotorEx) leftFront).setVelocity(-drive_slow_velocity);
@@ -296,10 +296,10 @@ gates.setPower(0);
         arm2 = hardwareMap.get(Servo.class, "arm2");
         launcher = hardwareMap.get(Servo.class, "launcher");
         leftEncoder = hardwareMap.dcMotor.get("leftEncoder");
-         rightEncoder = hardwareMap.dcMotor.get("rightEncoder");
-         frontEncoder = hardwareMap.dcMotor.get("frontEncoder");
-         intake1 = hardwareMap.get(CRServo.class, "intake1");
-         intake2 = hardwareMap.get(CRServo.class, "intake2");
+        rightEncoder = hardwareMap.dcMotor.get("rightEncoder");
+        frontEncoder = hardwareMap.dcMotor.get("frontEncoder");
+        intake1 = hardwareMap.get(CRServo.class, "intake1");
+        intake2 = hardwareMap.get(CRServo.class, "intake2");
         reset = hardwareMap.get(TouchSensor.class, "reset");
         arm2.setDirection(Servo.Direction.REVERSE);
         lift.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -323,7 +323,7 @@ gates.setPower(0);
         lift_power_incr = 0.1;
         lift_max_velocity = 0;
         arm_max_position = 0.8;
-        arm_min_position = 0.25;
+        arm_min_position = 0.27;
         arm_position = 0.5;
         arm_accel = 0;
         arm_turn_Ok_position = 0.41;
@@ -336,7 +336,7 @@ gates.setPower(0);
         drive_slow_power = 0.2;
         Initialize_DriveTrain();
         // Initialize_Lift();
-     //   lift_telemetry();
+        //   lift_telemetry();
         telemetry.update();
         // Wait for Start button
         waitForStart();
@@ -352,7 +352,7 @@ gates.setPower(0);
                 // Return_home();
                 //Deliver_cone();
                 position_zero();
-                  position_max();
+                position_max();
                 telemetry.update();
             }
         }
@@ -423,6 +423,9 @@ gates.setPower(0);
                 arm_position = arm_min_position;
             }
         }
+        if (lift_pos <900){
+            arm_position = 0.23;
+        }
         arm1.setPosition(arm_position);
         arm2.setPosition(arm_position);
     }
@@ -456,7 +459,7 @@ gates.setPower(0);
         } else if ((gamepad2.left_stick_y > 0 /*!reset.isPressed()*/)) {
             lift_target_power = -(lift_max_velocity*lift_max_power_mult_down * lift_max_power * gamepad2.left_stick_y);
         } else {
-                lift_target_power = 0;
+            lift_target_power = 0;
 
         }
 
