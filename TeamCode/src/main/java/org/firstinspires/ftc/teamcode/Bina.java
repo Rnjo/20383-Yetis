@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
+
 @TeleOp
 public class Bina extends LinearOpMode {
 
@@ -314,7 +315,7 @@ public class Bina extends LinearOpMode {
         lift_power_incr = 0.1;
         lift_max_velocity = 0;
         arm_max_position = 1.0;
-        arm_min_position = 0.3;
+        arm_min_position = 0.2;
         arm_position = 0.5;
         arm_accel = 0;
         arm_turn_Ok_position = 0.41;
@@ -403,7 +404,7 @@ public class Bina extends LinearOpMode {
         if (gamepad2.right_stick_y < 0) {
             arm_accel = -gamepad2.right_stick_y * 0.06;
         } else if (gamepad2.right_stick_y > 0) {
-            arm_accel = -gamepad2.right_stick_y * 0.03;
+            arm_accel = -gamepad2.right_stick_y * 0.05;
         } else {
             arm_accel = 0;
         }
@@ -456,8 +457,12 @@ public class Bina extends LinearOpMode {
             lift_target_power = -(lift_max_velocity*lift_max_power_mult_down/2 * lift_max_power * gamepad2.left_stick_y);
         } else if (gamepad2.left_stick_y > 0 && !reset.isPressed()) {
             lift_target_power = -(lift_max_velocity*lift_max_power_mult_down * lift_max_power * gamepad2.left_stick_y);
-        } else {
-            lift_target_power = 0;
+      /*  } else if (gamepad2.dpad_up){
+                lift.setPower(1);
+                lift2.setPower(1);
+                */
+        }else {
+            lift_target_power=0;
         }
 
         //if (lift_pos < lift_max_position/2 && arm_position > arm_min_position) {
@@ -471,6 +476,6 @@ public class Bina extends LinearOpMode {
 
         lift_power = lift_target_power;
         ((DcMotorEx) lift).setVelocity(lift_power);
-        ((DcMotorEx) lift2).setVelocity(lift_power);
+        //((DcMotorEx) lift2).setVelocity(lift_power);
     }
 }
