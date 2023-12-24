@@ -231,16 +231,16 @@ public class Bina extends LinearOpMode {
             ((DcMotorEx) rightFront).setVelocity(drive_max_velocity * (((y - x) - rx) / denominator));
             ((DcMotorEx) rightRear).setVelocity(drive_max_velocity * (((y + x) - rx) / denominator));
         } else if (gamepad1.right_stick_x == 0 && gamepad1.left_stick_y == 0 && gamepad1.left_stick_x == 0) {
-            if (gamepad1.dpad_down || gamepad2.dpad_down) {
-                ((DcMotorEx) leftRear).setVelocity(drive_slow_velocity);
+            if (gamepad1.dpad_down /*|| gamepad2.dpad_down*/) {
+                ((DcMotorEx) leftRear).setVelocity(-drive_slow_velocity);
                 ((DcMotorEx) rightRear).setVelocity(-drive_slow_velocity);
-                ((DcMotorEx) leftFront).setVelocity(drive_slow_velocity);
+                ((DcMotorEx) leftFront).setVelocity(-drive_slow_velocity);
                 ((DcMotorEx) rightFront).setVelocity(-drive_slow_velocity);
 
-            } else if (gamepad1.dpad_up || gamepad2.dpad_up) {
-                ((DcMotorEx) leftRear).setVelocity(-drive_slow_velocity);
+            } else if (gamepad1.dpad_up /*|| gamepad2.dpad_up*/) {
+                ((DcMotorEx) leftRear).setVelocity(drive_slow_velocity);
                 ((DcMotorEx) rightRear).setVelocity(drive_slow_velocity);
-                ((DcMotorEx) leftFront).setVelocity(-drive_slow_velocity);
+                ((DcMotorEx) leftFront).setVelocity(drive_slow_velocity);
                 ((DcMotorEx) rightFront).setVelocity(drive_slow_velocity);
             } else if (gamepad1.dpad_left || gamepad2.dpad_left) {
                 ((DcMotorEx) leftRear).setVelocity(drive_slow_velocity);
@@ -449,18 +449,29 @@ public class Bina extends LinearOpMode {
             lift_reset_done = false;
         }
 
-        if (gamepad2.left_stick_y < 0 && lift_pos <= lift_max_position) {
+
+        if (gamepad2.left_stick_y < 0 && lift_pos == lift_max_position/2) {
+            arm1.setPosition(arm_max_position); //upwards lift interlock test
+            arm2.setPosition(arm_max_position);
             lift_target_power = -(lift_max_velocity*lift_max_power_mult_up * lift_max_power * gamepad2.left_stick_y);
-            // } else if (gamepad2.left_stick_y > 0 && lift_pos <= lift_max_position/2.5 && arm_position > arm_min_position * 1.1 && !reset.isPressed()) {
-            //   lift_target_power = 0;
+        } else if (gamepad2.left_stick_y < 0 && lift_pos <= lift_max_position) {
+            lift_target_power = -(lift_max_velocity*lift_max_power_mult_up * lift_max_power * gamepad2.left_stick_y);
+             } else if (gamepad2.left_stick_y > 0 && lift_pos <= lift_max_position/2.5  && !reset.isPressed()) {
+               arm1.setPosition(arm_min_position);
+               arm2.setPosition((arm_min_position));
+            lift_target_power = -(lift_max_velocity*lift_max_power_mult_down * lift_max_power * gamepad2.left_stick_y);
+
         } else if (gamepad2.left_stick_y > 0 && lift_pos <= lift_max_position/4 && !reset.isPressed()) {
             lift_target_power = -(lift_max_velocity*lift_max_power_mult_down/2 * lift_max_power * gamepad2.left_stick_y);
         } else if (gamepad2.left_stick_y > 0 && !reset.isPressed()) {
             lift_target_power = -(lift_max_velocity*lift_max_power_mult_down * lift_max_power * gamepad2.left_stick_y);
-      /*  } else if (gamepad2.dpad_up){
-                lift.setPower(1);
-                lift2.setPower(1);
-                */
+        } else if (gamepad2.dpad_up) {
+            lift.setPower(0.8);
+            lift2.setPower(0.8);
+        }else if (gamepad2.dpad_down){
+
+            lift.setPower(-1);
+            lift2.setPower(-1);
         }else {
             lift_target_power=0;
         }
