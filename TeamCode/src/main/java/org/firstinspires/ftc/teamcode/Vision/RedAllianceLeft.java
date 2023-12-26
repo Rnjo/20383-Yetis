@@ -24,7 +24,6 @@ package org.firstinspires.ftc.teamcode.Vision;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.Bina;
@@ -40,15 +39,13 @@ import org.openftc.easyopencv.OpenCvWebcam;
  * command is issued. The pipeline is re-used from SkystoneDeterminationExample
  */
 @Autonomous
-public class RedAllianceLeft extends Bina
-{
+public class RedAllianceLeft extends Bina {
     OpenCvWebcam webcam;
     PowerplayRedDeterminationExample.SkystoneDeterminationRedPipeline pipeline;
     PowerplayRedDeterminationExample.SkystoneDeterminationRedPipeline.SkystonePosition snapshotAnalysis = PowerplayRedDeterminationExample.SkystoneDeterminationRedPipeline.SkystonePosition.LEFT; // default
 
     @Override
-    public void runOpMode()
-    {
+    public void runOpMode() {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         /**
          * NOTE: Many comments have been omitted from this sample for the
@@ -62,24 +59,22 @@ public class RedAllianceLeft extends Bina
         pipeline = new PowerplayRedDeterminationExample.SkystoneDeterminationRedPipeline();
         webcam.setPipeline(pipeline);
 
-        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
-        {
+        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
-            public void onOpened()
-            {
-                webcam.startStreaming(-3680   ,720, OpenCvCameraRotation.UPRIGHT);
+            public void onOpened() {
+                webcam.startStreaming(1280, 720, OpenCvCameraRotation.UPRIGHT);
             }
 
             @Override
-            public void onError(int errorCode) {}
+            public void onError(int errorCode) {
+            }
         });
 
         /*
          * The INIT-loop:
          * This REPLACES waitForStart!
          */
-        while (!isStarted() && !isStopRequested())
-        {
+        while (!isStarted() && !isStopRequested()) {
             telemetry.addData("Realtime analysis", pipeline.getAnalysis());
             telemetry.update();
 
@@ -134,71 +129,72 @@ public class RedAllianceLeft extends Bina
                 .back(-36)
                 .build();
 
+        if (opModeIsActive()) {
+            switch (snapshotAnalysis) {
+                case LEFT: {
+                    drive.followTrajectory(myTrajectory);
+                    drive.followTrajectory(LeftTurn);
+                    gates.setPower(-1);
+                    intake1.setPower(-0.4);
+                    intake2.setPower(-0.4);
+                    sleep(1000);
+                    drive.followTrajectory(LeftTurnBack);
+                    drive.followTrajectory(Left);
+                    drive.followTrajectory(moveTowardsBackboardWhileTurning);
+                    arm1.setPosition(1);
+                    arm2.setPosition(1);
+                    sleep(1000);
+                    gates.setPower(-1);
+                    sleep(1000);
+                    gates.setPower(0);
+                    arm1.setPosition(0);
+                    arm2.setPosition(0);
+                    drive.followTrajectory(Parking);
 
-        switch (snapshotAnalysis) {
-            case LEFT: {
-                drive.followTrajectory(myTrajectory);
-                drive.followTrajectory(LeftTurn);
-                gates.setPower(-1);
-                intake1.setPower(-0.4);
-                intake2.setPower(-0.4);
-                sleep(1000);
-                drive.followTrajectory(LeftTurnBack);
-                drive.followTrajectory(Left);
-                drive.followTrajectory(moveTowardsBackboardWhileTurning);
-                arm1.setPosition(1);
-                arm2.setPosition(1);
-                sleep(1000);
-                gates.setPower(-1);
-                sleep(1000);
-                gates.setPower(0);
-                arm1.setPosition(0);
-                arm2.setPosition(0);
-                drive.followTrajectory(Parking);
+
+                }
+                case RIGHT: {
+                    drive.followTrajectory(myTrajectory);
+                    drive.followTrajectory(RightTurn);
+                    gates.setPower(-1);
+                    intake1.setPower(-0.4);
+                    intake2.setPower(-0.4);
+                    sleep(1000);
+                    drive.followTrajectory(RightTurnBack);
+                    drive.followTrajectory(Right);
+                    drive.followTrajectory(moveTowardsBackboardWhileTurning);
+                    arm1.setPosition(1);
+                    arm2.setPosition(1);
+                    sleep(1000);
+                    gates.setPower(-1);
+                    sleep(1000);
+                    gates.setPower(0);
+                    arm1.setPosition(0);
+                    arm2.setPosition(0);
+                    drive.followTrajectory(Parking);
+
+
+                }
+                case CENTER: {
+                    drive.followTrajectory(myTrajectory);
+                    gates.setPower(-1);
+                    intake1.setPower(-1);
+                    intake2.setPower(-1);
+                    drive.followTrajectory(moveTowardsBackboardWhileTurning);
+                    arm1.setPosition(1);
+                    arm2.setPosition(1);
+                    sleep(1000);
+                    gates.setPower(-1);
+                    sleep(1000);
+                    gates.setPower(0);
+                    arm1.setPosition(0);
+                    arm2.setPosition(0);
+                    drive.followTrajectory(Parking);
+
+                }
 
 
             }
-            case RIGHT: {
-                drive.followTrajectory(myTrajectory);
-                drive.followTrajectory(RightTurn);
-                gates.setPower(-1);
-                intake1.setPower(-0.4);
-                intake2.setPower(-0.4);
-                sleep(1000);
-                drive.followTrajectory(RightTurnBack);
-                drive.followTrajectory(Right);
-                drive.followTrajectory(moveTowardsBackboardWhileTurning);
-                arm1.setPosition(1);
-                arm2.setPosition(1);
-                sleep(1000);
-                gates.setPower(-1);
-                sleep(1000);
-                gates.setPower(0);
-                arm1.setPosition(0);
-                arm2.setPosition(0);
-                drive.followTrajectory(Parking);
-
-
-            }
-            case CENTER: {
-                drive.followTrajectory(myTrajectory);
-                gates.setPower(-1);
-                intake1.setPower(-1);
-                intake2.setPower(-1);
-                drive.followTrajectory(moveTowardsBackboardWhileTurning);
-                arm1.setPosition(1);
-                arm2.setPosition(1);
-                sleep(1000);
-                gates.setPower(-1);
-                sleep(1000);
-                gates.setPower(0);
-                arm1.setPosition(0);
-                arm2.setPosition(0);
-                drive.followTrajectory(Parking);
-
-            }
-
-
         }
     }
 }
