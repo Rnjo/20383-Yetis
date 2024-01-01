@@ -79,8 +79,14 @@ public class BlueAllianceLeft extends Bina {
          */
 
 
-       waitForStart();
+        while (!isStarted() && !isStopRequested())
+        {
+            telemetry.addData("Realtime analysis", pipeline.getAnalysis());
+            telemetry.update();
 
+            // Don't burn CPU cycles busy-looping in this sample
+            sleep(50);
+        }
         /*
          * The START command just came in: snapshot the current analysis now
          * for later use. We must do this because the analysis will continue

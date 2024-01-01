@@ -75,10 +75,13 @@ public class BlueAllianceRight extends Bina {
         /*
          * The INIT-loop:
          * This REPLACES waitForStart!
-         */
+          while (!isStarted() && !isStopRequested()) {
+            telemetry.addData("Realtime analysis", pipeline.getAnalysis());
+            telemetry.update();
 
-
-        waitForStart();
+            // Don't burn CPU cycles busy-looping in this sample
+            sleep(50);
+        }
 
         /*
          * The START command just came in: snapshot the current analysis now
@@ -92,7 +95,6 @@ public class BlueAllianceRight extends Bina {
          */
         telemetry.addData("Snapshot post-START analysis", snapshotAnalysis);
         telemetry.update();
-
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
 
