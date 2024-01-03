@@ -181,6 +181,7 @@ public class BlueAllianceRight extends Bina {
                 sleep(1000);
                 intake1.setPower(0);
                 intake2.setPower(0);
+                drive.followTrajectory(moveToTapeRight2);
                 drive.followTrajectory(moveToBoardRight);
                 lift.setTargetPosition(lift_max_position);
                 lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);

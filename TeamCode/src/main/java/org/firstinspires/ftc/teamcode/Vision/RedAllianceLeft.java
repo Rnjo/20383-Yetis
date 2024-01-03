@@ -101,46 +101,56 @@ public class RedAllianceLeft extends Bina {
         telemetry.addData("Snapshot post-START analysis", snapshotAnalysis);
         telemetry.update();
 
-        drive.setPoseEstimate(new Pose2d(64.25, 15.6, 270));
+        drive.setPoseEstimate(new Pose2d(64.25, -32.4, 270));
 // left movements
-        Trajectory moveToTapeLeft = drive.trajectoryBuilder(new Pose2d(64.25, 15.6, 270))
-                .lineToConstantHeading(new Vector2d(30, 56.4))
+        Trajectory moveToTapeLeft1 = drive.trajectoryBuilder(new Pose2d(64.25, -32.4, 270))
+                .lineToConstantHeading(new Vector2d(36, -56.4))
+                .build();
+        Trajectory moveToTapeLeft2 = drive.trajectoryBuilder(moveToTapeLeft1.end())
+                .back(15.6)
                 .build();
 
-        Trajectory moveToBoardLeft = drive.trajectoryBuilder(moveToTapeLeft.end())
+        Trajectory moveToBoardLeft = drive.trajectoryBuilder(moveToTapeLeft2.end())
                 .lineToConstantHeading(new Vector2d(44, 39))
                 .build();
         Trajectory ParkLeft = drive.trajectoryBuilder(moveToBoardLeft.end())
                 .back(4)
                 .build();
+
 //middle movements
-        Trajectory moveToTapeMiddle = drive.trajectoryBuilder(new Pose2d(64.25, 15.6, 270))
-                .lineToConstantHeading(new Vector2d(24, 20.5))
+        Trajectory moveToTapeMiddle = drive.trajectoryBuilder(new Pose2d(64.25, -32.4,  270))
+                .lineToSplineHeading(new Pose2d(32.4, -36, 0))
                 .build();
 
 
-        Trajectory moveToBoardMiddle = drive.trajectoryBuilder(moveToTapeMiddle.end())
-                .lineToConstantHeading(new Vector2d(44, 39))
+        Trajectory moveToBoardMiddle = drive.trajectoryBuilder(moveToTapeMiddle.end().plus(new Pose2d(0, 0, 270)))
+                .lineToConstantHeading(new Vector2d(37.5, 39))
                 .build();
         Trajectory ParkMiddle = drive.trajectoryBuilder(moveToBoardMiddle.end())
                 .back(4)
                 .build();
 //right movements
 
-        Trajectory moveToTapeRight = drive.trajectoryBuilder(new Pose2d(64.25, 15.6, 270))
-                .lineToConstantHeading(new Vector2d(30, 8.5))
+        Trajectory moveToTapeRight = drive.trajectoryBuilder(new Pose2d(64.25, -32.4, 270))
+                .lineToConstantHeading(new Vector2d(30, -39.5))
                 .build();
 
-        Trajectory moveToBoardRight = drive.trajectoryBuilder(moveToTapeRight.end())
-                .lineToConstantHeading(new Vector2d(44, 39))
+        Trajectory moveToTapeRight2 = drive.trajectoryBuilder(moveToTapeRight.end())
+                .lineToConstantHeading(new Vector2d(36,8.4))
+                .build();
+
+        Trajectory moveToBoardRight = drive.trajectoryBuilder(moveToTapeRight2.end())
+                .lineToConstantHeading(new Vector2d(31, 39))
                 .build();
         Trajectory ParkRight = drive.trajectoryBuilder(moveToBoardRight.end())
                 .back(4)
                 .build();
 
+
         switch (snapshotAnalysis) {
             case LEFT: {
-                drive.followTrajectory(moveToTapeLeft);
+                drive.followTrajectory(moveToTapeLeft1);
+                drive.followTrajectory(moveToTapeLeft2);
                 intake1.setPower(-0.4);
                 intake2.setPower(-0.4);
                 sleep(1000);
@@ -171,6 +181,7 @@ public class RedAllianceLeft extends Bina {
                 sleep(1000);
                 intake1.setPower(0);
                 intake2.setPower(0);
+                drive.followTrajectory(moveToTapeRight2);
                 drive.followTrajectory(moveToBoardRight);
                 lift.setTargetPosition(lift_max_position);
                 lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -198,13 +209,12 @@ public class RedAllianceLeft extends Bina {
                 sleep(1000);
                 intake1.setPower(0);
                 intake2.setPower(0);
+                drive.turn(270);
                 drive.followTrajectory(moveToBoardMiddle);
                 lift.setTargetPosition(lift_max_position);
                 lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 lift.setPower(1);
                 lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                lift.setPower(1);
                 sleep(1000);
                 gates.setPower(-0.1);
                 sleep(2000);
