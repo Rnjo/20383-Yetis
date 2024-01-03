@@ -101,9 +101,9 @@ public class BlueAllianceRight extends Bina {
         telemetry.addData("Snapshot post-START analysis", snapshotAnalysis);
         telemetry.update();
 
-        drive.setPoseEstimate(new Pose2d(-64.25, -39.6, 270));
+        drive.setPoseEstimate(new Pose2d(-64.25, -32.4, 270));
 // left movements
-        Trajectory moveToTapeLeft1 = drive.trajectoryBuilder(new Pose2d(-64.25, -39.6, 270))
+        Trajectory moveToTapeLeft1 = drive.trajectoryBuilder(new Pose2d(-64.25, -32.4, 270))
                 .lineToConstantHeading(new Vector2d(-36, -56.4))
                 .build();
         Trajectory moveToTapeLeft2 = drive.trajectoryBuilder(moveToTapeLeft1.end())
@@ -118,7 +118,7 @@ public class BlueAllianceRight extends Bina {
                 .build();
 
 //middle movements
-        Trajectory moveToTapeMiddle = drive.trajectoryBuilder(new Pose2d(-64.25, -39.6,  270))
+        Trajectory moveToTapeMiddle = drive.trajectoryBuilder(new Pose2d(-64.25, -32.4,  270))
                 .lineToSplineHeading(new Pose2d(-32.4, -36, 0))
                 .build();
 
@@ -131,11 +131,15 @@ public class BlueAllianceRight extends Bina {
                 .build();
 //right movements
 
-        Trajectory moveToTapeRight = drive.trajectoryBuilder(new Pose2d(-64.25, -15.6, 270))
-                .lineToConstantHeading(new Vector2d(30, 8.5))
+        Trajectory moveToTapeRight = drive.trajectoryBuilder(new Pose2d(-64.25, -32.4, 270))
+                .lineToConstantHeading(new Vector2d(-30, -39.5))
                 .build();
 
-        Trajectory moveToBoardRight = drive.trajectoryBuilder(moveToTapeRight.end())
+        Trajectory moveToTapeRight2 = drive.trajectoryBuilder(moveToTapeRight.end())
+                .lineToConstantHeading(new Vector2d(-36,8.4))
+                .build();
+
+        Trajectory moveToBoardRight = drive.trajectoryBuilder(moveToTapeRight2.end())
                 .lineToConstantHeading(new Vector2d(-31, 39))
                 .build();
         Trajectory ParkRight = drive.trajectoryBuilder(moveToBoardRight.end())
