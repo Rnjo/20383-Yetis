@@ -70,8 +70,7 @@ public class RedAllianceLeft extends Bina {
             }
 
             @Override
-            public void onError(int errorCode) {
-            }
+            public void onError(int errorCode) {}
         });
 
         /*

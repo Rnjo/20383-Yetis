@@ -68,13 +68,10 @@ public class BlueAllianceRight extends Bina {
             }
 
             @Override
-            public void onError(int errorCode) {
-            }
+            public void onError(int errorCode) {}
         });
 
-        /*
-         * The INIT-loop:
-         * This REPLACES waitForStart!
+
           while (!isStarted() && !isStopRequested()) {
             telemetry.addData("Realtime analysis", pipeline.getAnalysis());
             telemetry.update();
