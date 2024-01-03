@@ -22,6 +22,7 @@
 package org.firstinspires.ftc.teamcode.Vision;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
@@ -49,6 +50,7 @@ public class BlueAllianceRight extends Bina {
 
     @Override
     public void runOpMode() {
+        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         /*
          * NOTE: Many comments have been omitted from this sample for the
          * sake of conciseness. If you're just starting out with EasyOpenCv,
@@ -71,15 +73,20 @@ public class BlueAllianceRight extends Bina {
             public void onError(int errorCode) {}
         });
 
+        /*
+         * The INIT-loop:
+         * This REPLACES waitForStart!
+         */
 
-          while (!isStarted() && !isStopRequested()) {
+
+        while (!isStarted() && !isStopRequested())
+        {
             telemetry.addData("Realtime analysis", pipeline.getAnalysis());
             telemetry.update();
 
             // Don't burn CPU cycles busy-looping in this sample
             sleep(50);
         }
-
         /*
          * The START command just came in: snapshot the current analysis now
          * for later use. We must do this because the analysis will continue
@@ -92,108 +99,110 @@ public class BlueAllianceRight extends Bina {
          */
         telemetry.addData("Snapshot post-START analysis", snapshotAnalysis);
         telemetry.update();
-        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+
+        drive.setPoseEstimate(new Pose2d(-64.25, -39.6, 270));
+// left movements
+        Trajectory moveToTapeLeft1 = drive.trajectoryBuilder(new Pose2d(-64.25, -39.6, 270))
+                .lineToConstantHeading(new Vector2d(-36, -56.4))
+                .build();
+        Trajectory moveToTapeLeft2 = drive.trajectoryBuilder(moveToTapeLeft1.end())
+                .back(15.6)
+                .build();
+
+        Trajectory moveToBoardLeft = drive.trajectoryBuilder(moveToTapeLeft2.end())
+                .lineToConstantHeading(new Vector2d(-44, 39))
+                .build();
+        Trajectory ParkLeft = drive.trajectoryBuilder(moveToBoardLeft.end())
+                .back(4)
+                .build();
+
+//middle movements
+        Trajectory moveToTapeMiddle = drive.trajectoryBuilder(new Pose2d(-64.25, -39.6,  270))
+                .lineToSplineHeading(new Pose2d(-32.4, -36, 0))
+                .build();
 
 
-        drive.setPoseEstimate(new Pose2d(-72, -36, 0));
+        Trajectory moveToBoardMiddle = drive.trajectoryBuilder(moveToTapeMiddle.end().plus(new Pose2d(0, 0, 270)))
+                .lineToConstantHeading(new Vector2d(-37.5, 39))
+                .build();
+        Trajectory ParkMiddle = drive.trajectoryBuilder(moveToBoardMiddle.end())
+                .back(4)
+                .build();
+//right movements
 
-        Trajectory myTrajectory = drive.trajectoryBuilder(new Pose2d(-72, -36, 0))
-                .forward(40)
+        Trajectory moveToTapeRight = drive.trajectoryBuilder(new Pose2d(-64.25, -15.6, 270))
+                .lineToConstantHeading(new Vector2d(30, 8.5))
                 .build();
-        Trajectory LeftTurn = drive.trajectoryBuilder(myTrajectory.end())
-                .lineToSplineHeading(new Pose2d(-32, -36, Math.toRadians(90)))
-                .forward(3)
+
+        Trajectory moveToBoardRight = drive.trajectoryBuilder(moveToTapeRight.end())
+                .lineToConstantHeading(new Vector2d(-31, 39))
                 .build();
-        Trajectory LeftTurnBack = drive.trajectoryBuilder(LeftTurn.end())
-                .back(3)
-                .lineToSplineHeading(new Pose2d(-32, -36, Math.toRadians(0)))
-                .build();
-        Trajectory RightTurn = drive.trajectoryBuilder(myTrajectory.end())
-                .lineToSplineHeading(new Pose2d(-32, -36, Math.toRadians(-90)))
-                .forward(3)
-                .build();
-        Trajectory RightTurnBack = drive.trajectoryBuilder(RightTurn.end())
-                .back(3)
-                .lineToSplineHeading(new Pose2d(-32, -36, Math.toRadians(0)))
-                .build();
-        Trajectory moveTowardsBackboardWhileTurning = drive.trajectoryBuilder(myTrajectory.end())
-                .lineToSplineHeading(new Pose2d(-36, 36, Math.toRadians(-90)))
-                .build();
-        Trajectory Left = drive.trajectoryBuilder(moveTowardsBackboardWhileTurning.end())
-                .strafeRight(6)
-                .build();
-        Trajectory Right = drive.trajectoryBuilder(moveTowardsBackboardWhileTurning.end())
-                .strafeLeft(6)
-                .build();
-        Trajectory Parking = drive.trajectoryBuilder(moveTowardsBackboardWhileTurning.end())
-                .back(-36)
+        Trajectory ParkRight = drive.trajectoryBuilder(moveToBoardRight.end())
+                .back(4)
                 .build();
 
 
         switch (snapshotAnalysis) {
             case LEFT: {
-                drive.followTrajectory(myTrajectory);
-                drive.followTrajectory(LeftTurn);
-                gates.setPower(-1);
+                drive.followTrajectory(moveToTapeLeft1);
+                drive.followTrajectory(moveToTapeLeft2);
                 intake1.setPower(-0.4);
                 intake2.setPower(-0.4);
                 sleep(1000);
-                drive.followTrajectory(LeftTurnBack);
-                drive.followTrajectory(Left);
-                drive.followTrajectory(moveTowardsBackboardWhileTurning);
-                arm1.setPosition(1);
-                arm2.setPosition(1);
+                intake1.setPower(0);
+                intake2.setPower(0);
+                drive.followTrajectory(moveToBoardLeft);
+                lift.setTargetPosition(lift_max_position);
                 sleep(1000);
-                gates.setPower(-1);
-                sleep(1000);
+                gates.setPower(-0.1);
+                sleep(2000);
                 gates.setPower(0);
-                arm1.setPosition(0);
-                arm2.setPosition(0);
-                drive.followTrajectory(Parking);
+                lift.setTargetPosition(lift_min_position);
+                sleep(1300);
+                drive.followTrajectory(ParkLeft);
 
 
             }
             case RIGHT: {
-                drive.followTrajectory(myTrajectory);
-                drive.followTrajectory(RightTurn);
-                gates.setPower(-1);
+                drive.followTrajectory(moveToTapeRight);
                 intake1.setPower(-0.4);
                 intake2.setPower(-0.4);
                 sleep(1000);
-                drive.followTrajectory(RightTurnBack);
-                drive.followTrajectory(Right);
-                drive.followTrajectory(moveTowardsBackboardWhileTurning);
-                arm1.setPosition(1);
-                arm2.setPosition(1);
+                intake1.setPower(0);
+                intake2.setPower(0);
+                drive.followTrajectory(moveToBoardRight);
+                lift.setTargetPosition(lift_max_position);
                 sleep(1000);
-                gates.setPower(-1);
-                sleep(1000);
+                gates.setPower(-0.1);
+                sleep(2000);
                 gates.setPower(0);
-                arm1.setPosition(0);
-                arm2.setPosition(0);
-                drive.followTrajectory(Parking);
+                lift.setTargetPosition(lift_min_position);
+                sleep(1300);
+                drive.followTrajectory(ParkRight);
+
+
 
 
             }
             case CENTER: {
-                drive.followTrajectory(myTrajectory);
-                gates.setPower(-1);
-                intake1.setPower(-1);
-                intake2.setPower(-1);
-                drive.followTrajectory(moveTowardsBackboardWhileTurning);
-                arm1.setPosition(1);
-                arm2.setPosition(1);
+                drive.followTrajectory(moveToTapeMiddle);
+                intake1.setPower(-0.4);
+                intake2.setPower(-0.4);
                 sleep(1000);
-                gates.setPower(-1);
+                intake1.setPower(0);
+                intake2.setPower(0);
+                drive.turn(270);
+                drive.followTrajectory(moveToBoardMiddle);
+                lift.setTargetPosition(lift_max_position);
                 sleep(1000);
+                gates.setPower(-0.1);
+                sleep(2000);
                 gates.setPower(0);
-                arm1.setPosition(0);
-                arm2.setPosition(0);
-                drive.followTrajectory(Parking);
-
+                lift.setTargetPosition(lift_min_position);
+                sleep(1300);
+                drive.followTrajectory(ParkMiddle);
             }
-
-
         }
     }
 }
+

@@ -110,7 +110,7 @@ public class BlueAllianceLeft extends Bina {
                 .lineToConstantHeading(new Vector2d(-44, 39))
                 .build();
 
-        Trajectory Park = drive.trajectoryBuilder(moveToBoardLeft.end())
+        Trajectory ParkLeft = drive.trajectoryBuilder(moveToBoardLeft.end())
                 .back(4)
                 .build();
 
@@ -121,9 +121,12 @@ public class BlueAllianceLeft extends Bina {
 
 
         Trajectory moveToBoardMiddle = drive.trajectoryBuilder(moveToTapeMiddle.end())
-                .lineToConstantHeading(new Vector2d(-44, 39))
+                .lineToConstantHeading(new Vector2d(-37.5, 39))
                 .build();
 
+        Trajectory ParkMiddle = drive.trajectoryBuilder(moveToBoardMiddle.end())
+                .back(4)
+                .build();
 //right movements
 
         Trajectory moveToTapeRight = drive.trajectoryBuilder(new Pose2d(-64.25, 15.6, 270))
@@ -131,9 +134,11 @@ public class BlueAllianceLeft extends Bina {
                 .build();
 
         Trajectory moveToBoardRight = drive.trajectoryBuilder(moveToTapeRight.end())
-                .lineToConstantHeading(new Vector2d(-44, 39))
+                .lineToConstantHeading(new Vector2d(-31, 39))
                 .build();
-
+        Trajectory ParkRight = drive.trajectoryBuilder(moveToBoardRight.end())
+                .back(4)
+                .build();
 
         switch (snapshotAnalysis) {
             case LEFT: {
@@ -150,7 +155,8 @@ public class BlueAllianceLeft extends Bina {
                 sleep(2000);
                 gates.setPower(0);
                 lift.setTargetPosition(lift_min_position);
-                drive.followTrajectory(Park);
+                sleep(1300);
+                drive.followTrajectory(ParkLeft);
 
 
             }
@@ -168,7 +174,8 @@ public class BlueAllianceLeft extends Bina {
                 sleep(2000);
                 gates.setPower(0);
                 lift.setTargetPosition(lift_min_position);
-                drive.followTrajectory(Park);
+                sleep(1300);
+                drive.followTrajectory(ParkRight);
 
 
 
@@ -188,7 +195,8 @@ public class BlueAllianceLeft extends Bina {
                 sleep(2000);
                 gates.setPower(0);
                 lift.setTargetPosition(lift_min_position);
-                drive.followTrajectory(Park);
+                sleep(1300);
+                drive.followTrajectory(ParkMiddle);
             }
            }
           }
