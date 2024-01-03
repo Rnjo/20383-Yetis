@@ -25,6 +25,7 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.Bina;
@@ -150,11 +151,17 @@ public class RedAllianceRight extends Bina {
                 intake2.setPower(0);
                 drive.followTrajectory(moveToBoardLeft);
                 lift.setTargetPosition(lift_max_position);
+                lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                lift.setPower(1);
+                lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 sleep(1000);
                 gates.setPower(-0.1);
                 sleep(2000);
                 gates.setPower(0);
                 lift.setTargetPosition(lift_min_position);
+                lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                lift.setPower(1);
+                lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 sleep(1300);
                 drive.followTrajectory(ParkLeft);
 
@@ -169,11 +176,17 @@ public class RedAllianceRight extends Bina {
                 intake2.setPower(0);
                 drive.followTrajectory(moveToBoardRight);
                 lift.setTargetPosition(lift_max_position);
+                lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                lift.setPower(1);
+                lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 sleep(1000);
                 gates.setPower(-0.1);
                 sleep(2000);
                 gates.setPower(0);
                 lift.setTargetPosition(lift_min_position);
+                lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                lift.setPower(1);
+                lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 sleep(1300);
                 drive.followTrajectory(ParkRight);
 
@@ -190,11 +203,17 @@ public class RedAllianceRight extends Bina {
                 intake2.setPower(0);
                 drive.followTrajectory(moveToBoardMiddle);
                 lift.setTargetPosition(lift_max_position);
+                lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                lift.setPower(1);
+                lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 sleep(1000);
                 gates.setPower(-0.1);
                 sleep(2000);
                 gates.setPower(0);
                 lift.setTargetPosition(lift_min_position);
+                lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                lift.setPower(1);
+                lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 sleep(1300);
                 drive.followTrajectory(ParkMiddle);
             }
