@@ -101,42 +101,42 @@ public class RedAllianceRight extends Bina {
         telemetry.addData("Snapshot post-START analysis", snapshotAnalysis);
         telemetry.update();
 
-        drive.setPoseEstimate(new Pose2d(64.25, 15.6, 270));
+        drive.setPoseEstimate(new Pose2d(15.6, -64.25, 179.1));
 // left movements
-        Trajectory moveToTapeLeft = drive.trajectoryBuilder(new Pose2d(64.25, 15.6, 270))
-                .lineToConstantHeading(new Vector2d(30, 56.4))
+        Trajectory moveToTapeLeft = drive.trajectoryBuilder(new Pose2d(15.6, -64.25, 179.1))
+                .lineToConstantHeading(new Vector2d(32.5, -30))
                 .build();
 
         Trajectory moveToBoardLeft = drive.trajectoryBuilder(moveToTapeLeft.end())
-                .lineToConstantHeading(new Vector2d(44, 39))
+                .lineToConstantHeading(new Vector2d(48, -43))
                 .build();
+
         Trajectory ParkLeft = drive.trajectoryBuilder(moveToBoardLeft.end())
                 .back(4)
                 .build();
 
 //middle movements
-        Trajectory moveToTapeMiddle = drive.trajectoryBuilder(new Pose2d(64.25, 15.6, 270))
-                .lineToConstantHeading(new Vector2d(24, 20.5))
+        Trajectory moveToTapeMiddle = drive.trajectoryBuilder(new Pose2d(15.6, -64.25, 179.1))
+                .lineToConstantHeading(new Vector2d(22,-24))
                 .build();
 
 
         Trajectory moveToBoardMiddle = drive.trajectoryBuilder(moveToTapeMiddle.end())
-                .lineToConstantHeading(new Vector2d(37.5, 39))
+                .lineToConstantHeading(new Vector2d(48, -36))
                 .build();
+
         Trajectory ParkMiddle = drive.trajectoryBuilder(moveToBoardMiddle.end())
                 .back(4)
                 .build();
-
 //right movements
 
-        Trajectory moveToTapeRight = drive.trajectoryBuilder(new Pose2d(64.25, 15.6, 270))
-                .lineToConstantHeading(new Vector2d(30, 8.5))
+        Trajectory moveToTapeRight = drive.trajectoryBuilder(new Pose2d(15.6, -64.25, 179.1))
+                .lineToConstantHeading(new Vector2d(8.5, 30))
                 .build();
 
         Trajectory moveToBoardRight = drive.trajectoryBuilder(moveToTapeRight.end())
-                .lineToConstantHeading(new Vector2d(31, 39))
+                .lineToConstantHeading(new Vector2d(48, -29))
                 .build();
-
         Trajectory ParkRight = drive.trajectoryBuilder(moveToBoardRight.end())
                 .back(4)
                 .build();
