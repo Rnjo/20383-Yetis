@@ -101,48 +101,45 @@ public class RedAllianceLeft extends Bina {
         telemetry.addData("Snapshot post-START analysis", snapshotAnalysis);
         telemetry.update();
 
-        drive.setPoseEstimate(new Pose2d(64.25, -32.4, 270));
-// left movements
-        Trajectory moveToTapeLeft1 = drive.trajectoryBuilder(new Pose2d(64.25, -32.4, 270))
-                .lineToConstantHeading(new Vector2d(36, -56.4))
-                .build();
-        Trajectory moveToTapeLeft2 = drive.trajectoryBuilder(moveToTapeLeft1.end())
-                .back(15.6)
+        drive.setPoseEstimate(new Pose2d(-32.4, -64.25, 179.1));
+// right movements
+        Trajectory moveToTapeRight = drive.trajectoryBuilder(new Pose2d(-32.4, -64.25, 179.1))
+                .lineToConstantHeading(new Vector2d(-38, -34))
                 .build();
 
-        Trajectory moveToBoardLeft = drive.trajectoryBuilder(moveToTapeLeft2.end())
-                .lineToConstantHeading(new Vector2d(44, 39))
+        Trajectory moveToBoardRight = drive.trajectoryBuilder(moveToTapeRight.end())
+                .lineToConstantHeading(new Vector2d(48, -30))
                 .build();
-        Trajectory ParkLeft = drive.trajectoryBuilder(moveToBoardLeft.end())
+        Trajectory ParkRight = drive.trajectoryBuilder(moveToBoardRight.end())
                 .back(4)
                 .build();
 
 //middle movements
-        Trajectory moveToTapeMiddle = drive.trajectoryBuilder(new Pose2d(64.25, -32.4,  270))
-                .lineToSplineHeading(new Pose2d(32.4, -36, 0))
+        Trajectory moveToTapeMiddle = drive.trajectoryBuilder(new Pose2d(-32.4, -64.25,  179.1))
+                .lineToSplineHeading(new Pose2d(-32.4, -36, 269))
                 .build();
 
 
         Trajectory moveToBoardMiddle = drive.trajectoryBuilder(moveToTapeMiddle.end().plus(new Pose2d(0, 0, 270)))
-                .lineToConstantHeading(new Vector2d(37.5, 39))
+                .lineToConstantHeading(new Vector2d(48, -36))
                 .build();
         Trajectory ParkMiddle = drive.trajectoryBuilder(moveToBoardMiddle.end())
                 .back(4)
                 .build();
-//right movements
+//left movements
 
-        Trajectory moveToTapeRight = drive.trajectoryBuilder(new Pose2d(64.25, -32.4, 270))
-                .lineToConstantHeading(new Vector2d(30, -39.5))
+        Trajectory moveToTapeLeft1 = drive.trajectoryBuilder(new Pose2d(-32.4, -64.25, 180))
+                .lineToConstantHeading(new Vector2d(-39.5, -30))
                 .build();
 
-        Trajectory moveToTapeRight2 = drive.trajectoryBuilder(moveToTapeRight.end())
-                .lineToConstantHeading(new Vector2d(36,8.4))
+        Trajectory moveToTapeLeft2 = drive.trajectoryBuilder(moveToTapeLeft1.end())
+                .lineToConstantHeading(new Vector2d(-16,-30))
                 .build();
 
-        Trajectory moveToBoardRight = drive.trajectoryBuilder(moveToTapeRight2.end())
-                .lineToConstantHeading(new Vector2d(31, 39))
+        Trajectory moveToBoardLeft = drive.trajectoryBuilder(moveToTapeLeft2.end())
+                .lineToConstantHeading(new Vector2d(48, -43))
                 .build();
-        Trajectory ParkRight = drive.trajectoryBuilder(moveToBoardRight.end())
+        Trajectory ParkLeft = drive.trajectoryBuilder(moveToBoardLeft.end())
                 .back(4)
                 .build();
 
@@ -150,12 +147,12 @@ public class RedAllianceLeft extends Bina {
         switch (snapshotAnalysis) {
             case LEFT: {
                 drive.followTrajectory(moveToTapeLeft1);
-                drive.followTrajectory(moveToTapeLeft2);
                 intake1.setPower(-0.4);
                 intake2.setPower(-0.4);
                 sleep(1000);
                 intake1.setPower(0);
                 intake2.setPower(0);
+                drive.followTrajectory(moveToTapeLeft2);
                 drive.followTrajectory(moveToBoardLeft);
                 lift.setTargetPosition(lift_max_position);
                 lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -181,7 +178,6 @@ public class RedAllianceLeft extends Bina {
                 sleep(1000);
                 intake1.setPower(0);
                 intake2.setPower(0);
-                drive.followTrajectory(moveToTapeRight2);
                 drive.followTrajectory(moveToBoardRight);
                 lift.setTargetPosition(lift_max_position);
                 lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);

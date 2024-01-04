@@ -135,7 +135,7 @@ public class BlueAllianceLeft extends Bina {
                 .build();
 
         Trajectory moveToBoardRight = drive.trajectoryBuilder(moveToTapeRight.end())
-                .lineToConstantHeading(new Vector2d(48, 29))
+                .lineToConstantHeading(new Vector2d(48, 30))
                 .build();
         Trajectory ParkRight = drive.trajectoryBuilder(moveToBoardRight.end())
                 .back(4)
