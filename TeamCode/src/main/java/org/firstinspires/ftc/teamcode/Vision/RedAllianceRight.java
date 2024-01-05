@@ -26,7 +26,7 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotor;
-
+import org.firstinspires.ftc.robotcontroller.external.samples.RobotHardware;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.Bina;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
@@ -48,6 +48,7 @@ public class RedAllianceRight extends Bina {
     OpenCvWebcam webcam;
     PowerplayblueDeterminationExample.SkystoneDeterminationPipeline pipeline;
     PowerplayblueDeterminationExample.SkystoneDeterminationPipeline.SkystonePosition snapshotAnalysis = PowerplayblueDeterminationExample.SkystoneDeterminationPipeline.SkystonePosition.LEFT; // default
+    private RobotHardware robot;
 
     @Override
     public void runOpMode() {
@@ -73,7 +74,6 @@ public class RedAllianceRight extends Bina {
             @Override
             public void onError(int errorCode) {}
         });
-
         /*
          * The INIT-loop:
          * This REPLACES waitForStart!
@@ -104,78 +104,135 @@ public class RedAllianceRight extends Bina {
         drive.setPoseEstimate(new Pose2d(15.6, -64.25, 179.1));
 // left movements
         Trajectory moveToTapeLeft = drive.trajectoryBuilder(new Pose2d(15.6, -64.25, 179.1))
-                .lineToConstantHeading(new Vector2d(32.5, -30))
+                .lineToConstantHeading(new Vector2d(36, -30))
+                .addDisplacementMarker(() -> {
+                    intake1.setPower(-0.4);
+                    intake2.setPower(-0.4);
+                    sleep(1000);
+                    intake1.setPower(0);
+                    intake2.setPower(0);
+                })
                 .build();
 
         Trajectory moveToBoardLeft = drive.trajectoryBuilder(moveToTapeLeft.end())
-                .lineToConstantHeading(new Vector2d(48, -43))
+                .lineToConstantHeading(new Vector2d(40, -33))
+                .addDisplacementMarker(() -> {
+
+                    lift.setTargetPosition(lift_max_position);
+                    lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    lift.setPower(1);
+                    lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                    sleep(1000);
+                    gates.setPower(-0.1);
+                    sleep(2000);
+                    gates.setPower(0);
+                    lift.setTargetPosition(lift_min_position);
+                    lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    lift.setPower(1);
+                    lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                    sleep(1300);
+                })
                 .build();
 
         Trajectory ParkLeft = drive.trajectoryBuilder(moveToBoardLeft.end())
-                .back(4)
+                .back(8)
                 .build();
 
 //middle movements
         Trajectory moveToTapeMiddle = drive.trajectoryBuilder(new Pose2d(15.6, -64.25, 179.1))
-                .lineToConstantHeading(new Vector2d(22,-24))
+                .lineToConstantHeading(new Vector2d(32,-17))
+                .addDisplacementMarker(() -> {
+                    intake1.setPower(-0.4);
+                    intake2.setPower(-0.4);
+                    sleep(1000);
+                    intake1.setPower(0);
+                    intake2.setPower(0);
+                })
                 .build();
 
 
         Trajectory moveToBoardMiddle = drive.trajectoryBuilder(moveToTapeMiddle.end())
-                .lineToConstantHeading(new Vector2d(48, -36))
+                .lineToConstantHeading(new Vector2d(40, -25))
+                .addDisplacementMarker(() -> {
+
+                    lift.setTargetPosition(lift_max_position);
+                    lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    lift.setPower(1);
+                    lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                    sleep(1000);
+                    gates.setPower(-0.1);
+                    sleep(2000);
+                    gates.setPower(0);
+                    lift.setTargetPosition(lift_min_position);
+                    lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    lift.setPower(1);
+                    lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                    sleep(1300);
+                })
                 .build();
 
         Trajectory ParkMiddle = drive.trajectoryBuilder(moveToBoardMiddle.end())
-                .back(4)
+                .back(8)
                 .build();
 //right movements
 
         Trajectory moveToTapeRight = drive.trajectoryBuilder(new Pose2d(15.6, -64.25, 179.1))
-                .lineToConstantHeading(new Vector2d(8.5, 30))
+                .lineToConstantHeading(new Vector2d(12, -22))
+                .addDisplacementMarker(() -> {
+                    intake1.setPower(-0.4);
+                    intake2.setPower(-0.4);
+                    sleep(1000);
+                    intake1.setPower(0);
+                    intake2.setPower(0);
+                })
                 .build();
 
         Trajectory moveToBoardRight = drive.trajectoryBuilder(moveToTapeRight.end())
-                .lineToConstantHeading(new Vector2d(48, -29))
+                .lineToConstantHeading(new Vector2d(40, -17))
+                .addDisplacementMarker(() -> {
+
+                    lift.setTargetPosition(lift_max_position);
+                    lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    lift.setPower(1);
+                    lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                    sleep(1000);
+                    gates.setPower(-0.1);
+                    sleep(2000);
+                    gates.setPower(0);
+                    lift.setTargetPosition(lift_min_position);
+                    lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    lift.setPower(1);
+                    lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                    sleep(1300);
+                })
                 .build();
         Trajectory ParkRight = drive.trajectoryBuilder(moveToBoardRight.end())
-                .back(4)
+                .back(8)
                 .build();
 
         switch (snapshotAnalysis) {
             case LEFT: {
                 drive.followTrajectory(moveToTapeLeft);
-                intake1.setPower(-0.4);
-                intake2.setPower(-0.4);
-                sleep(1000);
-                intake1.setPower(0);
-                intake2.setPower(0);
+
+                /*  */
                 drive.followTrajectory(moveToBoardLeft);
-                lift.setTargetPosition(lift_max_position);
-                lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                lift.setPower(1);
-                lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                sleep(1000);
-                gates.setPower(-0.1);
-                sleep(2000);
-                gates.setPower(0);
-                lift.setTargetPosition(lift_min_position);
-                lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                lift.setPower(1);
-                lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                sleep(1300);
+
                 drive.followTrajectory(ParkLeft);
+                terminateOpModeNow();
+
+
 
 
             }
             case RIGHT: {
                 drive.followTrajectory(moveToTapeRight);
-                intake1.setPower(-0.4);
+               /* intake1.setPower(-0.4);
                 intake2.setPower(-0.4);
                 sleep(1000);
                 intake1.setPower(0);
-                intake2.setPower(0);
+                intake2.setPower(0);*/
                 drive.followTrajectory(moveToBoardRight);
-                lift.setTargetPosition(lift_max_position);
+                /*lift.setTargetPosition(lift_max_position);
                 lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 lift.setPower(1);
                 lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -187,8 +244,9 @@ public class RedAllianceRight extends Bina {
                 lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 lift.setPower(1);
                 lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                sleep(1300);
+                sleep(1300);*/
                 drive.followTrajectory(ParkRight);
+                terminateOpModeNow();
 
 
 
@@ -196,13 +254,13 @@ public class RedAllianceRight extends Bina {
             }
             case CENTER: {
                 drive.followTrajectory(moveToTapeMiddle);
-                intake1.setPower(-0.4);
+              /*  intake1.setPower(-0.4);
                 intake2.setPower(-0.4);
                 sleep(1000);
                 intake1.setPower(0);
-                intake2.setPower(0);
+                intake2.setPower(0);*/
                 drive.followTrajectory(moveToBoardMiddle);
-                lift.setTargetPosition(lift_max_position);
+             /*   lift.setTargetPosition(lift_max_position);
                 lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 lift.setPower(1);
                 lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -214,8 +272,9 @@ public class RedAllianceRight extends Bina {
                 lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 lift.setPower(1);
                 lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                sleep(1300);
+                sleep(1300);*/
                 drive.followTrajectory(ParkMiddle);
+                terminateOpModeNow();
             }
         }
     }
