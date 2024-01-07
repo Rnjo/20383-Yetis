@@ -23,13 +23,17 @@ package org.firstinspires.ftc.teamcode.Vision;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+
 import org.firstinspires.ftc.robotcontroller.external.samples.RobotHardware;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.Bina;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
@@ -43,13 +47,16 @@ import org.openftc.easyopencv.OpenCvWebcam;
 @Autonomous
 
 
-public class RedAllianceRight extends Bina {
+public class RedAllianceRight extends LinearOpMode {
 
     OpenCvWebcam webcam;
     PowerplayblueDeterminationExample.SkystoneDeterminationPipeline pipeline;
     PowerplayblueDeterminationExample.SkystoneDeterminationPipeline.SkystonePosition snapshotAnalysis = PowerplayblueDeterminationExample.SkystoneDeterminationPipeline.SkystonePosition.LEFT; // default
     private RobotHardware robot;
-
+    public DcMotor lift;
+    public CRServo intake1;
+    public CRServo intake2;
+    public CRServo gates;
     @Override
     public void runOpMode() {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
@@ -78,202 +85,179 @@ public class RedAllianceRight extends Bina {
          * The INIT-loop:
          * This REPLACES waitForStart!
          */
+        lift = hardwareMap.get(DcMotor.class, "lift");
+        intake1 = hardwareMap.get(CRServo.class, "intake1");
+        intake2 = hardwareMap.get(CRServo.class, "intake2");
+        gates = hardwareMap.get(CRServo.class, "gates");
+        intake2.setDirection(CRServo.Direction.REVERSE);
+        lift.setDirection(DcMotorSimple.Direction.REVERSE);
+        ((DcMotorEx) lift).setTargetPositionTolerance(5);
 
-
-        while (!isStarted() && !isStopRequested())
-        {
-            telemetry.addData("Realtime analysis", pipeline.getAnalysis());
-            telemetry.update();
-
-            // Don't burn CPU cycles busy-looping in this sample
-            sleep(50);
-        }
         /*
          * The START command just came in: snapshot the current analysis now
          * for later use. We must do this because the analysis will continue
          * to change as the camera view changes once the robot starts moving!
          */
-        snapshotAnalysis = pipeline.getAnalysis();
 
         /*
          * Show that snapshot on the telemetry
          */
         telemetry.addData("Snapshot post-START analysis", snapshotAnalysis);
         telemetry.update();
-
-        drive.setPoseEstimate(new Pose2d(15.6, -64.25, 179.1));
+        Pose2d StartPose = new Pose2d(15.6, -64.25, 179.1);
+        drive.setPoseEstimate(StartPose);
 // left movements
-        Trajectory moveToTapeLeft = drive.trajectoryBuilder(new Pose2d(15.6, -64.25, 179.1))
-                .lineToConstantHeading(new Vector2d(36, -30))
-                .addDisplacementMarker(() -> {
-                    intake1.setPower(-0.4);
-                    intake2.setPower(-0.4);
-                    sleep(1000);
+        TrajectorySequence left = drive.trajectorySequenceBuilder(StartPose)
+
+                .lineToConstantHeading(new Vector2d(41.5   , -22))
+                .addTemporalMarker(1,() -> {
+                    intake1.setPower(-0.7);
+                    intake2.setPower(-0.7);
+
+                })
+                .waitSeconds(0.5)
+                .lineToConstantHeading(new Vector2d(45, -26))
+                .back(1)
+
+                .UNSTABLE_addTemporalMarkerOffset(-0.5, ()-> {
+
+
                     intake1.setPower(0);
                     intake2.setPower(0);
-                })
-                .build();
-
-        Trajectory moveToBoardLeft = drive.trajectoryBuilder(moveToTapeLeft.end())
-                .lineToConstantHeading(new Vector2d(40, -33))
-                .addDisplacementMarker(() -> {
-
-                    lift.setTargetPosition(lift_max_position);
+                    lift.setTargetPosition(3200);
                     lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     lift.setPower(1);
-                    lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                    sleep(1000);
-                    gates.setPower(-0.1);
-                    sleep(2000);
-                    gates.setPower(0);
-                    lift.setTargetPosition(lift_min_position);
-                    lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    lift.setPower(1);
-                    lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                    sleep(1300);
+
                 })
+
+                .waitSeconds(2)
+                .UNSTABLE_addTemporalMarkerOffset(3, ()-> {
+
+
+                    gates.setPower(-1);
+
+                })
+
+                .UNSTABLE_addTemporalMarkerOffset(5  ,() -> {
+                    gates.setPower(-1);
+
+
+                })
+                .waitSeconds(1)
+                .strafeLeft(0.5)
                 .build();
 
-        Trajectory ParkLeft = drive.trajectoryBuilder(moveToBoardLeft.end())
-                .back(8)
-                .build();
+
+
 
 //middle movements
-        Trajectory moveToTapeMiddle = drive.trajectoryBuilder(new Pose2d(15.6, -64.25, 179.1))
-                .lineToConstantHeading(new Vector2d(32,-17))
-                .addDisplacementMarker(() -> {
+        TrajectorySequence center = drive.trajectorySequenceBuilder(StartPose)
+
+
+                .lineToConstantHeading(new Vector2d(35,-5))
+                .addTemporalMarker(1.6,() -> {
                     intake1.setPower(-0.4);
                     intake2.setPower(-0.4);
-                    sleep(1000);
+
+                })
+                .waitSeconds(0.5)
+                .lineToConstantHeading(new Vector2d(46.5, -23))
+                .back(1)
+
+                .UNSTABLE_addTemporalMarkerOffset(0.1, ()-> {
+
+
                     intake1.setPower(0);
                     intake2.setPower(0);
-                })
-                .build();
-
-
-        Trajectory moveToBoardMiddle = drive.trajectoryBuilder(moveToTapeMiddle.end())
-                .lineToConstantHeading(new Vector2d(40, -25))
-                .addDisplacementMarker(() -> {
-
-                    lift.setTargetPosition(lift_max_position);
+                    lift.setTargetPosition(3200);
                     lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     lift.setPower(1);
-                    lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                    sleep(1000);
-                    gates.setPower(-0.1);
-                    sleep(2000);
-                    gates.setPower(0);
-                    lift.setTargetPosition(lift_min_position);
-                    lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    lift.setPower(1);
-                    lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                    sleep(1300);
+
                 })
+
+                .waitSeconds(2)
+                .UNSTABLE_addTemporalMarkerOffset(3.6, ()-> {
+
+
+                    gates.setPower(-1);
+
+                })
+
+                .UNSTABLE_addTemporalMarkerOffset(6.5  ,() -> {
+                    gates.setPower(-1);
+
+
+                })
+                .forward(1)
+
                 .build();
 
-        Trajectory ParkMiddle = drive.trajectoryBuilder(moveToBoardMiddle.end())
-                .back(8)
-                .build();
+
+
+
+
+
+
+
 //right movements
+        TrajectorySequence Right = drive.trajectorySequenceBuilder(StartPose)
+                .lineToConstantHeading(new Vector2d(17, -22))
+                .addTemporalMarker(1,() -> {
+                    intake1.setPower(-0.7);
+                    intake2.setPower(-0.7);
 
-        Trajectory moveToTapeRight = drive.trajectoryBuilder(new Pose2d(15.6, -64.25, 179.1))
-                .lineToConstantHeading(new Vector2d(12, -22))
-                .addDisplacementMarker(() -> {
-                    intake1.setPower(-0.4);
-                    intake2.setPower(-0.4);
-                    sleep(1000);
+                })
+                .waitSeconds(0.5)
+                .lineToConstantHeading(new Vector2d(46, -15))
+                .back(1)
+
+                .UNSTABLE_addTemporalMarkerOffset(-0.5, ()-> {
+
+
                     intake1.setPower(0);
                     intake2.setPower(0);
-                })
-                .build();
-
-        Trajectory moveToBoardRight = drive.trajectoryBuilder(moveToTapeRight.end())
-                .lineToConstantHeading(new Vector2d(40, -17))
-                .addDisplacementMarker(() -> {
-
-                    lift.setTargetPosition(lift_max_position);
+                    lift.setTargetPosition(3200);
                     lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     lift.setPower(1);
-                    lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                    sleep(1000);
-                    gates.setPower(-0.1);
-                    sleep(2000);
-                    gates.setPower(0);
-                    lift.setTargetPosition(lift_min_position);
-                    lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    lift.setPower(1);
-                    lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                    sleep(1300);
+
                 })
+
+                .waitSeconds(2)
+                .UNSTABLE_addTemporalMarkerOffset(3, ()-> {
+
+
+                    gates.setPower(-1);
+
+                })
+
+                .UNSTABLE_addTemporalMarkerOffset(7  ,() -> {
+                    gates.setPower(-1);
+
+
+                })
+                .strafeRight(0.5)
+
                 .build();
-        Trajectory ParkRight = drive.trajectoryBuilder(moveToBoardRight.end())
-                .back(8)
-                .build();
+
+
+
+
+        waitForStart();
+        snapshotAnalysis = pipeline.getAnalysis();
 
         switch (snapshotAnalysis) {
-            case LEFT: {
-                drive.followTrajectory(moveToTapeLeft);
-
-                /*  */
-                drive.followTrajectory(moveToBoardLeft);
-
-                drive.followTrajectory(ParkLeft);
+            case /*left*/LEFT: {
+                drive.followTrajectorySequence(left);
                 terminateOpModeNow();
-
-
 
 
             }
-            case RIGHT: {
-                drive.followTrajectory(moveToTapeRight);
-               /* intake1.setPower(-0.4);
-                intake2.setPower(-0.4);
-                sleep(1000);
-                intake1.setPower(0);
-                intake2.setPower(0);*/
-                drive.followTrajectory(moveToBoardRight);
-                /*lift.setTargetPosition(lift_max_position);
-                lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                lift.setPower(1);
-                lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                sleep(1000);
-                gates.setPower(-0.1);
-                sleep(2000);
-                gates.setPower(0);
-                lift.setTargetPosition(lift_min_position);
-                lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                lift.setPower(1);
-                lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                sleep(1300);*/
-                drive.followTrajectory(ParkRight);
+            case /*Right*/RIGHT: {
+                drive.followTrajectorySequence(Right);
                 terminateOpModeNow();
-
-
-
-
             }
             case CENTER: {
-                drive.followTrajectory(moveToTapeMiddle);
-              /*  intake1.setPower(-0.4);
-                intake2.setPower(-0.4);
-                sleep(1000);
-                intake1.setPower(0);
-                intake2.setPower(0);*/
-                drive.followTrajectory(moveToBoardMiddle);
-             /*   lift.setTargetPosition(lift_max_position);
-                lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                lift.setPower(1);
-                lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                sleep(1000);
-                gates.setPower(-0.1);
-                sleep(2000);
-                gates.setPower(0);
-                lift.setTargetPosition(lift_min_position);
-                lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                lift.setPower(1);
-                lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                sleep(1300);*/
-                drive.followTrajectory(ParkMiddle);
+                drive.followTrajectorySequence(center);
                 terminateOpModeNow();
             }
         }
