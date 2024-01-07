@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -40,7 +42,7 @@ public class Bina extends LinearOpMode {
     double arm_position;
     int drive_max_velocity;
     int lift_pos;
-  public  int lift_max_position;
+  public int lift_max_position;
     double launcher_pos;
     boolean lift_reset_done;
     boolean is_reset_pressed;
@@ -190,6 +192,12 @@ public class Bina extends LinearOpMode {
         telemetry.addData("launcher pos", launcher.getPosition());
         telemetry.addData("lift targ pos tolerance",((DcMotorEx) lift).getTargetPositionTolerance());
         telemetry.addData("lift targ pos ", lift.getTargetPosition());
+        TelemetryPacket packet = new TelemetryPacket();
+        packet.put("lift pos", lift.getCurrentPosition());
+        packet.put("lift direction", lift.getDirection());
+        FtcDashboard dashboard = FtcDashboard.getInstance();
+        dashboard.sendTelemetryPacket(packet);
+
         telemetry.update();
 
     }

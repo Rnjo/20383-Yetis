@@ -145,6 +145,8 @@ Pose2d StartPose = new Pose2d(15.6, 64.25, 179.1);
                 })
                 .waitSeconds(1)
                 .strafeRight(0.5)
+                .waitSeconds(1)
+                .strafeRight(10)
                             .build();
 
 
@@ -189,6 +191,8 @@ Pose2d StartPose = new Pose2d(15.6, 64.25, 179.1);
 
                 })
                 .forward(1)
+                .waitSeconds(1)
+                .strafeRight(15)
 
                 .build();
 
@@ -236,6 +240,8 @@ TrajectorySequence Right = drive.trajectorySequenceBuilder(StartPose)
 
         })
         .strafeLeft(0.5)
+        .waitSeconds(1)
+        .strafeRight(20)
 
         .build();
 

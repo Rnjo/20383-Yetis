@@ -145,6 +145,8 @@ public class RedAllianceRight extends LinearOpMode {
                 })
                 .waitSeconds(1)
                 .strafeLeft(0.5)
+                .waitSeconds(1)
+                .strafeLeft(10)
                 .build();
 
 
@@ -189,7 +191,8 @@ public class RedAllianceRight extends LinearOpMode {
 
                 })
                 .forward(1)
-
+                .waitSeconds(1)
+                .strafeLeft(15)
                 .build();
 
 
@@ -236,7 +239,8 @@ public class RedAllianceRight extends LinearOpMode {
 
                 })
                 .strafeRight(0.5)
-
+                .waitSeconds(1)
+                .strafeLeft(20)
                 .build();
 
 
