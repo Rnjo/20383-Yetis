@@ -104,20 +104,18 @@ public CRServo intake2;
          */
         telemetry.addData("Snapshot post-START analysis", snapshotAnalysis);
         telemetry.update();
-Pose2d StartPose = new Pose2d(15.6, 64.25, 179.1);
+Pose2d StartPose = new Pose2d(15.6, 64.25, 179.2);
         drive.setPoseEstimate(StartPose);
 // left movements
         TrajectorySequence left = drive.trajectorySequenceBuilder(StartPose)
-
-                .lineToConstantHeading(new Vector2d(41.5   , 22))
-                .addTemporalMarker(1,() -> {
-                    intake1.setPower(-0.7);
-                    intake2.setPower(-0.7);
-
+                .lineToConstantHeading(new Vector2d(52 , 17))
+                .addTemporalMarker(2,() -> {
+                    intake1.setPower(-0.4);
+                    intake2.setPower(-0.4);
                 })
                 .waitSeconds(0.5)
-                .lineToConstantHeading(new Vector2d(45, 26))
-                .back(1)
+                .lineToConstantHeading(new Vector2d(59, 22))
+                .strafeRight(5)
 
                 .UNSTABLE_addTemporalMarkerOffset(-0.5, ()-> {
 
@@ -131,22 +129,19 @@ Pose2d StartPose = new Pose2d(15.6, 64.25, 179.1);
                 })
 
                 .waitSeconds(2)
-                .UNSTABLE_addTemporalMarkerOffset(3, ()-> {
 
 
-                    gates.setPower(-1);
-
-                })
-
-                .UNSTABLE_addTemporalMarkerOffset(5  ,() -> {
-                    gates.setPower(-1);
+                .UNSTABLE_addTemporalMarkerOffset(2  ,() -> {
+                    gates.setPower(-0.1);
 
 
                 })
                 .waitSeconds(1)
                 .strafeRight(0.5)
-                .waitSeconds(1)
                 .strafeRight(10)
+                .waitSeconds(0.5)
+                .forward(2)
+                .strafeRight(30)
                             .build();
 
 
@@ -156,14 +151,14 @@ Pose2d StartPose = new Pose2d(15.6, 64.25, 179.1);
         TrajectorySequence center = drive.trajectorySequenceBuilder(StartPose)
 
 
-                .lineToConstantHeading(new Vector2d(35,5))
+                .lineToConstantHeading(new Vector2d(35,10))
                 .addTemporalMarker(1.6,() -> {
                     intake1.setPower(-0.4);
                     intake2.setPower(-0.4);
 
                 })
                 .waitSeconds(0.5)
-                .lineToConstantHeading(new Vector2d(46.5, 23))
+                .lineToConstantHeading(new Vector2d(57, 22))
                 .back(1)
 
                 .UNSTABLE_addTemporalMarkerOffset(0.1, ()-> {
@@ -176,24 +171,19 @@ Pose2d StartPose = new Pose2d(15.6, 64.25, 179.1);
                     lift.setPower(1);
 
                 })
+                .strafeRight(5)
+                .waitSeconds(3)
+                .UNSTABLE_addTemporalMarkerOffset(-1, ()-> {
 
-                .waitSeconds(2)
-                .UNSTABLE_addTemporalMarkerOffset(3.6, ()-> {
 
-
-                    gates.setPower(-1);
-
-                })
-
-                .UNSTABLE_addTemporalMarkerOffset(6.5  ,() -> {
-                    gates.setPower(-1);
-
+                    gates.setPower(-0.1);
 
                 })
-                .forward(1)
+
                 .waitSeconds(1)
-                .strafeRight(15)
-
+                .forward(2)
+                .strafeLeft(30)
+                .back(24)
                 .build();
 
 
@@ -205,17 +195,17 @@ Pose2d StartPose = new Pose2d(15.6, 64.25, 179.1);
 
 //right movements
 TrajectorySequence Right = drive.trajectorySequenceBuilder(StartPose)
-        .lineToConstantHeading(new Vector2d(17, 22))
+        .lineToConstantHeading(new Vector2d(23, 22))
         .addTemporalMarker(1,() -> {
-            intake1.setPower(-0.7);
-            intake2.setPower(-0.7);
+            intake1.setPower(-0.5);
+            intake2.setPower(-0.5);
 
         })
         .waitSeconds(0.5)
-        .lineToConstantHeading(new Vector2d(46, 15))
+        .lineToConstantHeading(new Vector2d(57, 10))
         .back(1)
 
-        .UNSTABLE_addTemporalMarkerOffset(-0.5, ()-> {
+        .UNSTABLE_addTemporalMarkerOffset(0.1, ()-> {
 
 
             intake1.setPower(0);
@@ -226,23 +216,17 @@ TrajectorySequence Right = drive.trajectorySequenceBuilder(StartPose)
 
         })
 
-        .waitSeconds(2)
-        .UNSTABLE_addTemporalMarkerOffset(3, ()-> {
+        .waitSeconds(3)
 
 
-            gates.setPower(-1);
-
-        })
-
-        .UNSTABLE_addTemporalMarkerOffset(7  ,() -> {
-            gates.setPower(-1);
+        .UNSTABLE_addTemporalMarkerOffset( -1   ,() -> {
+            gates.setPower(-0.1);
 
 
         })
-        .strafeLeft(0.5)
         .waitSeconds(1)
-        .strafeRight(20)
-
+        .forward(2)
+        .strafeLeft(20)
         .build();
 
 
