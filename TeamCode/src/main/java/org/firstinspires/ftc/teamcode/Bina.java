@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -11,6 +9,8 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.robotcore.external.JavaUtil;
 
 
 
@@ -24,7 +24,7 @@ public class Bina extends LinearOpMode {
     private DcMotor rightRear;
     private DcMotor leftFront;
     private DcMotor rightFront;
-    public DcMotor lift;
+    private DcMotor lift;
     private DcMotor lift2;
     private TouchSensor reset;
 
@@ -42,7 +42,7 @@ public class Bina extends LinearOpMode {
     double arm_position;
     int drive_max_velocity;
     int lift_pos;
-  public int lift_max_position;
+    int lift_max_position;
     double launcher_pos;
     boolean lift_reset_done;
     boolean is_reset_pressed;
@@ -58,7 +58,7 @@ public class Bina extends LinearOpMode {
     double lift_first_reset_power;
     int ticks_rev__fd_and_bk_;
     int lift_brake_threshold_down;
-   public int lift_min_position;
+    int lift_min_position;
     double circumference;
     int lift_brake_threshold_up;
     double arm_max_position;
@@ -74,8 +74,10 @@ public class Bina extends LinearOpMode {
         // ---------------------- Gate/intake/Launcher Code ----------------------
         if (gamepad2.left_bumper) {
             gates.setPower(-1);
+            arm1.setPosition(0);
+            arm2.setPosition(0);
         }else if (gamepad2.left_trigger!=0) {
-            gates.setPower(-0.5);
+            gates.setPower(-0.1);
         } else if (gamepad1.b) {
             intake1.setPower(-1);
             intake2.setPower(-1);
@@ -85,13 +87,14 @@ public class Bina extends LinearOpMode {
             gates.setPower(1);
         } else if (gamepad2.right_bumper) {
             gates.setPower(1);
-        } else if (gamepad1.left_bumper) {
+            arm1.setPosition(1);
+            arm2.setPosition(1);
+        } else if (gamepad1.left_bumper || gamepad2.b) {
             intake1.setPower(0);
             intake2.setPower(0);
             gates.setPower(0);
-        } else if (gamepad2.b) {
-            gates.setPower(0);
-        } if (gamepad2.a) {
+       
+        } else if (gamepad2.a) {
             launcher.setPosition(0.4);
         }
         // drone launch
@@ -130,7 +133,7 @@ public class Bina extends LinearOpMode {
                 telemetry.update();
             }
             lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            //frontEncoder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+               //frontEncoder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         }
 
@@ -146,27 +149,24 @@ public class Bina extends LinearOpMode {
      * Describe this function...
      */
     private void Initialize_DriveTrain() {
-        // leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
-        leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+       // leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
+       leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
-        rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+       rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 //leftRear.setDirection(DcMotorSimple.Direction.REVERSE);
-        leftRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+       leftRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftRear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightRear.setDirection(DcMotorSimple.Direction.  REVERSE);
+       rightRear.setDirection(DcMotorSimple.Direction.  REVERSE);
         rightRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightRear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+      rightRear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     /**
      * Describe this function...
      */
-    private void Initialize_Lift_Arm() {
-        arm1.setPosition(arm_min_position);
-        arm2.setPosition(arm_min_position);
-    }
+    
 
 
     /**
@@ -192,12 +192,6 @@ public class Bina extends LinearOpMode {
         telemetry.addData("launcher pos", launcher.getPosition());
         telemetry.addData("lift targ pos tolerance",((DcMotorEx) lift).getTargetPositionTolerance());
         telemetry.addData("lift targ pos ", lift.getTargetPosition());
-        TelemetryPacket packet = new TelemetryPacket();
-        packet.put("lift pos", lift.getCurrentPosition());
-        packet.put("lift direction", lift.getDirection());
-        FtcDashboard dashboard = FtcDashboard.getInstance();
-        dashboard.sendTelemetryPacket(packet);
-
         telemetry.update();
 
     }
@@ -225,27 +219,28 @@ public class Bina extends LinearOpMode {
     /**
      * Describe this function...
      */
+    
     private void Drive_Control() {
-
-
+        
+       
 
         double y = -gamepad1.left_stick_y;
-        double x = gamepad1.left_stick_x*1.1;
-        double  rx = (gamepad1.right_stick_x * 0.6);
+       double x = gamepad1.left_stick_x*1.1;
+      double  rx = (gamepad1.right_stick_x * 0.9);
         if (gamepad1.right_stick_x != 0 || gamepad1.left_stick_y != 0 || gamepad1.left_stick_x != 0) {
-            double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
+double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
             ((DcMotorEx) leftFront).setVelocity(drive_max_velocity * (((y + x) + rx) / denominator));
             ((DcMotorEx) leftRear).setVelocity(drive_max_velocity * ((y - x + rx) / denominator));
             ((DcMotorEx) rightFront).setVelocity(drive_max_velocity * (((y - x) - rx) / denominator));
             ((DcMotorEx) rightRear).setVelocity(drive_max_velocity * (((y + x) - rx) / denominator));
         } else if (gamepad1.right_stick_x == 0 && gamepad1.left_stick_y == 0 && gamepad1.left_stick_x == 0) {
-            if (gamepad1.dpad_down /*|| gamepad2.dpad_down*/) {
+            if (gamepad1.dpad_down || gamepad2.dpad_down) {
                 ((DcMotorEx) leftRear).setVelocity(-drive_slow_velocity);
                 ((DcMotorEx) rightRear).setVelocity(-drive_slow_velocity);
                 ((DcMotorEx) leftFront).setVelocity(-drive_slow_velocity);
                 ((DcMotorEx) rightFront).setVelocity(-drive_slow_velocity);
 
-            } else if (gamepad1.dpad_up /*|| gamepad2.dpad_up*/) {
+        } else if (gamepad1.dpad_up || gamepad2.dpad_up) {
                 ((DcMotorEx) leftRear).setVelocity(drive_slow_velocity);
                 ((DcMotorEx) rightRear).setVelocity(drive_slow_velocity);
                 ((DcMotorEx) leftFront).setVelocity(drive_slow_velocity);
@@ -298,7 +293,7 @@ public class Bina extends LinearOpMode {
         leftEncoder = hardwareMap.dcMotor.get("leftEncoder");
         rightEncoder = hardwareMap.dcMotor.get("rightEncoder");
         frontEncoder = hardwareMap.dcMotor.get("frontEncoder");
-        intake1 = hardwareMap.get(CRServo.class, "intake1");
+         intake1 = hardwareMap.get(CRServo.class, "intake1");
         intake2 = hardwareMap.get(CRServo.class, "intake2");
         reset = hardwareMap.get(TouchSensor.class, "reset");
         arm2.setDirection(Servo.Direction.REVERSE);
@@ -309,36 +304,33 @@ public class Bina extends LinearOpMode {
         frontEncoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         //frontEncoder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        drive_max_velocity = 2000;
-        slow_velocity = 500;
+        drive_max_velocity = 1700;
         lift_reset_done = false;
         is_reset_pressed= reset.isPressed();
         lift_max_power = 1;
         //lift_first_reset_power = 0.1; // only non-zero when you first init. Becomes zero at *first* reset
         lift_min_position = 0;
-        lift_max_position = 3200;
+        lift_max_position = 3150;
         lift_max_power_mult_up = 1;
         lift_max_power_mult_down = 0.7;
-        drive_slow_velocity=280;
+        drive_slow_velocity=600;
         lift_power_incr = 0.1;
-        lift_max_velocity = 0;
         arm_max_position = 1.0;
-        arm_min_position = 0.2;
+        arm_min_position = 0;
         arm_position = 0.5;
         arm_accel = 0;
         arm_turn_Ok_position = 0.41;
         claw_open_position = 0.55;
         claw_closed_position = 0;
         lift_high_junction_max = 1;
-        Drivetrain_velocity = 1400;
         lift_max_velocity = 2100;
         drive_power = 0.7;
         drive_slow_power = 0.2;
 
         // Do some initialization
-        Initialize_Lift_Arm();
+      //  Initialize_Lift_Arm();
         Initialize_DriveTrain();
-        lift_telemetry();
+         lift_telemetry();
         telemetry.update();
 
         // Wait for Start button
@@ -412,11 +404,11 @@ public class Bina extends LinearOpMode {
         if (gamepad2.right_stick_y < 0) {
             arm_accel = -gamepad2.right_stick_y * 0.06;
         } else if (gamepad2.right_stick_y > 0) {
-            arm_accel = -gamepad2.right_stick_y * 0.05;
+            arm_accel = -gamepad2.right_stick_y * 0.03;
         } else {
             arm_accel = 0;
         }
-        arm_position = arm_position + arm_accel;
+        arm_position = arm_position - arm_accel;
         if (arm_position > arm_max_position) {
             arm_position = arm_max_position;
         } else {
@@ -433,18 +425,20 @@ public class Bina extends LinearOpMode {
      */
     private void Lift_Control() {
         double lift_power;
-
+        
         lift_pos = lift.getCurrentPosition();
-
+        
         // ---------------------- Lift Code ----------------------
         lift_max_power_mult_up = 1;
         lift_max_power_mult_down = 1;
         if (reset.isPressed() && !lift_reset_done) {
+            gates.setPower(0);
             lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             lift_pos = lift.getCurrentPosition();
             lift_reset_done = true;
+            
             //frontEncoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             //frontEncoder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             //frontEncoder.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -452,49 +446,41 @@ public class Bina extends LinearOpMode {
         }
         lift_pos = lift.getCurrentPosition();
         lift_power = lift.getPower();
-
+        
         if (!reset.isPressed() && lift_reset_done) {
             lift_reset_done = false;
         }
-
-
-        if (gamepad2.left_stick_y < 0 && lift_pos == lift_max_position/2) {
-            arm1.setPosition(arm_max_position); //upwards lift interlock test
-            arm2.setPosition(arm_max_position);
+        
+       if (gamepad2.left_stick_y < 0 && (lift_pos == 1575||lift_pos == 1576||lift_pos == 1574||lift_pos == 1577||lift_pos == 1573||lift_pos == 1572)) {
+            arm1.setPosition(arm_min_position); //upwards lift interlock test
+            arm2.setPosition(arm_min_position);
             lift_target_power = -(lift_max_velocity*lift_max_power_mult_up * lift_max_power * gamepad2.left_stick_y);
         } else if (gamepad2.left_stick_y < 0 && lift_pos <= lift_max_position) {
             lift_target_power = -(lift_max_velocity*lift_max_power_mult_up * lift_max_power * gamepad2.left_stick_y);
-             } else if (gamepad2.left_stick_y > 0 && lift_pos <= lift_max_position/2.5  && !reset.isPressed()) {
-               arm1.setPosition(arm_min_position);
-               arm2.setPosition((arm_min_position));
+             } else if (gamepad2.left_stick_y > 0 && (lift_pos == 2075||lift_pos == 2076||lift_pos == 2074||lift_pos == 2077||lift_pos == 2073||lift_pos == 2072) && !reset.isPressed()) {
+               arm1.setPosition(arm_max_position);
+               arm2.setPosition((arm_max_position));
             lift_target_power = -(lift_max_velocity*lift_max_power_mult_down * lift_max_power * gamepad2.left_stick_y);
 
         } else if (gamepad2.left_stick_y > 0 && lift_pos <= lift_max_position/4 && !reset.isPressed()) {
             lift_target_power = -(lift_max_velocity*lift_max_power_mult_down/2 * lift_max_power * gamepad2.left_stick_y);
         } else if (gamepad2.left_stick_y > 0 && !reset.isPressed()) {
             lift_target_power = -(lift_max_velocity*lift_max_power_mult_down * lift_max_power * gamepad2.left_stick_y);
-        } else if (gamepad2.dpad_up) {
-            lift.setPower(0.8);
-            lift2.setPower(0.8);
-        }else if (gamepad2.dpad_down){
-
-            lift.setPower(-1);
-            lift2.setPower(-1);
-        }else {
-            lift_target_power=0;
+        } else {
+                lift_target_power = 0;
         }
 
         //if (lift_pos < lift_max_position/2 && arm_position > arm_min_position) {
-        //if (lift_target_power < 0) {
-        //    lift_target_power = 0;
-        //}
-        //arm1.setPosition(arm_min_position);
-        //arm2.setPosition(arm_min_position);
-        //sleep(500);
+            //if (lift_target_power < 0) {
+            //    lift_target_power = 0;
+            //}
+            //arm1.setPosition(arm_min_position);
+            //arm2.setPosition(arm_min_position);
+            //sleep(500);
         //}
 
         lift_power = lift_target_power;
         ((DcMotorEx) lift).setVelocity(lift_power);
-        //((DcMotorEx) lift2).setVelocity(lift_power);
+        ((DcMotorEx) lift2).setVelocity(lift_power);
     }
 }
