@@ -29,6 +29,7 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcontroller.external.samples.RobotHardware;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -55,6 +56,7 @@ public class RedAllianceRight extends LinearOpMode {
     private RobotHardware robot;
     public DcMotor lift;
     public CRServo intake1;
+    public Servo arm2  ;
     public CRServo intake2;
     public CRServo gates;
     @Override
@@ -86,6 +88,8 @@ public class RedAllianceRight extends LinearOpMode {
          * This REPLACES waitForStart!
          */
         lift = hardwareMap.get(DcMotor.class, "lift");
+        arm2 = hardwareMap.get(Servo.class, "arm2");
+
         intake1 = hardwareMap.get(CRServo.class, "intake1");
         intake2 = hardwareMap.get(CRServo.class, "intake2");
         gates = hardwareMap.get(CRServo.class, "gates");
@@ -104,96 +108,116 @@ public class RedAllianceRight extends LinearOpMode {
          */
         telemetry.addData("Snapshot post-START analysis", snapshotAnalysis);
         telemetry.update();
-        Pose2d StartPose = new Pose2d(15.6, -64.25, 179.1);
+        Pose2d StartPose = new Pose2d(15.6, 64.25, 270);
         drive.setPoseEstimate(StartPose);
 // left movements
-        TrajectorySequence left = drive.trajectorySequenceBuilder(StartPose)
-
-                .lineToConstantHeading(new Vector2d(41.5   , -22))
-                .addTemporalMarker(1,() -> {
-                    intake1.setPower(-0.7);
-                    intake2.setPower(-0.7);
-
+        TrajectorySequence center = drive.trajectorySequenceBuilder(StartPose)
+                .lineToConstantHeading(new Vector2d(60, -63))
+                .turn(Math.toRadians(90))
+                .addTemporalMarker(3.1,() -> {
+                    intake1.setPower(-1);
+                    intake2.setPower(-1);
                 })
                 .waitSeconds(0.5)
-                .lineToConstantHeading(new Vector2d(45, -26))
-                .back(1)
+                .lineToConstantHeading(new Vector2d(60, -80))
+                .strafeLeft(15)
+                .back(11.5)
 
-                .UNSTABLE_addTemporalMarkerOffset(-0.5, ()-> {
+                .UNSTABLE_addTemporalMarkerOffset(0, ()-> {
 
 
                     intake1.setPower(0);
                     intake2.setPower(0);
-                    lift.setTargetPosition(3200);
+                    lift.setTargetPosition(1600);
                     lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     lift.setPower(1);
 
                 })
 
                 .waitSeconds(2)
-                .UNSTABLE_addTemporalMarkerOffset(3, ()-> {
-
-
-                    gates.setPower(-1);
-
-                })
-
-                .UNSTABLE_addTemporalMarkerOffset(5  ,() -> {
-                    gates.setPower(-1);
+                .UNSTABLE_addTemporalMarkerOffset(-1  ,() -> {
+                    arm2.setPosition(1);
 
 
                 })
-                .waitSeconds(1)
-                .strafeLeft(0.5)
-                .waitSeconds(1)
-                .strafeLeft(10)
+
+                .UNSTABLE_addTemporalMarkerOffset(0.5 ,() -> {
+                    gates.setPower(-0.1);
+
+
+                })
+                .waitSeconds(2)
+
+                .forward(8)
+                .UNSTABLE_addTemporalMarkerOffset(0,()->{
+
+                    arm2.setPosition(0);
+
+
+                })
+
                 .build();
 
 
 
 
 //middle movements
-        TrajectorySequence center = drive.trajectorySequenceBuilder(StartPose)
+        TrajectorySequence left = drive.trajectorySequenceBuilder(StartPose)
 
-
-                .lineToConstantHeading(new Vector2d(35,-5))
-                .addTemporalMarker(1.6,() -> {
-                    intake1.setPower(-0.4);
-                    intake2.setPower(-0.4);
-
+                .forward(25)
+                .turn(Math.toRadians(-270))
+                .addTemporalMarker(4,() -> {
+                    intake1.setPower(-1);
+                    intake2.setPower(-1);
                 })
                 .waitSeconds(0.5)
-                .lineToConstantHeading(new Vector2d(46.5, -23))
-                .back(1)
-
-                .UNSTABLE_addTemporalMarkerOffset(0.1, ()-> {
+                .lineToConstantHeading(new Vector2d(60, -86))
+                .waitSeconds(2)
+                .forward(2)
+                .strafeLeft(15)
+                .waitSeconds(0.6)
+                .turn(Math.toRadians(15))
+                .waitSeconds(0.6)
+                .back(4)
+                .turn(Math.toRadians(10))
+                .UNSTABLE_addTemporalMarkerOffset(0, ()-> {
 
 
                     intake1.setPower(0);
                     intake2.setPower(0);
-                    lift.setTargetPosition(3200);
+                    lift.setTargetPosition(1600);
                     lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     lift.setPower(1);
 
                 })
 
                 .waitSeconds(2)
-                .UNSTABLE_addTemporalMarkerOffset(3.6, ()-> {
+                .UNSTABLE_addTemporalMarkerOffset(-1  ,() -> {
+                    arm2.setPosition(1);
 
-
-                    gates.setPower(-1);
-
-                })
-
-                .UNSTABLE_addTemporalMarkerOffset(6.5  ,() -> {
-                    gates.setPower(-1);
 
 
                 })
-                .forward(1)
-                .waitSeconds(1)
-                .strafeLeft(15)
+                .back(20)
+                .UNSTABLE_addTemporalMarkerOffset(0.5 ,() -> {
+                    gates.setPower(-0.1);
+
+
+                })
+                .waitSeconds(2)
+
+                .forward(8)
+                .UNSTABLE_addTemporalMarkerOffset(0,()->{
+
+                    arm2.setPosition(0);
+
+
+                })
+                .turn(Math.toRadians(-28))
+                .strafeLeft(24)
+                .back(2)
                 .build();
+
 
 
 
@@ -204,44 +228,64 @@ public class RedAllianceRight extends LinearOpMode {
 
 //right movements
         TrajectorySequence Right = drive.trajectorySequenceBuilder(StartPose)
-                .lineToConstantHeading(new Vector2d(17, -22))
-                .addTemporalMarker(1,() -> {
-                    intake1.setPower(-0.7);
-                    intake2.setPower(-0.7);
-
+                .forward(25)
+                .turn(Math.toRadians(-276))
+                .forward(5)
+                .UNSTABLE_addTemporalMarkerOffset(-1,() -> {
+                    intake1.setPower(-1);
+                    intake2.setPower(-1);
                 })
                 .waitSeconds(0.5)
-                .lineToConstantHeading(new Vector2d(46, -15))
-                .back(1)
+                .lineToConstantHeading(new Vector2d(60, -86))
+                .waitSeconds(2)
+                .forward(2)
+                .strafeRight(7)
+                .waitSeconds(0.6)
+                .turn(Math.toRadians(15))
+                .waitSeconds(0.6)
+                .back(4)
+                .turn(Math.toRadians(10))
+                .strafeLeft(10)
+                .turn(Math.toRadians(10))
 
                 .UNSTABLE_addTemporalMarkerOffset(-0.5, ()-> {
 
 
                     intake1.setPower(0);
                     intake2.setPower(0);
-                    lift.setTargetPosition(3200);
+                    lift.setTargetPosition(1600);
                     lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     lift.setPower(1);
 
                 })
 
                 .waitSeconds(2)
-                .UNSTABLE_addTemporalMarkerOffset(3, ()-> {
+                .UNSTABLE_addTemporalMarkerOffset(-1  ,() -> {
+                    arm2.setPosition(1);
 
-
-                    gates.setPower(-1);
-
-                })
-
-                .UNSTABLE_addTemporalMarkerOffset(7  ,() -> {
-                    gates.setPower(-1);
 
 
                 })
-                .strafeRight(0.5)
-                .waitSeconds(1)
-                .strafeLeft(20)
+                .back(5)
+                .UNSTABLE_addTemporalMarkerOffset(0.5 ,() -> {
+                    gates.setPower(-0.1);
+
+
+                })
+                .waitSeconds(2)
+
+                .forward(8)
+                .UNSTABLE_addTemporalMarkerOffset(0,()->{
+
+                    arm2.setPosition(0);
+
+
+                })
+                .turn(Math.toRadians(-28))
+                .forward(15)
                 .build();
+
+
 
 
 

@@ -10,8 +10,6 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.JavaUtil;
-
 
 
 @TeleOp
@@ -24,7 +22,7 @@ public class Bina extends LinearOpMode {
     private DcMotor rightRear;
     private DcMotor leftFront;
     private DcMotor rightFront;
-    private DcMotor lift;
+    public DcMotor lift;
     private DcMotor lift2;
     private TouchSensor reset;
 
@@ -42,7 +40,7 @@ public class Bina extends LinearOpMode {
     double arm_position;
     int drive_max_velocity;
     int lift_pos;
-    int lift_max_position;
+    public int lift_max_position;
     double launcher_pos;
     boolean lift_reset_done;
     boolean is_reset_pressed;
@@ -58,7 +56,7 @@ public class Bina extends LinearOpMode {
     double lift_first_reset_power;
     int ticks_rev__fd_and_bk_;
     int lift_brake_threshold_down;
-    int lift_min_position;
+    public int lift_min_position;
     double circumference;
     int lift_brake_threshold_up;
     double arm_max_position;
