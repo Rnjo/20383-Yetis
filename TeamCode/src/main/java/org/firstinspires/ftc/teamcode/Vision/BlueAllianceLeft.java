@@ -104,7 +104,7 @@ public CRServo intake2;
          */
         telemetry.addData("Snapshot post-START analysis", snapshotAnalysis);
         telemetry.update();
-Pose2d StartPose = new Pose2d(15.6, 64.25, 179.2);
+Pose2d StartPose = new Pose2d(15.6, 64.25, 180);
         drive.setPoseEstimate(StartPose);
 // left movements
         TrajectorySequence left = drive.trajectorySequenceBuilder(StartPose)
@@ -117,7 +117,7 @@ Pose2d StartPose = new Pose2d(15.6, 64.25, 179.2);
                 .lineToConstantHeading(new Vector2d(59, 22))
                 .strafeRight(5)
 
-                .UNSTABLE_addTemporalMarkerOffset(-0.5, ()-> {
+                .UNSTABLE_addTemporalMarkerOffset(0, ()-> {
 
 
                     intake1.setPower(0);
@@ -137,11 +137,9 @@ Pose2d StartPose = new Pose2d(15.6, 64.25, 179.2);
 
                 })
                 .waitSeconds(1)
-                .strafeRight(0.5)
-                .strafeRight(10)
-                .waitSeconds(0.5)
+
                 .forward(2)
-                .strafeRight(30)
+                .strafeRight(24)
                             .build();
 
 
