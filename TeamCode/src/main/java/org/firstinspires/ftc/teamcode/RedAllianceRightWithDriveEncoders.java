@@ -29,7 +29,6 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.Vision.PowerplayblueDeterminationExample;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
-import org.firstinspires.ftc.teamcode.myDriveTrain;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
@@ -42,8 +41,8 @@ import org.openftc.easyopencv.OpenCvWebcam;
  */
 @Autonomous
 
-
-public class RedAllianceLeftWithDriveEncoders extends myDriveTrain {
+//abhir auton
+public class RedAllianceRightWithDriveEncoders extends myDriveTrain {
 
     OpenCvWebcam webcam;
     PowerplayblueDeterminationExample.SkystoneDeterminationPipeline pipeline;
