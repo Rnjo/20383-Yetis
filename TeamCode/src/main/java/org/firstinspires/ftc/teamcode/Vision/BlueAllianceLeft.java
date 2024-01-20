@@ -114,7 +114,7 @@ Pose2d StartPose = new Pose2d(15.6, 64.25, 270);
         TrajectorySequence center = drive.trajectorySequenceBuilder(StartPose)
                 .lineToConstantHeading(new Vector2d(60, 63))
                 .turn(Math.toRadians(-90))
-                .addTemporalMarker(3.1,() -> {
+                .addTemporalMarker(2.1,() -> {
                     intake1.setPower(-1);
                     intake2.setPower(-1);
                 })
@@ -166,7 +166,7 @@ Pose2d StartPose = new Pose2d(15.6, 64.25, 270);
 
                 .forward(25)
                 .turn(Math.toRadians(270))
-                .addTemporalMarker(4,() -> {
+                .addTemporalMarker(2.5,() -> {
                     intake1.setPower(-1);
                     intake2.setPower(-1);
                 })
@@ -176,10 +176,10 @@ Pose2d StartPose = new Pose2d(15.6, 64.25, 270);
                 .forward(2)
                 .strafeRight(15)
                 .waitSeconds(0.6)
-                .turn(Math.toRadians(-15))
+                .turn(Math.toRadians(15))
                 .waitSeconds(0.6)
                 .back(4)
-                .turn(Math.toRadians(-10))
+                .turn(Math.toRadians(10))
                 .UNSTABLE_addTemporalMarkerOffset(0, ()-> {
 
 
