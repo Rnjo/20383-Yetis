@@ -19,17 +19,17 @@
  * SOFTWARE.
  */
 
-package org.firstinspires.ftc.teamcode.Vision;
+package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.Bina;
+import org.firstinspires.ftc.teamcode.Vision.PowerplayblueDeterminationExample;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.myDriveTrain;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
@@ -43,7 +43,7 @@ import org.openftc.easyopencv.OpenCvWebcam;
 @Autonomous
 
 
-public class BlueAllianceLeftWithDriveConstants extends Bina {
+public class BlueAllianceLeftWithDriveEncoders extends myDriveTrain {
 
     OpenCvWebcam webcam;
     PowerplayblueDeterminationExample.SkystoneDeterminationPipeline pipeline;
@@ -81,6 +81,7 @@ public class BlueAllianceLeftWithDriveConstants extends Bina {
          */
 
 
+
         waitForStart();
         rightRear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftRear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -111,94 +112,103 @@ public class BlueAllianceLeftWithDriveConstants extends Bina {
 
         switch (snapshotAnalysis) {
             case LEFT: {
-                leftRear.setTargetPosition(1);
-                leftFront.setTargetPosition(1);
-                rightRear.setTargetPosition(1);
-                rightRear.setTargetPosition(1);
-                rightRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                leftRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                rightRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                leftRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                rightRear.setPower(0.7);
-                rightFront.setPower(0.7);
-                leftRear.setPower(0.7);
-                leftFront.setPower(0.7);
-                sleep(1500);
-                rightRear.setTargetPosition(1380);
-                leftRear.setTargetPosition(1380);
-                leftFront.setTargetPosition(1380);
-                rightFront.setTargetPosition(1380);
-                rightRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                leftRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                rightRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                leftRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                rightRear.setPower(0.7);
-                rightFront.setPower(0.7);
-                leftRear.setPower(0.7);
-                leftFront.setPower(0.7);
+              toAndFro(23);
                 sleep(2000);
-                leftRear.setTargetPosition(1);
-                leftFront.setTargetPosition(1);
-                rightRear.setTargetPosition(1);
-                rightRear.setTargetPosition(1);
-                rightRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                leftRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                rightRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                leftRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                rightRear.setPower(0.7);
-                rightFront.setPower(0.7);
-                leftRear.setPower(-0.7);
-                leftFront.setPower(-0.7);
+               leftAndRight(-23.31);
+                sleep(3000);
+                turn(true);
                 sleep(1500);
+                leftAndRight(-8.48);
+                sleep(2000);
+                gates.setPower(-1);
+                intake1.setPower(-0.7);
+                intake2.setPower(-0.7);
+                sleep(1500);
+                gates.setPower(0);
+                intake1.setPower(0);
+                intake2.setPower(0);
+                toAndFro(-17.12);
+                sleep(4000);
+                leftAndRight(10.6);
+                sleep(2000);
+                lift.setTargetPosition(lift_max_position/2);
+                lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                lift.setPower(0.7);
+                sleep(1000);
+                arm1.setPosition(arm_max_position);
+                arm2.setPosition(arm_max_position);
+                sleep(1000);
+                gates.setPower(-1);
+                sleep(1000);
+                position_zero();
+                leftAndRight(21.20);
+
+
 
             }
             case RIGHT: {
-                rightRear.setTargetPosition(1044);
-                leftRear.setTargetPosition(1044);
-                leftFront.setTargetPosition(1044);
-                rightFront.setTargetPosition(1044);
-                rightRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                leftRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                rightRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                leftRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                rightRear.setPower(0.7);
-                rightFront.setPower(0.7);
-                leftRear.setPower(0.7);
-                leftFront.setPower(0.7);
+                toAndFro(22.13);
                 sleep(2000);
-                leftRear.setTargetPosition(972);
-                leftFront.setTargetPosition(1154);
-                rightRear.setTargetPosition(1154);
-                rightRear.setTargetPosition(972);
-                rightRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                leftRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                rightRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                leftRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                rightRear.setPower(0.7);
-                rightFront.setPower(-0.7);
-                leftRear.setPower(-0.7);
-                leftFront.setPower(0.7);
+               leftAndRight(2.12);
                 sleep(1500);
+               turn(true);
+                sleep(1500);
+                leftAndRight(14.84);
+                sleep(1500);
+                gates.setPower(-1);
+                intake1.setPower(-0.7);
+                intake2.setPower(-0.7);
+                sleep(1500);
+                gates.setPower(0);
+                intake1.setPower(0);
+                intake2.setPower(0);
+               toAndFro(-38.16);
+                sleep(4000);
+                leftAndRight(-6.36);
+                sleep(1000);
+                lift.setTargetPosition(lift_max_position/2);
+                lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                lift.setPower(0.7);
+                sleep(1000);
+                arm1.setPosition(arm_max_position);
+                arm2.setPosition(arm_max_position);
+                sleep(1000);
+                gates.setPower(-1);
+                sleep(1000);
+                position_zero();
+                sleep(4000);
+                leftAndRight(8.48);
+
 
 
 
 
             }
             case CENTER: {
-                rightRear.setTargetPosition(1380);
-                leftRear.setTargetPosition(1380);
-                leftFront.setTargetPosition(1380);
-                rightFront.setTargetPosition(1380);
-                rightRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                leftRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                rightRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                leftRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                rightRear.setPower(0.7);
-                rightFront.setPower(0.7);
-                leftRear.setPower(0.7);
-                leftFront.setPower(0.7);
+               toAndFro(24.38);
                 sleep(2000);
-
+                leftAndRight(4.66);
+                sleep(2000);
+                gates.setPower(-1);
+                intake1.setPower(-0.7);
+                intake2.setPower(-0.7);
+                sleep(2000);
+                turn(true);
+                sleep(2000);
+                toAndFro(-38.16);
+                sleep(2000);
+                lift.setTargetPosition(lift_max_position/2);
+                lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                lift.setPower(0.7);
+                sleep(1000);
+                arm1.setPosition(arm_max_position);
+                arm2.setPosition(arm_max_position);
+                sleep(1000);
+                gates.setPower(-1);
+                sleep(1000);
+                position_zero();
+                sleep(2000);
+                leftAndRight(-20.54);
             }
 
 

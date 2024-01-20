@@ -24,8 +24,8 @@ public class Bina extends LinearOpMode {
     public DcMotor rightRear;
     public DcMotor leftFront;
     public DcMotor rightFront;
-    private DcMotor lift;
-    private DcMotor lift2;
+    public DcMotor lift;
+    public DcMotor lift2;
     private TouchSensor reset;
 
     public Servo arm1;
@@ -42,7 +42,7 @@ public class Bina extends LinearOpMode {
     double arm_position;
     int drive_max_velocity;
     int lift_pos;
-    int lift_max_position;
+    public int lift_max_position;
     double launcher_pos;
     boolean lift_reset_done;
     boolean is_reset_pressed;
@@ -61,7 +61,7 @@ public class Bina extends LinearOpMode {
     int lift_min_position;
     double circumference;
     int lift_brake_threshold_up;
-    double arm_max_position;
+    public double arm_max_position;
     double arm_min_position;
     double arm_turn_Ok_position;
     int Drivetrain_velocity;
@@ -119,7 +119,7 @@ public class Bina extends LinearOpMode {
     }
 
 
-    private void position_zero() {
+    public void position_zero() {
         if ( gamepad2.x) {
             gates.setPower(0);
             arm1.setPosition(arm_max_position);
@@ -129,8 +129,8 @@ public class Bina extends LinearOpMode {
             //frontEncoder.setTargetPosition(lift_min_position);
             lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             //frontEncoder.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            lift.setPower(lift_max_power);
-            lift2.setPower(lift_max_power);
+            lift.setPower(0.7);
+            lift2.setPower(0.7);
             //frontEncoder.setPower(lift_max_power);
             while(lift.isBusy() || lift2.isBusy()){
                 telemetry.update();
