@@ -20,10 +20,10 @@ public class Bina extends LinearOpMode {
     public CRServo gates;
 
     private Servo launcher;
-    private DcMotor leftRear;
-    private DcMotor rightRear;
-    private DcMotor leftFront;
-    private DcMotor rightFront;
+    public DcMotor leftRear;
+    public DcMotor rightRear;
+    public DcMotor leftFront;
+    public DcMotor rightFront;
     private DcMotor lift;
     private DcMotor lift2;
     private TouchSensor reset;
