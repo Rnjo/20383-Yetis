@@ -26,7 +26,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.Vision.PowerplayblueDeterminationExample;
@@ -35,7 +34,7 @@ import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvWebcam;
-//Abhir's Autonomus code. Use me from front left starting position
+
 /*
  * This sample demonstrates how to run analysis during INIT
  * and then snapshot that value for later use when the START
@@ -43,8 +42,8 @@ import org.openftc.easyopencv.OpenCvWebcam;
  */
 @Autonomous
 
-
-public class BlueAllianceLeftWithDriveEncoders extends myDriveTrain {
+//abhir auton
+public class RedAllianceLeftWithDriveEncoders extends myDriveTrain {
 
     OpenCvWebcam webcam;
     PowerplayblueDeterminationExample.SkystoneDeterminationPipeline pipeline;
@@ -68,7 +67,7 @@ public class BlueAllianceLeftWithDriveEncoders extends myDriveTrain {
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
             public void onOpened() {
-                webcam.startStreaming(1280, 720, OpenCvCameraRotation.UPSIDE_DOWN);
+                webcam.startStreaming(1280, 720, OpenCvCameraRotation.UPRIGHT);
             }
 
             @Override
@@ -81,6 +80,8 @@ public class BlueAllianceLeftWithDriveEncoders extends myDriveTrain {
          * This REPLACES waitForStart!
          */
 
+
+
         waitForStart();
         lift = hardwareMap.get(DcMotor.class, "lift");
         gates = hardwareMap.get(CRServo.class, "gates");
@@ -90,18 +91,15 @@ public class BlueAllianceLeftWithDriveEncoders extends myDriveTrain {
         leftRear = hardwareMap.get(DcMotor.class, "leftRear");
         rightFront = hardwareMap.get(DcMotor.class, "rightFront");
         leftFront = hardwareMap.get(DcMotor.class, "leftFront");
-        arm1 = hardwareMap.get(Servo.class, "arm1");
-        arm2 = hardwareMap.get(Servo.class, "arm2");
         rightRear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftRear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightRear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftRear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
         ((DcMotorEx) rightRear).setTargetPositionTolerance(5);
         ((DcMotorEx) leftRear).setTargetPositionTolerance(5);
         ((DcMotorEx) rightFront).setTargetPositionTolerance(5);
         ((DcMotorEx) leftFront).setTargetPositionTolerance(5);
-        ((DcMotorEx) lift).setTargetPositionTolerance(5);
 
 
         /*
@@ -117,104 +115,63 @@ public class BlueAllianceLeftWithDriveEncoders extends myDriveTrain {
         telemetry.addData("Snapshot post-START analysis", snapshotAnalysis);
         telemetry.update();
 
-        //drive.setPoseEstimate(new Pose2d(-72, 12, 0));
 
 
         switch (snapshotAnalysis) {
             case LEFT: {
-                sleep(1000);
-                toAndFro(23);
+                toAndFro(22.13);
                 sleep(2000);
-                leftAndRight(-27.31);  // strafe positive goes right , neg goes left
-                sleep(3000);
-                turn(true);             // true turns right, false turns left
+                leftAndRight(2.12);
                 sleep(1500);
-                leftAndRight(-6.48);
-                sleep(2000);
-                intake1.setPower(-0.3);     // outtake first pixel onto spike mark
-                sleep(4000);
-                intake1.setPower(0);
-                toAndFro(-10.0);     // go towards the board
-                sleep(2000);
-                leftAndRight(12.6);  // move towards left of the board
-                sleep(2000);
-                lift.setTargetPosition(-1900);
-                lift.setPower(1);
-                lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                sleep(1000);
-                arm1.setPosition(1);
-                arm2.setPosition(1);
-                sleep(1000);
-                gates.setPower(-1);
-                sleep(1000);
+                turn(true);
+                sleep(1500);
+                leftAndRight(14.84);
+                sleep(1500);
+                intake1.setPower(-0.7);
+                intake2.setPower(-0.7);
+                sleep(1500);
                 gates.setPower(0);
-                toAndFro(4);     // go away from the board
-                sleep(1000);
-                /*lift.setTargetPosition(-200);
-                lift.setPower(1);
-                lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                sleep(1000);
-                */leftAndRight(24.20);
+                intake1.setPower(0);
+                intake2.setPower(0);
                 sleep(3000);
-                toAndFro(-12);
-                sleep(3000);
+                leftAndRight(96);
                 break;
             }
             case RIGHT: {
-                sleep(1000);
-                toAndFro(30);
-                sleep(2500);
-                turn(true);
-                sleep(1000);
-                toAndFro(-27);
+                toAndFro(23);
                 sleep(2000);
-                lift.setTargetPosition(-1900);
-                lift.setPower(1);
-                lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                sleep(1000);
-                arm1.setPosition(1);
-                arm2.setPosition(1);
-                sleep(1000);
-                gates.setPower(-1);
-                sleep(1000);
+                leftAndRight(-2.21);
+                sleep(3000);
+                turn(false);
+                sleep(1500);
+                leftAndRight(8.48);
+                sleep(2000);
+                intake1.setPower(-0.7);
+                intake2.setPower(-0.7);
+                sleep(1500);
                 gates.setPower(0);
-                toAndFro(4);     // go away from the board
-                sleep(1000);
-                leftAndRight(24);
-                sleep(2000);
-                toAndFro(-12);
+                intake1.setPower(0);
+                intake2.setPower(0);
+                turn(false);
+                turn(false);
+                leftAndRight(96);
                 break;
             }
             case CENTER: {
-                sleep(1000);
-                toAndFro(28);
+               toAndFro(24.38);
                 sleep(2000);
-                leftAndRight(4.66);
+                leftAndRight(-4.66);
                 sleep(2000);
                 intake1.setPower(-0.7);
                 intake2.setPower(-0.7);
                 sleep(2000);
-                turn(true);
+                turn(false);
                 sleep(2000);
-                toAndFro(-38.16);
-                sleep(2000);
-                lift.setTargetPosition(-1900);
-                lift.setPower(1);
-                lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                sleep(1000);
-                arm1.setPosition(1);
-                arm2.setPosition(1);
-                sleep(1000);
-                gates.setPower(-1);
-                sleep(1000);
-                gates.setPower(0);
-                toAndFro(4);     // go away from the board
-                sleep(1000);
-                leftAndRight(-20.54);
-                sleep(1000);
-                toAndFro(-12);
+                leftAndRight(96);
                 break;
             }
+
+
         }
     }
 

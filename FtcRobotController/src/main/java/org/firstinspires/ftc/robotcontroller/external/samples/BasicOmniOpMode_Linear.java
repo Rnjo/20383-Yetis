@@ -43,7 +43,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  *
  * This particular OpMode illustrates driving a 4-motor Omni-Directional (or Holonomic) robot.
  * This code will work with either a Mecanum-Drive or an X-Drive train.
- * Both of these drives are illustrated at https://gm0.org/en/latest/docs/robot-design/drivetrains/holonomic.html
+ * Both of these drives are illustrated at https://gm0.org/en/latest/docs/robot-design/myDriveTrains/holonomic.html
  * Note that a Mecanum drive must display an X roller-pattern when viewed from above.
  *
  * Also note that it is critical to set the correct rotation direction for each motor.  See details below.

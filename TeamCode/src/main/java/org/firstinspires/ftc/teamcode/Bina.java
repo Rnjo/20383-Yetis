@@ -12,8 +12,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.JavaUtil;
 
-
-
 @TeleOp
 public class Bina extends LinearOpMode {
 
@@ -25,7 +23,7 @@ public class Bina extends LinearOpMode {
     public DcMotor leftFront;
     public DcMotor rightFront;
     public DcMotor lift;
-    public DcMotor lift2;
+    private DcMotor lift2;
     private TouchSensor reset;
 
     public Servo arm1;
@@ -58,53 +56,70 @@ public class Bina extends LinearOpMode {
     double lift_first_reset_power;
     int ticks_rev__fd_and_bk_;
     int lift_brake_threshold_down;
-    int lift_min_position;
+    public int lift_min_position;
     double circumference;
     int lift_brake_threshold_up;
-    public double arm_max_position;
+    double arm_max_position;
     double arm_min_position;
     double arm_turn_Ok_position;
-    int Drivetrain_velocity;
+    int myDriveTrain_velocity;
     double drive_power;
 
     /**
      * Describe this function...
+     Gamepad2 Left bumper - Slow tray outtake
+     Gamepad2 Right bumper - Fast tray and rollers intake
+     Gamepad2 A - One shot pixel delivery
+     Gamepad2 B - Stop all intakes
+
+     Gamepad1 Left bumper - Fast rollers outtake
+     Gamepad1 Right bumper - Fast tray and rollers intake
+     Gamepad1 A - Launch drone (keep pressed)
+     Gamepad1 B - Stop all intakes
      */
     private void Claw_Control() {
         // ---------------------- Gate/intake/Launcher Code ----------------------
+        lift_pos = lift.getCurrentPosition();
+
         if (gamepad2.left_bumper) {
             gates.setPower(-0.15);
-        } else if (gamepad2.a) {
+        } else if (gamepad2.right_bumper) {
+            gates.setPower(1);
+            intake1.setPower(1);
+            intake2.setPower(1);
+        } else if (gamepad2.a && lift_pos >= lift_max_position*0.35) {
             arm1.setPosition(arm_min_position);
             arm2.setPosition(arm_min_position);
-        } else if (gamepad2.left_trigger!=0) {
+            sleep(1000);
             gates.setPower(-0.15);
-        } else if (gamepad1.b) {
+        } else if (gamepad2.b) {
+            intake1.setPower(0);
+            intake2.setPower(0);
+            gates.setPower(0);
+        }
+
+        if (gamepad1.left_bumper) {
             intake1.setPower(-1);
             intake2.setPower(-1);
         } else if (gamepad1.right_bumper) {
             gates.setPower(1);
             intake1.setPower(1);
             intake2.setPower(1);
-        } else if (gamepad2.right_bumper) {
-            gates.setPower(1);
-            arm1.setPosition(arm_max_position);
-            arm2.setPosition(arm_max_position);
-        } else if (gamepad1.left_bumper || gamepad2.b) {
+        } else if (gamepad1.b) {
             intake1.setPower(0);
             intake2.setPower(0);
             gates.setPower(0);
-        } else if (gamepad2.a) {
-            launcher.setPosition(0.4);
-        }else{
-            launcher.setPosition(0.5);
         }
 
-        // drone launch
+        // Drone launch
+        if (gamepad1.a) {
+            launcher.setPosition(0.5);
+        } else {
+            launcher.setPosition(0.18);
+        }
 
         telemetry.update();
     }
-
 
     /**
      * Describe this function...
@@ -118,47 +133,17 @@ public class Bina extends LinearOpMode {
         }
     }
 
-
-    public void position_zero() {
-        if ( gamepad2.x) {
-            gates.setPower(0);
-            arm1.setPosition(arm_max_position);
-            arm2.setPosition(arm_max_position);
-            sleep(500);
-            lift.setTargetPosition(lift_min_position);
-            //frontEncoder.setTargetPosition(lift_min_position);
-            lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            //frontEncoder.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            lift.setPower(0.7);
-            lift2.setPower(0.7);
-            //frontEncoder.setPower(lift_max_power);
-            while(lift.isBusy() || lift2.isBusy()){
-                telemetry.update();
-            }
-            lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            //frontEncoder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        }
-
-    }
-    private void position_max() {
-        if ( gamepad2.y) {
-            arm1.setPosition(arm_max_position);
-            arm2.setPosition(arm_max_position);
-        }
-    }
-
     /**
      * Describe this function...
      */
-    private void Initialize_DriveTrain() {
+    private void Initialize_myDriveTrain() {
         // leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
         leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
         rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//leftRear.setDirection(DcMotorSimple.Direction.REVERSE);
+        //leftRear.setDirection(DcMotorSimple.Direction.REVERSE);
         leftRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftRear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightRear.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -173,7 +158,6 @@ public class Bina extends LinearOpMode {
         arm1.setPosition(arm_max_position);
         arm2.setPosition(arm_max_position);
     }
-
 
     /**
      * Describe this function...
@@ -202,26 +186,6 @@ public class Bina extends LinearOpMode {
 
     }
 
-
-   /* private void Deliver_cone() {
-        if (gamepad2.y) {
-
-            Timer(0.6);
-            arm1.setPosition(1);
-            arm2.setPosition(1);
-
-            lift.setTargetPosition(1200);
-            lift2.setTargetPosition(1200);
-
-            lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            lift2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-            lift.setPower(lift_max_power);
-            Timer(2);
-            lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        }
-    }
-*/
     /**
      * Describe this function...
      */
@@ -318,7 +282,6 @@ public class Bina extends LinearOpMode {
         lift_reset_done = false;
         is_reset_pressed= reset.isPressed();
         lift_max_power = 1;
-        //lift_first_reset_power = 0.1; // only non-zero when you first init. Becomes zero at *first* reset
         lift_min_position = 0;
         lift_max_position = 3150;
         lift_max_power_mult_up = 1;
@@ -326,8 +289,8 @@ public class Bina extends LinearOpMode {
         drive_slow_velocity=600;
         lift_power_incr = 0.1;
         lift_max_velocity = 0;
-        arm_max_position = 0.47;
-        arm_min_position = 0.05;
+        arm_max_position = 0.48;
+        arm_min_position = 0.0;
         arm_position = 0.5;
         arm_accel = 0;
         arm_turn_Ok_position = 0.41;
@@ -338,9 +301,13 @@ public class Bina extends LinearOpMode {
         drive_power = 0.7;
         drive_slow_power = 0.2;
 
+
         // Do some initialization
+        lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         Initialize_Lift_Arm();
-        Initialize_DriveTrain();
+        Initialize_myDriveTrain();
         lift_telemetry();
         telemetry.update();
 
@@ -354,8 +321,8 @@ public class Bina extends LinearOpMode {
                 Lift_Control();
                 Arm_Control();
                 Claw_Control();
-                //     lift_telemetry();
-                drive_telemetry();
+                lift_telemetry();
+                //drive_telemetry();
                 // Return_home();
                 //Deliver_cone();
                 //position_zero();
@@ -364,7 +331,28 @@ public class Bina extends LinearOpMode {
             }
         }
     }
+    public void position_zero() {
+        if ( gamepad2.x) {
+            gates.setPower(0);
+            arm1.setPosition(arm_max_position);
+            arm2.setPosition(arm_max_position);
+            sleep(500);
+            lift.setTargetPosition(lift_min_position);
+            //frontEncoder.setTargetPosition(lift_min_position);
+            lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            //frontEncoder.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            lift.setPower(lift_max_power);
+            lift2.setPower(lift_max_power);
+            //frontEncoder.setPower(lift_max_power);
+            while(lift.isBusy() || lift2.isBusy()){
+                telemetry.update();
+            }
+            lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            //frontEncoder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+        }
+
+    }
     /**
      * Describe this function...
      */
@@ -384,27 +372,6 @@ public class Bina extends LinearOpMode {
         telemetry.addData("Left Front pos", leftFront.getCurrentPosition());
         telemetry.addData("Right Back pos", rightRear.getCurrentPosition());
         telemetry.addData("Right Front pos", rightFront.getCurrentPosition());}
-
-
-    /**
-     * Describe this function...
-     */
-
-
-    /**
-     * Describe this function...
-     */
-
-
-    /**
-     * Describe this function...
-     */
-    private void stop_and_reset() {
-        leftRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-    }
 
     /**
      * Describe this function...
@@ -448,11 +415,9 @@ public class Bina extends LinearOpMode {
             lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             lift_pos = lift.getCurrentPosition();
+            arm1.setPosition(arm_max_position);
+            arm2.setPosition(arm_max_position);
             lift_reset_done = true;
-            //frontEncoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            //frontEncoder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            //frontEncoder.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            //lift_first_reset_power = 0;
         }
         lift_pos = lift.getCurrentPosition();
         lift_power = lift.getPower();
@@ -461,32 +426,18 @@ public class Bina extends LinearOpMode {
             lift_reset_done = false;
         }
 
-        if (gamepad2.left_stick_y < 0 && lift_pos <= lift_max_position*0.8) {
-            //arm1.setPosition(arm_min_position); //upwards lift interlock test
-            //arm2.setPosition(arm_min_position);
-            lift_target_power = -(lift_max_velocity*lift_max_power_mult_up * lift_max_power * gamepad2.left_stick_y);
-        } else if (gamepad2.left_stick_y < 0 && lift_pos <= lift_max_position) {
+        if (gamepad2.left_stick_y < 0 && lift_pos <= lift_max_position) {
             lift_target_power = -(lift_max_velocity*lift_max_power_mult_up * lift_max_power * gamepad2.left_stick_y);
         } else if (gamepad2.left_stick_y > 0 && lift_pos >= lift_max_position*0.35 && !reset.isPressed()) {
-            arm1.setPosition(arm_max_position);
-            arm2.setPosition(arm_max_position);
-            lift_target_power = -(lift_max_velocity*lift_max_power_mult_down/1 * lift_max_power * gamepad2.left_stick_y);
+            arm1.setPosition(arm_max_position*0.90);
+            arm2.setPosition(arm_max_position*0.90);
+            gates.setPower(0);
+            lift_target_power = -(lift_max_velocity*lift_max_power_mult_down * lift_max_power * gamepad2.left_stick_y);
         } else if (gamepad2.left_stick_y > 0 && !reset.isPressed()) {
-            //arm1.setPosition(arm_max_position);
-            //arm2.setPosition(arm_max_position);
             lift_target_power = -(lift_max_velocity*lift_max_power_mult_down * lift_max_power * gamepad2.left_stick_y);
         } else {
             lift_target_power = 0;
         }
-
-        //if (lift_pos < lift_max_position/2 && arm_position > arm_min_position) {
-        //if (lift_target_power < 0) {
-        //    lift_target_power = 0;
-        //}
-        //arm1.setPosition(arm_min_position);
-        //arm2.setPosition(arm_min_position);
-        //sleep(500);
-        //}
 
         lift_power = lift_target_power;
         ((DcMotorEx) lift).setVelocity(lift_power);

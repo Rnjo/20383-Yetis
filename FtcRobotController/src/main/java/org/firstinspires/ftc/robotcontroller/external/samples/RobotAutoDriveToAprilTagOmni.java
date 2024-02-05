@@ -210,7 +210,7 @@ public class RobotAutoDriveToAprilTagOmni extends LinearOpMode
             }
             telemetry.update();
 
-            // Apply desired axes motions to the drivetrain.
+            // Apply desired axes motions to the myDriveTrain.
             moveRobot(drive, strafe, turn);
             sleep(10);
         }

@@ -47,7 +47,7 @@ import java.util.concurrent.TimeUnit;
 
 /*
  * This OpMode illustrates using a camera to locate and drive towards a specific AprilTag.
- * The code assumes a basic two-wheel (Tank) Robot Drivetrain
+ * The code assumes a basic two-wheel (Tank) Robot myDriveTrain
  *
  * For an introduction to AprilTags, see the ftc-docs link below:
  * https://ftc-docs.firstinspires.org/en/latest/apriltag/vision_portal/apriltag_intro/apriltag-intro.html
@@ -196,7 +196,7 @@ public class RobotAutoDriveToAprilTagTank extends LinearOpMode
             }
             telemetry.update();
 
-            // Apply desired axes motions to the drivetrain.
+            // Apply desired axes motions to the myDriveTrain.
             moveRobot(drive, turn);
             sleep(10);
         }
