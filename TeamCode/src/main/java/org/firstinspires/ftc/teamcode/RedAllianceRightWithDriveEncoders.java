@@ -124,30 +124,50 @@ public class RedAllianceRightWithDriveEncoders extends myDriveTrain {
 
         switch (snapshotAnalysis) {
             case LEFT: {
-            toAndFro(30);
-            sleep(3000);
-            turn(false);
-            intake1.setPower(-0.3);     // outtake first pixel onto spik
-            sleep(2000);
-            intake1.setPower(-0.3);
-            toAndFro(-33);
-            sleep(2000);
-            lift.setTargetPosition(-1900);
-            lift.setPower(1);
-            lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            sleep(1000);
-            arm1.setPosition(1);
-            arm2.setPosition(1);
-            sleep(1000);
-            gates.setPower(-1);
-            sleep(1000);
-            gates.setPower(0);
-            toAndFro(3);
-            sleep(1000);
-            leftAndRight(-24);
-            sleep(2000);
-            toAndFro(-12);
-            break;
+                sleep(1000);
+                toAndFro(30);
+                sleep(2500);
+                turn(false);
+                sleep(1000);
+                intake1.setPower(-0.3);     // outtake first pixel onto spike mark
+                sleep(3000);
+                intake1.setPower(0);
+                toAndFro(-30);
+                sleep(2000);
+                leftFront.setTargetPosition(120);
+                rightFront.setTargetPosition(-120);
+                leftRear.setTargetPosition(120);
+                rightRear.setTargetPosition(-120);
+                rightRear.setPower(0.7);
+                rightFront.setPower(0.7);
+                leftRear.setPower(0.7);
+                leftFront.setPower(0.7);
+                rightRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                leftRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                rightRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                leftRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                sleep(1000);
+                sleep(2000);
+                lift.setTargetPosition(-1900);
+                lift.setPower(1);
+                lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                sleep(1000);
+                arm1.setPosition(1);
+                arm2.setPosition(1);
+                sleep(1000);
+                gates.setPower(-1);
+                sleep(1000);
+                gates.setPower(0);
+                toAndFro(4);     // go away from the board
+                sleep(1000);
+                leftAndRight(-24);
+                sleep(2000);
+                toAndFro(-12);
+                break;
             }
             case RIGHT: {
                 toAndFro(23);
@@ -205,21 +225,21 @@ public class RedAllianceRightWithDriveEncoders extends myDriveTrain {
 
             }
             case CENTER: {
-               toAndFro(25);
+                sleep(1000);
+                toAndFro(24);
                 sleep(2000);
-                leftAndRight(-4.66);
+                leftAndRight(4.66);
                 sleep(2000);
-                intake1.setPower(-0.7);
-                intake2.setPower(-0.7);
-                sleep(2000);
+                intake1.setPower(-0.3);
+                sleep(3000);
                 intake1.setPower(0);
-                intake2.setPower(0);
                 turn(false);
                 sleep(2000);
-                toAndFro(-30.16);
+                toAndFro(-33);
                 sleep(2000);
+                leftAndRight(-5);
                 sleep(1000);
-                lift.setTargetPosition(-1450);
+                lift.setTargetPosition(-1900);
                 lift.setPower(1);
                 lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 sleep(1000);
@@ -229,9 +249,10 @@ public class RedAllianceRightWithDriveEncoders extends myDriveTrain {
                 gates.setPower(-1);
                 sleep(1000);
                 gates.setPower(0);
-                toAndFro(3);
-                sleep(2000);
-                leftAndRight(20.54);
+                toAndFro(4);     // go away from the board
+                sleep(1000);
+                leftAndRight(-20.54);
+                sleep(1000);
                 toAndFro(-12);
                 break;
             }
