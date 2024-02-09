@@ -162,15 +162,21 @@ public class BlueAllianceLeftWithDriveEncoders extends myDriveTrain {
             }
             case RIGHT: {
                 sleep(1000);
-                toAndFro(30);
+                toAndFro(27);
                 sleep(2500);
                 turn(true);
+                sleep(3000);
+                toAndFro(8);
+                sleep(1000);
+                toAndFro(-5);
                 sleep(1000);
                 intake1.setPower(-0.3);     // outtake first pixel onto spike mark
                 sleep(3000);
                 intake1.setPower(0);
-                toAndFro(-30);
+                toAndFro(-36);
                 sleep(2000);
+                leftAndRight(-9);
+                sleep(1000);
                 leftFront.setTargetPosition(120);
                 rightFront.setTargetPosition(-120);
                 leftRear.setTargetPosition(120);
@@ -201,9 +207,7 @@ public class BlueAllianceLeftWithDriveEncoders extends myDriveTrain {
                 gates.setPower(0);
                 toAndFro(4);     // go away from the board
                 sleep(1000);
-                leftAndRight(24);
-                sleep(2000);
-                toAndFro(-12);
+                leftAndRight(29);
                 break;
             }
             case CENTER: {

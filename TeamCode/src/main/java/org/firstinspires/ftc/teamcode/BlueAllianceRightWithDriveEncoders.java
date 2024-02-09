@@ -122,56 +122,77 @@ public class BlueAllianceRightWithDriveEncoders extends myDriveTrain {
 
         switch (snapshotAnalysis) {
             case LEFT: {
+                leftAndRight(5.5);
                 sleep(1000);
-                toAndFro(22.13);
-                sleep(2000);
-                leftAndRight(2.12);
-                sleep(1500);
+                toAndFro(32);
+                sleep(2500);
                 turn(false);
-                sleep(1500);
-                leftAndRight(14.84);
-                sleep(1500);
-                intake1.setPower(-0.7);
-                intake2.setPower(-0.7);
-                sleep(1500);
-                gates.setPower(0);
+                sleep(1000);
+                intake1.setPower(-0.3);     // outtake first pixel onto spike mark
+                sleep(3000);
                 intake1.setPower(0);
-                intake2.setPower(0);
                 turn(false);
+                sleep(2000);
                 turn(false);
-                leftAndRight(-96);
+                sleep(2000);
+                leftAndRight(-50);
+                sleep(6000);
+                toAndFro(-10);
+                sleep(2000);
+                leftAndRight(-40);
+                sleep(5000);
+                turn(false);
+                sleep(1000);
                 break;
             }
             case RIGHT: {
+                leftAndRight(5);
                 sleep(1000);
                 toAndFro(23);
                 sleep(2000);
-                leftAndRight(27.31);  // strafe positive goes right , neg goes left
+                leftAndRight(27);  // strafe positive goes right , neg goes left
                 sleep(3000);
                 turn(false);             // true turns right, false turns left
                 sleep(1500);
-                leftAndRight(-6.48);
+                leftAndRight(5);
                 sleep(2000);
                 intake1.setPower(-0.3);     // outtake first pixel onto spike mark
-                sleep(4000);
+                sleep(3000);
                 intake1.setPower(0);
-                leftAndRight(-96);
+                turn(false);
+                sleep(2000);
+                turn(false);
+                sleep(2000);
+                leftAndRight(-10);
+                toAndFro(-15);
+                sleep(2000);
+                leftAndRight(-50);
+                sleep(4000);
+                toAndFro(-5);
+                sleep(1000);
+                leftAndRight(-30);
+                sleep(4000);
+                turn(false);
+                sleep(1000);
                 break;
             }
             case CENTER: {
+                leftAndRight(5);
                 sleep(1000);
-                toAndFro(24.38);
+                toAndFro(24);
                 sleep(2000);
-                leftAndRight(4.66);
-                sleep(2000);
-                intake1.setPower(-0.7);
-                intake2.setPower(-0.7);
-                sleep(2000);
-                gates.setPower(0);
+                intake1.setPower(-0.3);
+                sleep(3000);
                 intake1.setPower(0);
-                intake2.setPower(0);
                 turn(true);
-                leftAndRight(-96);
+                sleep(2000);
+                leftAndRight(-50);
+                sleep(4000);
+                toAndFro(-20);
+                leftAndRight(-40);
+                sleep(4000);
+                turn(false);
+                sleep(1000);
                 break;
 
             }

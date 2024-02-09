@@ -29,7 +29,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.Vision.PowerplayblueDeterminationExample;
+import org.firstinspires.ftc.teamcode.Vision.PowerplayRedDeterminationExample;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -47,8 +47,8 @@ import org.openftc.easyopencv.OpenCvWebcam;
 public class RedAllianceRightWithDriveEncoders extends myDriveTrain {
 
     OpenCvWebcam webcam;
-    PowerplayblueDeterminationExample.SkystoneDeterminationPipeline pipeline;
-    PowerplayblueDeterminationExample.SkystoneDeterminationPipeline.SkystonePosition snapshotAnalysis = PowerplayblueDeterminationExample.SkystoneDeterminationPipeline.SkystonePosition.LEFT; // default
+    PowerplayRedDeterminationExample.SkystoneDeterminationRedPipeline pipeline;
+    PowerplayRedDeterminationExample.SkystoneDeterminationRedPipeline.SkystonePosition snapshotAnalysis = PowerplayRedDeterminationExample.SkystoneDeterminationRedPipeline.SkystonePosition.LEFT; // default
 
     @Override
     public void runOpMode() {
@@ -62,13 +62,13 @@ public class RedAllianceRightWithDriveEncoders extends myDriveTrain {
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
-        pipeline = new PowerplayblueDeterminationExample.SkystoneDeterminationPipeline();
+        pipeline = new PowerplayRedDeterminationExample.SkystoneDeterminationRedPipeline();
         webcam.setPipeline(pipeline);
 
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
             public void onOpened() {
-                webcam.startStreaming(1280, 720, OpenCvCameraRotation.UPRIGHT);
+                webcam.startStreaming(1280, 720, OpenCvCameraRotation.UPSIDE_DOWN);
             }
 
             @Override
@@ -132,26 +132,10 @@ public class RedAllianceRightWithDriveEncoders extends myDriveTrain {
                 intake1.setPower(-0.3);     // outtake first pixel onto spike mark
                 sleep(3000);
                 intake1.setPower(0);
-                toAndFro(-30);
+                toAndFro(-34);
                 sleep(2000);
-                leftFront.setTargetPosition(120);
-                rightFront.setTargetPosition(-120);
-                leftRear.setTargetPosition(120);
-                rightRear.setTargetPosition(-120);
-                rightRear.setPower(0.7);
-                rightFront.setPower(0.7);
-                leftRear.setPower(0.7);
-                leftFront.setPower(0.7);
-                rightRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                leftRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                rightRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                leftRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                sleep(1000);
-                sleep(2000);
+                leftAndRight(4);
+                sleep(700);
                 lift.setTargetPosition(-1900);
                 lift.setPower(1);
                 lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -170,9 +154,9 @@ public class RedAllianceRightWithDriveEncoders extends myDriveTrain {
                 break;
             }
             case RIGHT: {
-                toAndFro(23);
+                toAndFro(28);
                 sleep(2000);
-                leftAndRight(25);  // strafe positive goes right , neg goes left
+                leftAndRight(28);  // strafe positive goes right , neg goes left
                 sleep(3000);
                 turn(false);             // true turns right, false turns left
                 sleep(1500);
@@ -181,27 +165,10 @@ public class RedAllianceRightWithDriveEncoders extends myDriveTrain {
                 intake1.setPower(-0.3);     // outtake first pixel onto spike mark
                 sleep(2000);
                 intake1.setPower(0);
-                toAndFro(-16);     // go towards the board
+                toAndFro(-19);     // go towards the board
                 sleep(2000);
                 leftAndRight(-17.5);  // move towards left of the board
                 sleep(2000);
-                leftFront.setTargetPosition(-120);
-                rightFront.setTargetPosition(120);
-                leftRear.setTargetPosition(-120);
-                rightRear.setTargetPosition(120);
-                rightRear.setPower(0.7);
-                rightFront.setPower(0.7);
-                leftRear.setPower(0.7);
-                leftFront.setPower(0.7);
-                rightRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                leftRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                rightRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                leftRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                sleep(1000);
                 lift.setTargetPosition(-1450);
                 lift.setPower(1);
                 lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
