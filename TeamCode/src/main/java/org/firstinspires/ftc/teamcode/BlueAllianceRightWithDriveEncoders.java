@@ -122,7 +122,7 @@ public class BlueAllianceRightWithDriveEncoders extends myDriveTrain {
 
         switch (snapshotAnalysis) {
             case LEFT: {
-                leftAndRight(5.5);
+                leftAndRight(12);
                 sleep(1000);
                 toAndFro(32);
                 sleep(2500);
@@ -135,14 +135,6 @@ public class BlueAllianceRightWithDriveEncoders extends myDriveTrain {
                 sleep(2000);
                 turn(false);
                 sleep(2000);
-                leftAndRight(-50);
-                sleep(6000);
-                toAndFro(-10);
-                sleep(2000);
-                leftAndRight(-40);
-                sleep(5000);
-                turn(false);
-                sleep(1000);
                 break;
             }
             case RIGHT: {
@@ -163,17 +155,6 @@ public class BlueAllianceRightWithDriveEncoders extends myDriveTrain {
                 sleep(2000);
                 turn(false);
                 sleep(2000);
-                leftAndRight(-10);
-                toAndFro(-15);
-                sleep(2000);
-                leftAndRight(-50);
-                sleep(4000);
-                toAndFro(-5);
-                sleep(1000);
-                leftAndRight(-30);
-                sleep(4000);
-                turn(false);
-                sleep(1000);
                 break;
             }
             case CENTER: {
@@ -185,14 +166,6 @@ public class BlueAllianceRightWithDriveEncoders extends myDriveTrain {
                 sleep(3000);
                 intake1.setPower(0);
                 turn(true);
-                sleep(2000);
-                leftAndRight(-50);
-                sleep(4000);
-                toAndFro(-20);
-                leftAndRight(-40);
-                sleep(4000);
-                turn(false);
-                sleep(1000);
                 break;
 
             }

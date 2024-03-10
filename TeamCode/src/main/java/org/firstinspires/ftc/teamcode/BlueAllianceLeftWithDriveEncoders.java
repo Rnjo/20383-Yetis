@@ -150,12 +150,17 @@ public class BlueAllianceLeftWithDriveEncoders extends myDriveTrain {
                 gates.setPower(0);
                 toAndFro(4);     // go away from the board
                 sleep(1000);
-                /*lift.setTargetPosition(-200);
+                arm1.setPosition(arm_max_position*0.9);
+                arm2.setPosition(arm_max_position*0.9);
+                gates.setPower(0);
+                sleep(2000);
+                lift.setTargetPosition(1102);
                 lift.setPower(1);
-                lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);// go away from the board
                 sleep(1000);
-                */leftAndRight(24.20);
-                sleep(3000);
+                arm1.setPosition(arm_max_position);
+                arm2.setPosition(arm_max_position);
+                sleep(1000);
                 toAndFro(-12);
                 sleep(3000);
                 break;
@@ -205,7 +210,18 @@ public class BlueAllianceLeftWithDriveEncoders extends myDriveTrain {
                 gates.setPower(-1);
                 sleep(1000);
                 gates.setPower(0);
-                toAndFro(4);     // go away from the board
+                toAndFro(4);
+                sleep(1000);
+                arm1.setPosition(arm_max_position*0.9);
+                arm2.setPosition(arm_max_position*0.9);
+                gates.setPower(0);
+                sleep(2000);
+                lift.setTargetPosition(1102);
+                lift.setPower(1);
+                lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);// go away from the board
+                sleep(1000);
+                arm1.setPosition(arm_max_position);
+                arm2.setPosition(arm_max_position);
                 sleep(1000);
                 leftAndRight(29);
                 break;
@@ -235,9 +251,18 @@ public class BlueAllianceLeftWithDriveEncoders extends myDriveTrain {
                 gates.setPower(-1);
                 sleep(1000);
                 gates.setPower(0);
-                toAndFro(4);     // go away from the board
+                toAndFro(4);
                 sleep(1000);
-                leftAndRight(20.54);
+                arm1.setPosition(arm_max_position*0.9);
+                arm2.setPosition(arm_max_position*0.9);
+                gates.setPower(0);
+                sleep(2000);
+                lift.setTargetPosition(1102);
+                lift.setPower(1);
+                lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);// go away from the board
+                sleep(1000);
+                arm1.setPosition(arm_max_position);
+                arm2.setPosition(arm_max_position);
                 sleep(1000);
                 toAndFro(-12);
                 break;

@@ -148,9 +148,14 @@ public class RedAllianceRightWithDriveEncoders extends myDriveTrain {
                 gates.setPower(0);
                 toAndFro(4);     // go away from the board
                 sleep(1000);
-                leftAndRight(-24);
+                arm1.setPosition(0.43);
+                arm2.setPosition(0.43);
                 sleep(2000);
-                toAndFro(-12);
+                lift.setTargetPosition(0);
+                lift.setPower(1);
+                lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                sleep(1000);
+                leftAndRight(-24);
                 break;
             }
             case RIGHT: {
@@ -179,15 +184,20 @@ public class RedAllianceRightWithDriveEncoders extends myDriveTrain {
                 gates.setPower(-1);
                 sleep(1000);
                 gates.setPower(0);
-                toAndFro(3);     // go away from the board
+                toAndFro(3);
                 sleep(1000);
-                /*lift.setTargetPosition(-200);
+                arm1.setPosition(arm_max_position*0.9);
+                arm2.setPosition(arm_max_position*0.9);
+                gates.setPower(0);
+                sleep(2000);
+                lift.setTargetPosition(1102);
                 lift.setPower(1);
-                lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);// go away from the board
                 sleep(1000);
-                */leftAndRight(-22.);
-                sleep(3000);
-                toAndFro(-7);
+                arm1.setPosition(arm_max_position);
+                arm2.setPosition(arm_max_position);
+                sleep(1000);
+                leftAndRight(-22.);
                 break;
 
             }
@@ -201,26 +211,7 @@ public class RedAllianceRightWithDriveEncoders extends myDriveTrain {
                 sleep(3000);
                 intake1.setPower(0);
                 turn(false);
-                sleep(2000);
-                toAndFro(-33);
-                sleep(2000);
-                leftAndRight(-5);
-                sleep(1000);
-                lift.setTargetPosition(-1900);
-                lift.setPower(1);
-                lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                sleep(1000);
-                arm1.setPosition(1);
-                arm2.setPosition(1);
-                sleep(1000);
-                gates.setPower(-1);
-                sleep(1000);
-                gates.setPower(0);
-                toAndFro(4);     // go away from the board
-                sleep(1000);
                 leftAndRight(-20.54);
-                sleep(1000);
-                toAndFro(-12);
                 break;
             }
 

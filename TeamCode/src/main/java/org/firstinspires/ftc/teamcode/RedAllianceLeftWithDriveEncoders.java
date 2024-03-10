@@ -67,7 +67,7 @@ public class RedAllianceLeftWithDriveEncoders extends myDriveTrain {
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
             public void onOpened() {
-                webcam.startStreaming(1280, 720, OpenCvCameraRotation.UPRIGHT);
+                webcam.startStreaming(1280, 720, OpenCvCameraRotation.UPSIDE_DOWN);
             }
 
             @Override
@@ -119,7 +119,7 @@ public class RedAllianceLeftWithDriveEncoders extends myDriveTrain {
 
         switch (snapshotAnalysis) {
             case LEFT: {
-                leftAndRight(-5);
+                leftAndRight(-6);
                 sleep(1000);
                 toAndFro(23);
                 sleep(2000);
@@ -130,47 +130,27 @@ public class RedAllianceLeftWithDriveEncoders extends myDriveTrain {
                 leftAndRight(-5);
                 sleep(2000);
                 intake1.setPower(-0.3);     // outtake first pixel onto spike mark
-                sleep(3000);
+                sleep(1800);
                 intake1.setPower(0);
                 turn(false);
                 sleep(2000);
                 turn(false);
                 sleep(2000);
-                leftAndRight(10);
-                toAndFro(-15);
-                sleep(2000);
-                leftAndRight(50);
-                sleep(4000);
-                toAndFro(-5);
-                sleep(1000);
-                leftAndRight(30);
-                sleep(4000);
-                turn(true);
-                sleep(1000);
                 break;
             }
             case RIGHT: {
-                leftAndRight(-5.5);
+                leftAndRight(-6.5);
                 sleep(1000);
                 toAndFro(32);
                 sleep(2500);
                 turn(true);
                 sleep(1000);
                 intake1.setPower(-0.3);     // outtake first pixel onto spike mark
-                sleep(3000);
+                sleep(1800);
                 intake1.setPower(0);
                 turn(false);
                 sleep(2000);
                 turn(false);
-                sleep(2000);
-                leftAndRight(50);
-                sleep(6000);
-                toAndFro(-10);
-                sleep(2000);
-                leftAndRight(40);
-                sleep(5000);
-                turn(true);
-                sleep(1000);
                 break;
             }
             case CENTER: {
@@ -179,17 +159,9 @@ public class RedAllianceLeftWithDriveEncoders extends myDriveTrain {
                 toAndFro(24);
                 sleep(2000);
                 intake1.setPower(-0.3);
-                sleep(3000);
+                sleep(1800);
                 intake1.setPower(0);
                 turn(false);
-                sleep(2000);
-                leftAndRight(50);
-                sleep(4000);
-                toAndFro(20);
-                leftAndRight(40);
-                sleep(4000);
-                turn(true);
-                sleep(1000);
                 break;
 
             }
