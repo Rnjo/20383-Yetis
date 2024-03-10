@@ -30,9 +30,11 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.Abhir.myDriveTrain;
+import org.firstinspires.ftc.teamcode.Vision.PowerplayGreenDeterminationExample;
+import org.firstinspires.ftc.teamcode.Vision.PowerplayRedDeterminationExample;
 import org.firstinspires.ftc.teamcode.Vision.PowerplayblueDeterminationExample;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
-import org.firstinspires.ftc.teamcode.Abhir.myDriveTrain;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
@@ -50,7 +52,11 @@ public class AB extends myDriveTrain {
 
     OpenCvWebcam webcam;
     PowerplayblueDeterminationExample.SkystoneDeterminationPipeline pipeline;
-    PowerplayblueDeterminationExample.SkystoneDeterminationPipeline.SkystonePosition snapshotAnalysis = PowerplayblueDeterminationExample.SkystoneDeterminationPipeline.SkystonePosition.LEFT; // default
+    PowerplayblueDeterminationExample.SkystoneDeterminationPipeline.SkystonePosition snapshotAnalysis; /*= PowerplayblueDeterminationExample.SkystoneDeterminationPipeline.SkystonePosition.LEFT; // default*/
+    PowerplayRedDeterminationExample.SkystoneDeterminationRedPipeline pipelineRed;
+    PowerplayRedDeterminationExample.SkystoneDeterminationRedPipeline.SkystonePosition snapshotAnalysisRed;/* = PowerplayRedDeterminationExample.SkystoneDeterminationRedPipeline.SkystonePosition.LEFT; // default*/
+    PowerplayGreenDeterminationExample.SkystoneDeterminationGreenPipeline pipelineGreen;
+    PowerplayGreenDeterminationExample.SkystoneDeterminationGreenPipeline.SkystonePosition snapshotAnalysisGreen;/* = PowerplayGreenDeterminationExample.SkystoneDeterminationGreenPipeline.SkystonePosition.LEFT; // default*/
 
     @Override
     public void runOpMode() {
@@ -66,6 +72,9 @@ public class AB extends myDriveTrain {
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
         pipeline = new PowerplayblueDeterminationExample.SkystoneDeterminationPipeline();
         webcam.setPipeline(pipeline);
+        webcam.setPipeline(pipelineGreen);
+        webcam.setPipeline(pipelineRed);
+
 
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
@@ -118,6 +127,8 @@ public class AB extends myDriveTrain {
          * to change as the camera view changes once the robot starts moving!
          */
         snapshotAnalysis = pipeline.getAnalysis();
+        snapshotAnalysisRed = pipelineRed.getAnalysis();
+        snapshotAnalysisGreen = pipelineGreen.getAnalysis();
 
 
         /*
@@ -143,6 +154,9 @@ public class AB extends myDriveTrain {
                 FtcDashboard.getInstance().stopCameraStream();
                 leftAndRight(24);
                 break;
+
+
+
             }
         }
     }

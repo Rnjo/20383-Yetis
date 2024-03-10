@@ -48,7 +48,7 @@ import org.openftc.easyopencv.OpenCvWebcam;
 public class PowerplayGreenDeterminationExample extends LinearOpMode
 {
     OpenCvWebcam webcam;
-    SkystoneDeterminationPipeline pipeline;
+    SkystoneDeterminationGreenPipeline pipeline;
 
     @Override
     public void runOpMode()
@@ -63,7 +63,7 @@ public class PowerplayGreenDeterminationExample extends LinearOpMode
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam= OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
         FtcDashboard.getInstance().startCameraStream(webcam, 0);
-        pipeline = new SkystoneDeterminationPipeline();
+        pipeline = new SkystoneDeterminationGreenPipeline();
         webcam.setPipeline(pipeline);
 
         // We set the viewport policy to optimized view so the preview doesn't appear 90 deg
@@ -98,7 +98,7 @@ public class PowerplayGreenDeterminationExample extends LinearOpMode
         }
     }
 
-    public static class SkystoneDeterminationPipeline extends OpenCvPipeline
+    public static class SkystoneDeterminationGreenPipeline extends OpenCvPipeline
     {
         /*
          * An enum to define the skystone position
