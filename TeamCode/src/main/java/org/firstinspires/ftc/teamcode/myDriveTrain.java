@@ -49,7 +49,6 @@ public class myDriveTrain extends Bina {
             rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         }
-
     }
     public void leftAndRight(double dInches) {
         dInchesToiTics = 47.17;
