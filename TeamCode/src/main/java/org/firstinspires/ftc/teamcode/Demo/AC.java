@@ -30,35 +30,21 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.Abhir.myDriveTrain;
-import org.firstinspires.ftc.teamcode.Vision.PowerplayGreenDeterminationExample;
-import org.firstinspires.ftc.teamcode.Vision.PowerplayRedDeterminationExample;
 import org.firstinspires.ftc.teamcode.Vision.PowerplayblueDeterminationExample;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.Abhir.myDriveTrain;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvWebcam;
-//Abhir's Autonomus code. Use me from front left starting position
-/*
- * This sample demonstrates how to run analysis during INIT
- * and then snapshot that value for later use when the START
- * command is issued. The pipeline is re-used from SkystoneDeterminationExample
- */
+
 @Autonomous
 
 
-public class AB extends myDriveTrain {
-
+public class AC extends myDriveTrain {
     OpenCvWebcam webcam;
-    OpenCvWebcam webcamRed;
-    OpenCvWebcam webcamGreen;
     PowerplayblueDeterminationExample.SkystoneDeterminationPipeline pipeline;
-    PowerplayblueDeterminationExample.SkystoneDeterminationPipeline.SkystonePosition snapshotAnalysis; /*= PowerplayblueDeterminationExample.SkystoneDeterminationPipeline.SkystonePosition.LEFT; // default*/
-    PowerplayRedDeterminationExample.SkystoneDeterminationRedPipeline pipelineRed;
-    PowerplayRedDeterminationExample.SkystoneDeterminationRedPipeline.SkystonePosition snapshotAnalysisRed;/* = PowerplayRedDeterminationExample.SkystoneDeterminationRedPipeline.SkystonePosition.LEFT; // default*/
-    PowerplayGreenDeterminationExample.SkystoneDeterminationGreenPipeline pipelineGreen;
-    PowerplayGreenDeterminationExample.SkystoneDeterminationGreenPipeline.SkystonePosition snapshotAnalysisGreen;/* = PowerplayGreenDeterminationExample.SkystoneDeterminationGreenPipeline.SkystonePosition.LEFT; // default*/
+    PowerplayblueDeterminationExample.SkystoneDeterminationPipeline.SkystonePosition snapshotAnalysis = PowerplayblueDeterminationExample.SkystoneDeterminationPipeline.SkystonePosition.LEFT; // default
 
     @Override
     public void runOpMode() {
@@ -73,14 +59,7 @@ public class AB extends myDriveTrain {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
         pipeline = new PowerplayblueDeterminationExample.SkystoneDeterminationPipeline();
-        pipelineRed = new PowerplayRedDeterminationExample.SkystoneDeterminationRedPipeline();
-        pipelineGreen = new PowerplayGreenDeterminationExample.SkystoneDeterminationGreenPipeline();
-        webcamRed = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
-        webcamGreen = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
         webcam.setPipeline(pipeline);
-        webcamGreen.setPipeline(pipelineGreen);
-        webcamRed.setPipeline(pipelineRed);
-
 
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
@@ -97,9 +76,9 @@ public class AB extends myDriveTrain {
          * The INIT-loop:
          * This REPLACES waitForStart!
          */
-        FtcDashboard.getInstance().startCameraStream(webcam, 10);
+        FtcDashboard.getInstance().startCameraStream(webcam, 2);
         waitForStart();
-        FtcDashboard.getInstance().startCameraStream(webcam, 10);
+        FtcDashboard.getInstance().startCameraStream(webcam, 2);
         telemetry.addData("Snapshot post-START analysis", snapshotAnalysis);
         TelemetryPacket packet = new TelemetryPacket();
         packet.put("Snapshot post-START analysis", snapshotAnalysis);
@@ -133,8 +112,7 @@ public class AB extends myDriveTrain {
          * to change as the camera view changes once the robot starts moving!
          */
         snapshotAnalysis = pipeline.getAnalysis();
-        snapshotAnalysisRed = pipelineRed.getAnalysis();
-        snapshotAnalysisGreen = pipelineGreen.getAnalysis();
+
 
 
         /*
@@ -146,44 +124,76 @@ public class AB extends myDriveTrain {
 
         switch (snapshotAnalysis) {
             case LEFT: {
-                FtcDashboard.getInstance().stopCameraStream();
+               FtcDashboard.getInstance().stopCameraStream();
+                sleep(1000);
                 leftAndRight(-24);
-
+                sleep(1000);
+                Snapshotting(200);
+                if (isStopRequested()){
+                    terminateOpModeNow();
+                }
                 break;
             }
+
             case CENTER: {
                 FtcDashboard.getInstance().stopCameraStream();
+                sleep(1000);
                 toAndFro(24);
+                sleep(1000);
+                Snapshotting(200);
+                if (isStopRequested()){
+                    terminateOpModeNow();
+                }
                 break;
             }
-            case RIGHT: {
+            case RIGHT  : {
                 FtcDashboard.getInstance().stopCameraStream();
+                sleep(1000);
                 leftAndRight(24);
+                sleep(1000);
+                Snapshotting(200);
+                if (isStopRequested()){
+                    terminateOpModeNow();
+                }
                 break;
-
-
-            }
-        }
-
-        switch (snapshotAnalysisRed) {
-            case LEFT: {
-                FtcDashboard.getInstance().stopCameraStream();
-                leftAndRight(-24);
-
-                break;
-            }
-            case CENTER: {
-                FtcDashboard.getInstance().stopCameraStream();
-                toAndFro(24);
-                break;
-            }
-            case RIGHT: {
-                FtcDashboard.getInstance().stopCameraStream();
-                leftAndRight(24);
-                break;
-
-
             }
         }
     }
+
+    void Snapshotting(int x) {
+    for (int i=0; i<x; i++){
+
+        FtcDashboard.getInstance().startCameraStream(webcam, 1);
+        webcam.startStreaming(1280, 720, OpenCvCameraRotation.UPRIGHT);
+       sleep(3500);
+        PowerplayblueDeterminationExample.SkystoneDeterminationPipeline.SkystonePosition snapshotAnalysis2 = pipeline.getAnalysis();
+        webcam.stopStreaming();
+
+        switch (snapshotAnalysis2) {
+
+            case LEFT: {
+
+                leftAndRight(-24);
+
+                break;
+            }
+            case CENTER: {
+                toAndFro(24);
+
+                break;
+            }
+
+            case RIGHT: {
+                leftAndRight(24);
+
+                break;
+            }
+
+        }
+
+        }
+
+    }
 }
+
+
