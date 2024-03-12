@@ -41,7 +41,7 @@ import org.openftc.easyopencv.OpenCvWebcam;
 @Autonomous
 
 
-public class AC extends myDriveTrain {
+public class ACv3 extends myDriveTrain {
     OpenCvWebcam webcam;
     PowerplayblueDeterminationExample.SkystoneDeterminationPipeline pipeline;
     PowerplayblueDeterminationExample.SkystoneDeterminationPipeline.SkystonePosition snapshotAnalysis = PowerplayblueDeterminationExample.SkystoneDeterminationPipeline.SkystonePosition.LEFT; // default
