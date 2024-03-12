@@ -43,7 +43,9 @@ import org.openftc.easyopencv.OpenCvWebcam;
  * 100% accurate) method of detecting the skystone when lined up with
  * the sample regions over the first 3 stones.
  */
+
 @TeleOp
+
 public class PowerplayRedDeterminationExample extends LinearOpMode
 {
     OpenCvWebcam webcam;
@@ -107,7 +109,8 @@ public class PowerplayRedDeterminationExample extends LinearOpMode
         {
             LEFT,
             CENTER,
-            RIGHT
+            RIGHT,
+            NONE
         }
 
         /*
@@ -300,12 +303,16 @@ public class PowerplayRedDeterminationExample extends LinearOpMode
              */
             int maxOneTwo = Math.max(avg1, avg2);
             int max = Math.max(maxOneTwo, avg3);
+            int val=0;
+            if(max>maxOneTwo*2){
+                val++;
+            }
 
             /*
              * Now that we found the max, we actually need to go and
              * figure out which sample region that value was from
              */
-            if(max == avg1) // Was it from region 1?
+            if(val==1&&max==avg1) // Was it from region 1?
             {
                 position = SkystonePosition.LEFT; // Record our analysis
 
@@ -320,7 +327,7 @@ public class PowerplayRedDeterminationExample extends LinearOpMode
                         GREEN, // The color the rectangle is drawn in
                         -1); // Negative thickness means solid fill
             }
-            else if(max == avg2) // Was it from region 2?
+            else if(val==1&&max == avg2) // Was it from region 2?
             {
                 position = SkystonePosition.CENTER; // Record our analysis
 
@@ -335,7 +342,7 @@ public class PowerplayRedDeterminationExample extends LinearOpMode
                         GREEN, // The color the rectangle is drawn in
                         -1); // Negative thickness means solid fill
             }
-            else if(max == avg3) // Was it from region 3?
+            else if(val==1&&max == avg3) // Was it from region 3?
             {
                 position = SkystonePosition.RIGHT; // Record our analysis
 
@@ -349,6 +356,9 @@ public class PowerplayRedDeterminationExample extends LinearOpMode
                         region3_pointB, // Second point which defines the rectangle
                         GREEN, // The color the rectangle is drawn in
                         -1); // Negative thickness means solid fill
+            } else {
+
+                position=SkystonePosition.NONE;
             }
 
             /*

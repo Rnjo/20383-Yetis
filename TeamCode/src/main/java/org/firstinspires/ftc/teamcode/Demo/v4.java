@@ -254,20 +254,20 @@ public class v4 extends myDriveTrain {
             switch (snapshotAnalysisRed) {
 
                 case LEFT: {
-                    intake1.setPower(1);
-                    intake2.setPower(1);
+                    terminateOpModeNow();
                     break;
                 }
                 case CENTER: {
-                    lift.setTargetPosition(lift_max_position);
-                    break;
+            terminateOpModeNow();
+            break;
                 }
 
                 case RIGHT: {
-                    lift.setTargetPosition(lift_min_position);
-                    intake1.setPower(0);
-                    intake2.setPower(0);
+                    terminateOpModeNow();
 
+                    break;
+                }
+                case NONE: {
                     break;
                 }
 
