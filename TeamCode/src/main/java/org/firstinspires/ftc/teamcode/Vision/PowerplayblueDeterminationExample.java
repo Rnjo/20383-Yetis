@@ -121,14 +121,14 @@ public class PowerplayblueDeterminationExample extends LinearOpMode
         /*
          * The core values which define the location and size of the sample regions
          */
-        static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(0,0);
-        static final Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(415,0);
-        static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(850,0);
-        static final Point REGION4_TOPLEFT_ANCHOR_POINT  =new Point(0, 720);
+        static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(0,199);
+        static final Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(415,199);
+        static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(850,199);
+        static final Point REGION4_TOPLEFT_ANCHOR_POINT  =new Point(0, 0);
         static final int REGION_WIDTH = 424;
-        static final int REGION_HEIGHT = 620;
-        static final int REGION_WIDTH_TOP = 424;
-        static final int REGION_HEIGHT_TOP = 720;
+        static final int REGION_HEIGHT = 519;
+        static final int REGION_WIDTH_TOP = 1279;
+        static final int REGION_HEIGHT_TOP = 199;
 
         /*
          * Points which actually define the sample region rectangles, derived from above values

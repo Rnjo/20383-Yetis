@@ -207,7 +207,7 @@ public class v4 extends myDriveTrain {
 
             FtcDashboard.getInstance().startCameraStream(webcam, 1);
             webcam.startStreaming(1280, 720, OpenCvCameraRotation.UPRIGHT);
-            sleep(3500);
+            sleep(4500);
             PowerplayblueDeterminationExample.SkystoneDeterminationPipeline.SkystonePosition snapshotAnalysis2 = pipeline.getAnalysis();
             webcam.stopStreaming();
 
@@ -244,7 +244,7 @@ public class v4 extends myDriveTrain {
     }
 
 
-    void Stopping(int x) {
+    void Stopping(double x) {
         for (int i=0; i<x; i++){
 
             webcamRed.startStreaming(1280, 720, OpenCvCameraRotation.UPRIGHT);
@@ -253,18 +253,11 @@ public class v4 extends myDriveTrain {
 
             switch (snapshotAnalysisRed) {
 
-                case LEFT: {
-                    terminateOpModeNow();
-                    break;
-                }
-                case CENTER: {
-            terminateOpModeNow();
-            break;
-                }
+                case LEFT:
+                case CENTER:
 
                 case RIGHT: {
                     terminateOpModeNow();
-
                     break;
                 }
                 case NONE: {

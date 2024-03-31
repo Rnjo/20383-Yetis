@@ -22,6 +22,7 @@
 package org.firstinspires.ftc.teamcode.Vision;
 
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -304,11 +305,17 @@ public class PowerplayRedDeterminationExample extends LinearOpMode
             int maxOneTwo = Math.max(avg1, avg2);
             int max = Math.max(maxOneTwo, avg3);
             int val=0;
-            if(max>maxOneTwo*2){
+            if(max>maxOneTwo+3){
                 val++;
             }
+            TelemetryPacket packet = new TelemetryPacket();
+            packet.put("max", max);
+            packet.put("max2", maxOneTwo);
+            packet.put("avg3", avg3);
 
-            /*
+            FtcDashboard.getInstance().sendTelemetryPacket(packet);
+
+                       /*
              * Now that we found the max, we actually need to go and
              * figure out which sample region that value was from
              */
@@ -356,9 +363,15 @@ public class PowerplayRedDeterminationExample extends LinearOpMode
                         region3_pointB, // Second point which defines the rectangle
                         GREEN, // The color the rectangle is drawn in
                         -1); // Negative thickness means solid fill
-            } else {
+            } else if (val!=1){
 
                 position=SkystonePosition.NONE;
+                Imgproc.rectangle(
+                input, // Buffer to draw on
+                        region1_pointA, // First point which defines the rectangle
+                        region3_pointB, // Second point which defines the rectangle
+                        GREEN, -1// The color the rectangle is drawn in
+                        ); // Negative thickness means solid fill
             }
 
             /*
