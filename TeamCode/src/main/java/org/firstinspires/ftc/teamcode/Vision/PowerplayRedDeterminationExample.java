@@ -304,14 +304,14 @@ public class PowerplayRedDeterminationExample extends LinearOpMode
              */
             int maxOneTwo = Math.max(avg1, avg2);
             int max = Math.max(maxOneTwo, avg3);
-            int val=0;
-            if(max>maxOneTwo+3){
-                val++;
-            }
+
+            boolean val= max > avg1 + 6 || max > avg2 + 6 || max > avg3 + 6;
             TelemetryPacket packet = new TelemetryPacket();
-            packet.put("max", max);
-            packet.put("max2", maxOneTwo);
+            packet.put("avg1", avg1);
+            packet.put("avg2", avg2);
             packet.put("avg3", avg3);
+            packet.put("max", max);
+            packet.put("maxTwo", maxOneTwo);
 
             FtcDashboard.getInstance().sendTelemetryPacket(packet);
 
@@ -319,7 +319,7 @@ public class PowerplayRedDeterminationExample extends LinearOpMode
              * Now that we found the max, we actually need to go and
              * figure out which sample region that value was from
              */
-            if(val==1&&max==avg1) // Was it from region 1?
+            if(val &&max==avg1) // Was it from region 1?
             {
                 position = SkystonePosition.LEFT; // Record our analysis
 
@@ -334,7 +334,7 @@ public class PowerplayRedDeterminationExample extends LinearOpMode
                         GREEN, // The color the rectangle is drawn in
                         -1); // Negative thickness means solid fill
             }
-            else if(val==1&&max == avg2) // Was it from region 2?
+            else if(val&& max == avg2) // Was it from region 2?
             {
                 position = SkystonePosition.CENTER; // Record our analysis
 
@@ -349,7 +349,7 @@ public class PowerplayRedDeterminationExample extends LinearOpMode
                         GREEN, // The color the rectangle is drawn in
                         -1); // Negative thickness means solid fill
             }
-            else if(val==1&&max == avg3) // Was it from region 3?
+            else if(val&&max == avg3) // Was it from region 3?
             {
                 position = SkystonePosition.RIGHT; // Record our analysis
 
@@ -363,14 +363,14 @@ public class PowerplayRedDeterminationExample extends LinearOpMode
                         region3_pointB, // Second point which defines the rectangle
                         GREEN, // The color the rectangle is drawn in
                         -1); // Negative thickness means solid fill
-            } else if (val!=1){
+            } else if (!val){
 
                 position=SkystonePosition.NONE;
                 Imgproc.rectangle(
                 input, // Buffer to draw on
                         region1_pointA, // First point which defines the rectangle
                         region3_pointB, // Second point which defines the rectangle
-                        GREEN, -1// The color the rectangle is drawn in
+                        GREEN, 10// The color the rectangle is drawn in
                         ); // Negative thickness means solid fill
             }
 

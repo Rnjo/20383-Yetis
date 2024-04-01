@@ -198,6 +198,19 @@ public class v4 extends myDriveTrain {
                 }
 
                 break;
+            } case NONE:{
+                if (isStopRequested()){
+                    terminateOpModeNow();
+                }
+                FtcDashboard.getInstance().stopCameraStream();
+                sleep(1000);
+
+                while (!isStopRequested()) {
+                    Snapshotting(1);
+                    Stopping(1);
+                }
+
+
             }
         }
     }
@@ -235,6 +248,8 @@ public class v4 extends myDriveTrain {
                     toAndFro(-24);
 
                     break;
+                } case NONE: {
+                     break;
                 }
 
             }
