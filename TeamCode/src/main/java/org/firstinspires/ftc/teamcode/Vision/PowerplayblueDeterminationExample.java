@@ -22,7 +22,6 @@
 package org.firstinspires.ftc.teamcode.Vision;
 
 import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -109,8 +108,7 @@ public class PowerplayblueDeterminationExample extends LinearOpMode
             LEFT,
             CENTER,
             RIGHT,
-            TOP,
-            NONE
+            TOP
         }
 
         /*
@@ -123,14 +121,14 @@ public class PowerplayblueDeterminationExample extends LinearOpMode
         /*
          * The core values which define the location and size of the sample regions
          */
-        static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(0,299);
-        static final Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(415,299);
-        static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(850,299);
+        static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(0,199);
+        static final Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(415,199);
+        static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(850,199);
         static final Point REGION4_TOPLEFT_ANCHOR_POINT  =new Point(0, 0);
         static final int REGION_WIDTH = 424;
-        static final int REGION_HEIGHT = 409;
+        static final int REGION_HEIGHT = 519;
         static final int REGION_WIDTH_TOP = 1279;
-        static final int REGION_HEIGHT_TOP = 299;
+        static final int REGION_HEIGHT_TOP = 199;
 
         /*
          * Points which actually define the sample region rectangles, derived from above values
@@ -318,27 +316,15 @@ public class PowerplayblueDeterminationExample extends LinearOpMode
             /*
              * Find the max of the 3 averages
              */
-            int maxOne = Math.max(avg1, avg2);
-            int maxTwo = Math.max(avg4, avg3);
-            int max = Math.max(maxTwo, maxOne);
-
-            boolean val= max > avg1 + 6 || max > avg2 + 5 || max > avg3 + 5 || max>avg4+5;
-            TelemetryPacket packet = new TelemetryPacket();
-            packet.put("avg1", avg1);
-            packet.put("avg2", avg2);
-            packet.put("avg3", avg3);
-            packet.put("avg4", avg4);
-            packet.put("max", max);
-            packet.put("maxTwo", maxTwo);
-            packet.put("maxOne", maxOne);
-
-            FtcDashboard.getInstance().sendTelemetryPacket(packet);
+            int maxOneTwo = Math.max(avg1, avg2);
+            int maxOneThree = Math.max(maxOneTwo, avg3);
+            int max = Math.max(maxOneThree, avg4);
 
             /*
              * Now that we found the max, we actually need to go and
              * figure out which sample region that value was from
              */
-            if(val&&max == avg1) // Was it from region 1?
+            if(max == avg1) // Was it from region 1?
             {
                 position = SkystonePosition.LEFT; // Record our analysis
 
@@ -353,7 +339,7 @@ public class PowerplayblueDeterminationExample extends LinearOpMode
                         GREEN, // The color the rectangle is drawn in
                         -1); // Negative thickness means solid fill
             }
-            else if(val&&max == avg2) // Was it from region 2?
+            else if(max == avg2) // Was it from region 2?
             {
                 position = SkystonePosition.CENTER; // Record our analysis
 
@@ -368,7 +354,7 @@ public class PowerplayblueDeterminationExample extends LinearOpMode
                         GREEN, // The color the rectangle is drawn in
                         -1); // Negative thickness means solid fill
             }
-            else if(val&&max == avg3) // Was it from region 3?
+            else if(max == avg3) // Was it from region 3?
             {
                 position = SkystonePosition.RIGHT; // Record our analysis
 
@@ -383,7 +369,7 @@ public class PowerplayblueDeterminationExample extends LinearOpMode
                         GREEN, // The color the rectangle is drawn in
                         -1); // Negative thickness means solid fill
             }
-            else if(val&max == avg4) // Was it from region 3?
+            else if(max == avg4) // Was it from region 3?
             {
                 position = SkystonePosition.TOP; // Record our analysis
 
@@ -397,15 +383,6 @@ public class PowerplayblueDeterminationExample extends LinearOpMode
                         region4_pointB, // Second point which defines the rectangle
                         GREEN, // The color the rectangle is drawn in
                         -1); // Negative thickness means solid fill
-            } else if (!val){
-
-                position= SkystonePosition.NONE;
-                Imgproc.rectangle(
-                        input, // Buffer to draw on
-                        region1_pointA, // First point which defines the rectangle
-                        region3_pointB, // Second point which defines the rectangle
-                        GREEN, 10// The color the rectangle is drawn in
-                ); // Negative thickness means solid fill
             }
 
             /*

@@ -38,7 +38,6 @@ import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvWebcam;
-
 @Autonomous
 
 
@@ -63,7 +62,7 @@ public class v4 extends myDriveTrain {
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
         pipeline = new PowerplayblueDeterminationExample.SkystoneDeterminationPipeline();
         pipelineRed = new PowerplayRedDeterminationExample.SkystoneDeterminationRedPipeline();
-        webcamRed = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"));
+        webcamRed = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
         webcam.setPipeline(pipeline);
         webcamRed.setPipeline(pipelineRed);
 
@@ -82,9 +81,9 @@ public class v4 extends myDriveTrain {
          * The INIT-loop:
          * This REPLACES waitForStart!
          */
-        FtcDashboard.getInstance().startCameraStream(webcam, 2);
+        FtcDashboard.getInstance().startCameraStream(webcam, 30);
         waitForStart();
-        FtcDashboard.getInstance().startCameraStream(webcam, 2);
+        FtcDashboard.getInstance().startCameraStream(webcam, 30);
         telemetry.addData("Snapshot post-START analysis", snapshotAnalysis);
         TelemetryPacket packet = new TelemetryPacket();
         packet.put("Snapshot post-START analysis", snapshotAnalysis);
@@ -180,6 +179,8 @@ public class v4 extends myDriveTrain {
                     Stopping(1);
                 }
 
+
+
                 break;
             }
             case TOP  : {
@@ -194,21 +195,11 @@ public class v4 extends myDriveTrain {
 
                 while (!isStopRequested()) {
                     Snapshotting(1);
-                    Stopping(1);
+                   Stopping(1);
                 }
 
                 break;
-            } case NONE:{
-                if (isStopRequested()){
-                    terminateOpModeNow();
-                }
-                FtcDashboard.getInstance().stopCameraStream();
-                sleep(1000);
 
-                while (!isStopRequested()) {
-                    Snapshotting(1);
-                    Stopping(1);
-                }
 
 
             }
@@ -218,12 +209,11 @@ public class v4 extends myDriveTrain {
     void Snapshotting(int x) {
         for (int i=0; i<x; i++){
 
-            FtcDashboard.getInstance().startCameraStream(webcam, 1);
+            FtcDashboard.getInstance().startCameraStream(webcam, 30);
             webcam.startStreaming(1280, 720, OpenCvCameraRotation.UPRIGHT);
             sleep(4500);
             PowerplayblueDeterminationExample.SkystoneDeterminationPipeline.SkystonePosition snapshotAnalysis2 = pipeline.getAnalysis();
             webcam.stopStreaming();
-
             switch (snapshotAnalysis2) {
 
                 case LEFT: {
@@ -240,7 +230,6 @@ public class v4 extends myDriveTrain {
 
                 case RIGHT: {
                     leftAndRight(24);
-
                     break;
                 }
                 case TOP: {
@@ -248,8 +237,6 @@ public class v4 extends myDriveTrain {
                     toAndFro(-24);
 
                     break;
-                } case NONE: {
-                     break;
                 }
 
             }
@@ -261,21 +248,31 @@ public class v4 extends myDriveTrain {
 
     void Stopping(double x) {
         for (int i=0; i<x; i++){
-
+            FtcDashboard.getInstance().startCameraStream(webcamRed, 30);
             webcamRed.startStreaming(1280, 720, OpenCvCameraRotation.UPRIGHT);
-            sleep(2000);
+            sleep(5400);
+            PowerplayRedDeterminationExample.SkystoneDeterminationRedPipeline.SkystonePosition snapshotAnalysisRed = pipelineRed.getAnalysis();
             webcamRed.stopStreaming();
+            int garbage=4;
 
             switch (snapshotAnalysisRed) {
 
-                case LEFT:
-                case CENTER:
+                case LEFT:{
+                    terminateOpModeNow();
+                    break;
+                }
+                case CENTER:{
+
+                    terminateOpModeNow();
+                    break;
+                }
 
                 case RIGHT: {
                     terminateOpModeNow();
                     break;
                 }
                 case NONE: {
+                    garbage+=1;
                     break;
                 }
 
