@@ -43,11 +43,11 @@ import org.openftc.easyopencv.OpenCvWebcam;
 
 public class v4 extends myDriveTrain {
     OpenCvWebcam webcam;
-    OpenCvWebcam webcamRed;
+    //OpenCvWebcam webcamRed;
     PowerplayblueDeterminationExample.SkystoneDeterminationPipeline pipeline;
     PowerplayblueDeterminationExample.SkystoneDeterminationPipeline.SkystonePosition snapshotAnalysis; /*= PowerplayblueDeterminationExample.SkystoneDeterminationPipeline.SkystonePosition.LEFT; // default*/
     PowerplayRedDeterminationExample.SkystoneDeterminationRedPipeline pipelineRed;
-    PowerplayRedDeterminationExample.SkystoneDeterminationRedPipeline.SkystonePosition snapshotAnalysisRed;/* = PowerplayRedDeterminationExample.SkystoneDeterminationRedPipeline.SkystonePosition.LEFT; // default*/
+    //PowerplayRedDeterminationExample.SkystoneDeterminationRedPipeline.SkystonePosition snapshotAnalysisRed;/* = PowerplayRedDeterminationExample.SkystoneDeterminationRedPipeline.SkystonePosition.LEFT; // default*/
 
     public void runOpMode() {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
@@ -62,9 +62,9 @@ public class v4 extends myDriveTrain {
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
         pipeline = new PowerplayblueDeterminationExample.SkystoneDeterminationPipeline();
         pipelineRed = new PowerplayRedDeterminationExample.SkystoneDeterminationRedPipeline();
-        webcamRed = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
+        //webcamRed = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
         webcam.setPipeline(pipeline);
-        webcamRed.setPipeline(pipelineRed);
+     // webcamRed.setPipeline(pipelineRed);
 
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
@@ -77,6 +77,17 @@ public class v4 extends myDriveTrain {
             }
         });
 
+        /*webcamRed.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+            @Override
+            public void onOpened() {
+               // webcamRed.startStreaming(1280, 720, OpenCvCameraRotation.UPRIGHT);
+            }
+
+            @Override
+            public void onError(int errorCode) {
+            }
+        });
+*/
         /*
          * The INIT-loop:
          * This REPLACES waitForStart!
@@ -117,7 +128,7 @@ public class v4 extends myDriveTrain {
          * to change as the camera view changes once the robot starts moving!
          */
         snapshotAnalysis = pipeline.getAnalysis();
-        snapshotAnalysisRed = pipelineRed.getAnalysis();
+       // snapshotAnalysisRed = pipelineRed.getAnalysis();
 
 
         /*
@@ -176,7 +187,7 @@ public class v4 extends myDriveTrain {
 
                 while (!isStopRequested()) {
                     Snapshotting(1);
-                    Stopping(1);
+                   Stopping(1);
                 }
 
 
@@ -210,6 +221,7 @@ public class v4 extends myDriveTrain {
         for (int i=0; i<x; i++){
 
             FtcDashboard.getInstance().startCameraStream(webcam, 30);
+            webcam.setPipeline(pipeline);
             webcam.startStreaming(1280, 720, OpenCvCameraRotation.UPRIGHT);
             sleep(4500);
             PowerplayblueDeterminationExample.SkystoneDeterminationPipeline.SkystonePosition snapshotAnalysis2 = pipeline.getAnalysis();
@@ -248,30 +260,39 @@ public class v4 extends myDriveTrain {
 
     void Stopping(double x) {
         for (int i=0; i<x; i++){
-            FtcDashboard.getInstance().startCameraStream(webcamRed, 30);
-            webcamRed.startStreaming(1280, 720, OpenCvCameraRotation.UPRIGHT);
-            sleep(5400);
-            PowerplayRedDeterminationExample.SkystoneDeterminationRedPipeline.SkystonePosition snapshotAnalysisRed = pipelineRed.getAnalysis();
-            webcamRed.stopStreaming();
+
+            FtcDashboard.getInstance().startCameraStream(webcam, 30);
+            webcam.setPipeline(pipelineRed);
+            webcam.startStreaming(1280, 720, OpenCvCameraRotation.UPRIGHT);
+            sleep(4500);
+            PowerplayRedDeterminationExample.SkystoneDeterminationRedPipeline.SkystonePosition snapshotAnalysisK = pipelineRed.getAnalysis();
+            webcam.stopStreaming();
             int garbage=4;
 
-            switch (snapshotAnalysisRed) {
+            switch (snapshotAnalysisK) {
 
                 case LEFT:{
+                  //  leftAndRight(-24);
+
                     terminateOpModeNow();
                     break;
                 }
                 case CENTER:{
+                   // toAndFro(24);
 
                     terminateOpModeNow();
                     break;
                 }
 
                 case RIGHT: {
-                    terminateOpModeNow();
+                   // leftAndRight(24);
+
+                          terminateOpModeNow();
                     break;
                 }
                 case NONE: {
+                   // toAndFro(-24);
+
                     garbage+=1;
                     break;
                 }
