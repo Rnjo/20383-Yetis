@@ -150,8 +150,8 @@ public class v4 extends myDriveTrain {
                 sleep(1000);
 
                 while (!isStopRequested()) {
-                    Snapshotting(1);
-                    Stopping(1);
+                    Snapshotting(4);
+                    Stopping(2);
                 }
 
                 break;
@@ -168,8 +168,8 @@ public class v4 extends myDriveTrain {
                 sleep(1000);
 
                 while (!isStopRequested()) {
-                    Snapshotting(1);
-                    Stopping(1);
+                    Snapshotting(4);
+                    Stopping(2);
                 }
 
                 break;
@@ -186,40 +186,20 @@ public class v4 extends myDriveTrain {
                 sleep(1000);
 
                 while (!isStopRequested()) {
-                    Snapshotting(1);
-                   Stopping(1);
+                    Snapshotting(4);
+                   Stopping(2);
                 }
 
 
 
                 break;
             }
-            case TOP  : {
-                if (isStopRequested()){
-                    terminateOpModeNow();
-                }
 
-                FtcDashboard.getInstance().stopCameraStream();
-                sleep(1000);
-                toAndFro(-24);
-                sleep(1000);
-
-                while (!isStopRequested()) {
-                    Snapshotting(1);
-                   Stopping(1);
-                }
-
-                break;
-
-
-
-            }
         }
     }
 
     void Snapshotting(int x) {
         for (int i=0; i<x; i++){
-
             FtcDashboard.getInstance().startCameraStream(webcam, 30);
             webcam.setPipeline(pipeline);
             webcam.startStreaming(1280, 720, OpenCvCameraRotation.UPRIGHT);
@@ -229,14 +209,11 @@ public class v4 extends myDriveTrain {
             switch (snapshotAnalysis2) {
 
                 case LEFT: {
-
                     leftAndRight(-24);
-
                     break;
                 }
                 case CENTER: {
                     toAndFro(24);
-
                     break;
                 }
 
@@ -244,12 +221,7 @@ public class v4 extends myDriveTrain {
                     leftAndRight(24);
                     break;
                 }
-                case TOP: {
 
-                    toAndFro(-24);
-
-                    break;
-                }
 
             }
 
